@@ -1,0 +1,146 @@
+# Tipo de proyecto
+project:
+  type: website
+
+# Opciones del sitio web
+website:
+  # Título del sitio
+  title: "Introducción a la Revisión Sistemática con Meta-análisis"
+  
+  # Mensaje
+  announcement: 
+    content: "Guardar como PDF: presione **CTRL** + **P**"
+    icon: file-pdf-fill
+    type: dark
+  
+  # Botón de búsqueda
+  search: 
+    location: sidebar
+  
+ # Barra de navegación
+  navbar:
+    title: false
+    background: "#2F2E4E"
+    pinned: true
+    left:
+      - text: "Introducción a la Revisión Sistemática con Meta-análisis"
+        menu: 
+          - text: "Unidad 1"
+          - text: "Unidad 2"
+          - text: "Unidad 3"
+            
+    right:
+      - icon: cloud-download
+        text: "Descargas"
+        menu: 
+          - text: "R para Windows"
+            icon: windows
+            target: _blank
+            href: https://cran.rstudio.com/bin/windows/
+          - text: "R para macOS"
+            icon: apple
+            target: _blank
+            href: https://cran.rstudio.com/bin/macosx/
+          - text: "R para Linux"
+            icon: ubuntu
+            target: _blank
+            href: https://cran.rstudio.com/bin/linux/
+          - text: "RStudio Desktop"
+            icon: terminal
+            target: _blank
+            href: https://posit.co/download/rstudio-desktop/
+          - text: "RTools"
+            icon: terminal
+            target: _blank
+            href: https://cran.r-project.org/bin/windows/Rtools/
+          
+
+  # Barra lateral
+  sidebar:
+    contents:
+      - section: "Unidad 1"
+        icon: file-earmark-bar-graph
+          
+      - section: "Unidad 2"
+        icon: file-earmark-bar-graph
+        # contents: 
+        #   - unidad_2/intro.qmd
+        #   - unidad_2/fixed_random.qmd
+        #   - unidad_2/tipos_estimador.qmd
+        #   - unidad_2/mod_bias.qmd
+          
+      - section: "Unidad 3"
+        icon: file-earmark-bar-graph
+      
+      - section: "Material suplementario"
+        icon: file-earmark-bar-graph
+        contents:
+          - extras/intro_inferencia.qmd
+          - extras/intro_R.qmd
+          
+  
+  # Botón de anterior/siguiente
+  page-navigation: true
+  
+  # Botón de volver arriba
+  back-to-top-navigation: true
+  
+  # Pié de página
+  page-footer: 
+    center: Este material es parte del curso de Introducción a la Revisión Sistemática con Meta-análisis © 2025 Instituto Nacional de Epidemiología "Dr. Juan H. Jara" (ANLIS)
+ 
+
+
+# Formato HTML
+format:
+  html:
+    # Tema claro y oscuro
+    theme: 
+     light: cosmo
+     dark: cyborg
+     
+     # Botón para cambiar a modo oscuro
+    include-in-header:
+      text: |
+        <style type="text/css">
+        .quarto-reader-toggle .bi::before, .quarto-color-scheme-toggle .bi::before {
+          display: inline-block;
+          height: 40px;
+          width: 40px;
+          background-size: 20px 20px;
+          background-position: center;
+          background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(189, 195, 199, 1)" class="bi bi-moon-stars-fill" viewBox="0 0 16 16"> <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"/> <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/> </svg>') !important;
+        }
+        </style>
+        
+    # CSS
+    css: styles.css
+    
+    # Tabla de contenidos
+    toc: true
+    toc-title: "Contenidos"
+    
+    # Colocar enlaces a la ayuda de funciones
+    code-link: true
+
+# Tipografía
+mainfont: "Calibri"
+
+# Archivos para descargar
+resources: 
+  - files/
+  
+# Idioma del documento
+lang: es
+
+# Salida código de R
+execute: 
+  echo: true
+  warning: false
+  
+# Metadatos
+license: CC BY-NC
+  
+# Tipo de editor
+editor: visual
+

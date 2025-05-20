@@ -1,0 +1,50 @@
+---
+title: "Introducción"
+author:
+  - name: Tamara Ricardo
+    orcid: 0000-0002-0921-2611
+bibliography: references.bib
+---
+
+```{r}
+#| echo: false
+source("../setup.R")
+```
+
+## ¿Qué es un meta-análisis?
+
+Un meta-análisis es una herramienta estadística que permite **sintetizar cuantitativamente** la evidencia de investigaciones independientes sobre un mismo problema de investigación. Se lo ha definido como un "análisis de análisis" [@glass1976], ya que su **unidad de análisis** no son individuos o poblaciones, sino estudios científicos.
+
+El objetivo principal de un meta-análisis es proporcionar un estimador numérico que resuma los resultados de los estudios incluidos, permitiendo evaluar la **magnitud del efecto** de una intervención o la relación entre variables en diferentes contextos [@Harrer2021]. Es importante destacar que los meta-análisis son adecuados únicamente para **investigaciones cuantitativas** y, en general, requieren que los estudios analizados compartan el mismo diseño y estimen medidas de asociación similares.
+
+A continuación, se presentan algunas de las principales ventajas y limitaciones del meta-análisis:
+
+```{=html}
+<style type="text/css">@media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}</style>
+<div class="tg-wrap"><table style="border-collapse:collapse;border-spacing:0;border:none;margin:0px auto" class="tg"><thead><tr><th style="background-color:#2f2e4e;border-color:inherit;border-style:solid;border-width:0px;color:#ffffff;font-family:Arial, sans-serif;font-size:14px;font-weight:bold;overflow:hidden;padding:6px 6px;position:-webkit-sticky;position:sticky;text-align:left;top:-1px;vertical-align:top;will-change:transform;word-break:normal">Ventajas</th><th style="background-color:#2f2e4e;border-color:inherit;border-style:solid;border-width:0px;color:#ffffff;font-family:Arial, sans-serif;font-size:14px;font-weight:bold;overflow:hidden;padding:6px 6px;position:-webkit-sticky;position:sticky;text-align:left;top:-1px;vertical-align:top;will-change:transform;word-break:normal">Desventajas</th></tr></thead>
+<tbody><tr><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">Permite una síntesis cuantitativa de la evidencia disponible.</td><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">La validez de los resultados depende de la calidad metodológica de los estudios incluidos.</td></tr>
+<tr><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">Aumenta la potencia estadística al combinar los datos de múltiples estudios.</td><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">Puede estar afectado por sesgos de publicación.</td></tr>
+<tr><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">Mejora la precisión de los estimadores al reducir la variabilidad aleatoria.</td><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">La heterogeneidad entre estudios puede dificultar la interpretación de los resultados.</td></tr>
+<tr><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">Permite identificar patrones no evidentes en estudios individuales.</td><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">Requiere una metodología rigurosa y criterios estrictos de selección de estudios.</td></tr>
+<tr><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">Evalúa la consistencia de los resultados en diferentes poblaciones y contextos.</td><td style="background-color:#ffffff;border-color:inherit;border-style:solid;border-width:0px;font-family:inherit;font-size:14px;overflow:hidden;padding:6px 6px;text-align:left;vertical-align:top;word-break:normal">No corrige errores metodológicos de los estudios primarios.</td></tr></tbody></table></div>
+```
+
+## Estimadores de efecto
+
+En estudios individuales, se asume que las variables de interés fueron medidas de manera uniforme en todos los participantes. Esto permite aplicar técnicas de estadística descriptiva, como el [análisis exploratorio de datos (EDA)](https://datos-ine.github.io/unidad_1/EDA.html), para caracterizar la muestra y evaluar relaciones entre variables.
+
+Sin embargo, en los meta-análisis esta suposición no siempre se cumple. Aunque los criterios de inclusión sean estrictos, los estudios pueden diferir en diseño, población, medición de variables o definición de resultados. Por ello, no es posible sintetizar la evidencia utilizando exclusivamente herramientas de la estadística tradicional.
+
+Para integrar los resultados de diferentes estudios, los meta-análisis utilizan **estimadores de efecto**, también llamados **tamaño de efecto** o *effect size*. En algunos casos, estos valores se extraen directamente de los artículos, pero a menudo deben calcularse a partir de los datos reportados. Un buen estimador de efecto debe cumplir con las siguientes condiciones:
+
+-   **Comparable:** Debe ser consistente entre los estudios incluidos.
+
+-   **Computable:** Debe poder calcularse a partir de la información disponible.
+
+-   **Confiable:** Debe permitir estimar su error estándar.
+
+-   **Interpretable:** Debe responder adecuadamente a la pregunta de investigación.
+
+Desde una perspectiva estadística, los estimadores de efecto son equivalentes a los coeficientes en modelos de regresión o a las medidas de asociación en estudios epidemiológicos, ya que cuantifican la fuerza y dirección de la relación entre dos variables. Algunos estimadores de efecto comúnmente utilizados en investigación epidemiológica y aplicables a modelos de meta-análisis incluyen: proporción, incidencia, correlación, diferencia de medias, *odds-ratio* (OR), riesgo relativo (RR) y *hazard-ratio*.
+
+En las próximas secciones, exploraremos los modelos de meta-análisis más adecuados para cada estimador de efecto y su implementación en software R.
