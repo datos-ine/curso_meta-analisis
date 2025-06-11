@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://datos-ine.github.io/curso_meta-analisis/unidad_2/tipos_estimador.html</loc>
-    <lastmod>2025-05-20T15:51:24.518Z</lastmod>
+    <loc>https://datos-ine.github.io/curso_meta-analisis/unidad_2/04_mod_bias.html</loc>
+    <lastmod>2025-06-11T12:28:28.250Z</lastmod>
   </url>
   <url>
-    <loc>https://datos-ine.github.io/curso_meta-analisis/unidad_2/intro.html</loc>
-    <lastmod>2025-05-20T15:51:24.518Z</lastmod>
+    <loc>https://datos-ine.github.io/curso_meta-analisis/unidad_2/02_fixed_random.html</loc>
+    <lastmod>2025-06-11T13:07:00.672Z</lastmod>
   </url>
   <url>
     <loc>https://datos-ine.github.io/curso_meta-analisis/index.html</loc>
-    <lastmod>2025-05-20T15:57:35.437Z</lastmod>
+    <lastmod>2025-06-11T12:28:28.243Z</lastmod>
   </url>
   <url>
     <loc>https://datos-ine.github.io/curso_meta-analisis/extras/intro_inferencia.html</loc>
-    <lastmod>2025-05-20T16:04:11.642Z</lastmod>
+    <lastmod>2025-06-11T12:28:28.001Z</lastmod>
   </url>
   <url>
     <loc>https://datos-ine.github.io/curso_meta-analisis/extras/intro_R.html</loc>
-    <lastmod>2025-05-20T15:51:24.423Z</lastmod>
+    <lastmod>2025-06-11T12:28:27.999Z</lastmod>
   </url>
   <url>
-    <loc>https://datos-ine.github.io/curso_meta-analisis/unidad_2/fixed_random.html</loc>
-    <lastmod>2025-05-20T15:51:24.518Z</lastmod>
+    <loc>https://datos-ine.github.io/curso_meta-analisis/unidad_2/01_intro.html</loc>
+    <lastmod>2025-06-11T12:28:28.246Z</lastmod>
   </url>
   <url>
-    <loc>https://datos-ine.github.io/curso_meta-analisis/unidad_2/mod_bias.html</loc>
-    <lastmod>2025-05-20T15:51:24.518Z</lastmod>
+    <loc>https://datos-ine.github.io/curso_meta-analisis/unidad_2/03_tipos_estimador.html</loc>
+    <lastmod>2025-06-11T12:28:28.249Z</lastmod>
   </url>
 </urlset>

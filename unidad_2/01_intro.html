@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="author" content="Andrea Silva">
 <meta name="author" content="Tamara Ricardo">
-<title>Introducción a la inferencia estadística – Introducción a la Revisión Sistemática con Meta-análisis</title>
+<title>Introducción – Introducción a la Revisión Sistemática con Meta-análisis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -47,7 +46,8 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../extras/intro_R.html" rel="next">
+<link href="../unidad_2/02_fixed_random.html" rel="next">
+<link href="../extras/intro_R.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -94,32 +94,7 @@ div.csl-indent {
   background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(189, 195, 199, 1)" class="bi bi-moon-stars-fill" viewBox="0 0 16 16"> <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"/> <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/> </svg>') !important;
 }
 </style>
-<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script><link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 <body class="nav-sidebar floating nav-fixed">
 
@@ -186,7 +161,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../extras/intro_inferencia.html">Material Introductorio</a></li><li class="breadcrumb-item"><a href="../extras/intro_inferencia.html">Introducción a la inferencia estadística</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html">Meta-análisis</a></li><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html">Introducción</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -214,7 +189,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../extras/intro_inferencia.html" class="sidebar-item-text sidebar-link active">
+  <a href="../extras/intro_inferencia.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introducción a la inferencia estadística</span></a>
   </div>
 </li>
@@ -238,7 +213,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../unidad_2/01_intro.html" class="sidebar-item-text sidebar-link">
+  <a href="../unidad_2/01_intro.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Introducción</span></a>
   </div>
 </li>
@@ -270,32 +245,13 @@ window.Quarto = {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Contenidos</h2>
    
   <ul>
-<li><a href="#fundamentos" id="toc-fundamentos" class="nav-link active" data-scroll-target="#fundamentos">Fundamentos</a></li>
-  <li>
-<a href="#estimaci%C3%B3n-de-par%C3%A1metros" id="toc-estimación-de-parámetros" class="nav-link" data-scroll-target="#estimaci%C3%B3n-de-par%C3%A1metros">Estimación de parámetros</a>
-  <ul class="collapse">
-<li><a href="#intervalos-de-confianza" id="toc-intervalos-de-confianza" class="nav-link" data-scroll-target="#intervalos-de-confianza">Intervalos de confianza</a></li>
-  <li><a href="#c%C3%B3mo-se-interpreta-un-ic" id="toc-cómo-se-interpreta-un-ic" class="nav-link" data-scroll-target="#c%C3%B3mo-se-interpreta-un-ic">¿Cómo se interpreta un IC?</a></li>
-  </ul>
-</li>
-  <li>
-<a href="#pruebas-de-hip%C3%B3tesis" id="toc-pruebas-de-hipótesis" class="nav-link" data-scroll-target="#pruebas-de-hip%C3%B3tesis">Pruebas de Hipótesis</a>
-  <ul class="collapse">
-<li><a href="#estad%C3%ADstico-de-prueba" id="toc-estadístico-de-prueba" class="nav-link" data-scroll-target="#estad%C3%ADstico-de-prueba">Estadístico de prueba</a></li>
-  <li><a href="#errores" id="toc-errores" class="nav-link" data-scroll-target="#errores">Errores</a></li>
-  <li><a href="#nivel-de-significancia" id="toc-nivel-de-significancia" class="nav-link" data-scroll-target="#nivel-de-significancia">Nivel de significancia</a></li>
-  <li><a href="#regi%C3%B3n-cr%C3%ADtica" id="toc-región-crítica" class="nav-link" data-scroll-target="#regi%C3%B3n-cr%C3%ADtica">Región crítica</a></li>
-  <li><a href="#valor-cr%C3%ADtico" id="toc-valor-crítico" class="nav-link" data-scroll-target="#valor-cr%C3%ADtico">Valor crítico</a></li>
-  <li><a href="#tipos-de-contraste" id="toc-tipos-de-contraste" class="nav-link" data-scroll-target="#tipos-de-contraste">Tipos de contraste</a></li>
-  <li><a href="#potencia-estad%C3%ADstica" id="toc-potencia-estadística" class="nav-link" data-scroll-target="#potencia-estad%C3%ADstica">Potencia estadística</a></li>
-  </ul>
-</li>
-  <li><a href="#aplicaciones-e-interpretaci%C3%B3n" id="toc-aplicaciones-e-interpretación" class="nav-link" data-scroll-target="#aplicaciones-e-interpretaci%C3%B3n">Aplicaciones e Interpretación</a></li>
+<li><a href="#qu%C3%A9-es-un-meta-an%C3%A1lisis" id="toc-qué-es-un-meta-análisis" class="nav-link active" data-scroll-target="#qu%C3%A9-es-un-meta-an%C3%A1lisis">¿Qué es un meta-análisis?</a></li>
+  <li><a href="#estimadores-de-efecto" id="toc-estimadores-de-efecto" class="nav-link" data-scroll-target="#estimadores-de-efecto">Estimadores de efecto</a></li>
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../extras/intro_inferencia.html">Material Introductorio</a></li><li class="breadcrumb-item"><a href="../extras/intro_inferencia.html">Introducción a la inferencia estadística</a></li></ol></nav><div class="quarto-title">
-<h1 class="title">Introducción a la inferencia estadística</h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html">Meta-análisis</a></li><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html">Introducción</a></li></ol></nav><div class="quarto-title">
+<h1 class="title">Introducción</h1>
 </div>
 
 
@@ -303,9 +259,8 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Autores/as</div>
+    <div class="quarto-title-meta-heading">Autor/a</div>
     <div class="quarto-title-meta-contents">
-             <p>Andrea Silva <a href="https://orcid.org/0000-0002-4791-9706" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
              <p>Tamara Ricardo <a href="https://orcid.org/0000-0002-0921-2611" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
           </div>
   </div>
@@ -316,256 +271,73 @@ window.Quarto = {
   
 
 
-</header><div class="quarto-figure quarto-figure-center">
-<figure class="figure"><div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="https://allisonhorst.com/"><img src="..\images/inferencia.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="Artwork por @allison_horst"></a></p>
-</figure>
-</div>
-<figcaption>Artwork por @allison_horst</figcaption></figure>
-</div>
-<section id="fundamentos" class="level2"><h2 class="anchored" data-anchor-id="fundamentos">Fundamentos</h2>
-<p>La <strong>estadística inferencial</strong> es la rama de la estadística que permite extraer conclusiones sobre una población a partir de una muestra de datos. Este proceso se sustenta en dos procedimientos principales: la <strong>estimación</strong> y la <strong>prueba de hipótesis</strong>.</p>
-<p>La <strong>población</strong> se define como el conjunto completo de individuos u observaciones de interés, mientras que la <strong>muestra</strong> es el subconjunto representativo de esa población, diseñado para reflejar sus características fundamentales. Para describir la población se utilizan <strong>parámetros</strong>, valores numéricos como la media poblacional <span class="math inline">\((\mu)\)</span>, mientras que los datos muestrales se resumen con <strong>estadísticos</strong>, por ejemplo, la media muestral <span class="math inline">\((\bar{x})\)</span>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="..\images/poblacion_muestra.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
-</figure>
-</div>
-</section><section id="estimación-de-parámetros" class="level2"><h2 class="anchored" data-anchor-id="estimación-de-parámetros">Estimación de parámetros</h2>
-<p>La estimación consiste en utilizar información muestral para inferir el valor de un parámetro poblacional. Existen dos tipos principales:</p>
-<ul>
-<li><p><strong>Estimación puntual</strong>: proporciona un único valor estimado. Por ejemplo, la media muestral (<span class="math inline">\(\bar{x}\)</span>) como estimador de la media poblacional (<span class="math inline">\(\mu\)</span>).</p></li>
-<li><p><strong>Estimación por intervalo de confianza</strong>: proporciona un rango de valores plausibles para el parámetro, con un nivel de confianza determinado.</p></li>
-</ul>
-<section id="intervalos-de-confianza" class="level3"><h3 class="anchored" data-anchor-id="intervalos-de-confianza">Intervalos de confianza</h3>
-<p>Aunque los intervalos de confianza son procedimientos inferenciales, están estrechamente ligados a la estadística descriptiva. Un intervalo de confianza indica un rango de valores dentro del cual se espera que se ubique el verdadero valor del parámetro poblacional, con una cierta probabilidad conocida como <em>nivel de confianza</em>.</p>
-<p>La forma general de un IC es:</p>
-<p><span class="math display">\[ IC = estimador~puntual \pm (coeficiente~de~confiabilidad) * (error~ estandar) \]</span></p>
-<section id="estimador-puntual" class="level4"><h4 class="anchored" data-anchor-id="estimador-puntual">Estimador puntual</h4>
-<ul>
-<li><p>Para la media poblacional (<span class="math inline">\(\mu\)</span>): se utiliza la media muestral <span class="math inline">\(\bar{x}\)</span>.</p></li>
-<li><p>Para una proporción poblacional (<span class="math inline">\(p\)</span>): se utiliza la proporción muestral <span class="math inline">\(\hat{p}\)</span>.</p></li>
-</ul></section><section id="coeficiente-de-confiabilidad" class="level4"><h4 class="anchored" data-anchor-id="coeficiente-de-confiabilidad">Coeficiente de confiabilidad</h4>
-<p>Corresponde al valor asociado al nivel de confianza deseado (por ejemplo, 90%, 95%, 99%). Se denota como <span class="math inline">\(1 - \alpha\)</span>, siendo <span class="math inline">\(\alpha\)</span> el nivel de significación (probabilidad de error tipo I). Por ejemplo, para un 95% de confianza, <span class="math inline">\(\alpha = 0.05\)</span> y el coeficiente es <span class="math inline">\(Z_{1 - \alpha/2} \approx 1.96\)</span>.</p>
-</section><section id="error-estándar-se" class="level4"><h4 class="anchored" data-anchor-id="error-estándar-se">Error estándar (SE)</h4>
-<p>Representa la variabilidad de la distribución muestral y depende del parámetro.</p>
-<p>Por ejemplo, para la media se calcula:</p>
-<p><span class="math display">\[
-SE = \frac{\sigma}{\sqrt{n}}
-\]</span></p>
-<p>Donde <span class="math inline">\(\sigma\)</span> es la desviación estándar poblacional y <span class="math inline">\(n\)</span> el tamaño de la muestra.</p>
-<p>Mientras que para una proporción se calcula como:</p>
-<p><span class="math display">\[
-SE = \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}
-\]</span></p>
-</section><section id="teorema-del-límite-central" class="level4"><h4 class="anchored" data-anchor-id="teorema-del-límite-central">Teorema del límite central</h4>
-<p>El Teorema del Límite Central (TLC) establece que, para muestras suficientemente grandes, la distribución muestral de la media (<span class="math inline">\(\bar{x}\)</span>) es aproximadamente normal, con media <span class="math inline">\(\mu\)</span> y varianza <span class="math inline">\(\sigma^2/n\)</span>. Esto permite utilizar la distribución normal estándar para calcular probabilidades e intervalos:</p>
-<p><span class="math display">\[
-Z = \frac{\bar{x}-\mu}{\sigma}
-\]</span></p>
-<p>Dado esto, se sabe que en una distribución normal:</p>
-<ul>
-<li><p>Aproximadamente el 68% de los valores se encuentran entre <span class="math inline">\(\mu \pm \sigma\)</span>.</p></li>
-<li><p>Aproximadamente el 95% entre <span class="math inline">\(\mu \pm 2\sigma\)</span>.</p></li>
-<li><p>Aproximadamente el 99% entre <span class="math inline">\(\mu \pm 3\sigma\)</span>.</p></li>
-</ul>
-<p>El siguiente gráfico ilustra lo explicado anteriormente:</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="intro_inferencia_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Un IC al 95% no significa que haya un 95% de probabilidad de que el parámetro esté dentro de un único intervalo calculado. Lo correcto es decir que, si repitiéramos muchas veces el procedimiento muestral, el 95% de los intervalos construidos de esa forma contendrían el verdadero valor del parámetro.</p>
-</section></section><section id="cómo-se-interpreta-un-ic" class="level3"><h3 class="anchored" data-anchor-id="cómo-se-interpreta-un-ic">¿Cómo se interpreta un IC?</h3>
-<p>Si repitiéramos el muestreo muchas veces, tomando muestras del mismo tamaño y construyendo un IC en cada caso, aproximadamente el <span class="math inline">\(100 * (1 − \alpha)\%\)</span> de esos intervalos contendrían el valor real del parámetro. Por ejemplo, un IC al 95% implica que, en el largo plazo, el 95% de los intervalos construidos con este método contendrán el valor verdadero.</p>
-<p>La amplitud del IC está determinada por la <strong>precisión de la estimación</strong>, que se calcula como el producto entre el <strong>coeficiente de confiabilidad</strong> (vinculado al nivel de confianza) y el <strong>error estándar</strong>. La fórmula general para construir un intervalo de confianza es:</p>
-<p><span class="math display">\[ IC = estimador~puntual \pm (coeficiente~de~confiabilidad) * (error~ estandar) \]</span></p>
-<p>En el caso de la media:</p>
-<ul>
-<li><p><strong>Aumento del nivel de confianza:</strong> Si se incrementa el nivel de confianza (por ejemplo, del 95% al 99%), el coeficiente de confiabilidad aumenta (por ejemplo, de 1.96 a 2.58), lo que produce un intervalo más amplio.</p></li>
-<li>
-<p><strong>Reducción del error estándar:</strong> Si se mantiene fijo el nivel de confianza, reducir la amplitud del IC requiere disminuir el error estándar. Para la media, este se calcula como:</p>
-<p><span class="math display">\[ SE = \frac{\sigma}{\sqrt{n}} \]</span></p>
-<p>y considerando que <span class="math inline">\(\sigma\)</span> es constante, la única forma de disminuir el error estándar es aumentando el tamaño muestral (<span class="math inline">\(n\)</span>).</p>
-</li>
-</ul>
-<p>El cálculo de los intervalos de confianza se basa en las <strong>distribuciones muestrales</strong> de los estimadores y en el <strong>error estándar</strong> correspondiente. Aunque las fórmulas pueden parecer complejas, los paquetes estadísticos (como R) permiten calcularlos de forma automática. Lo esencial es comprender de qué depende la <strong>amplitud del IC</strong> (nivel de confianza, error estándar y tamaño de la muestra) y cómo cada uno de estos factores influye en la <strong>precisión de la estimación</strong>.</p>
-</section></section><section id="pruebas-de-hipótesis" class="level2"><h2 class="anchored" data-anchor-id="pruebas-de-hipótesis">Pruebas de Hipótesis</h2>
-<p>Las pruebas de hipótesis (también conocidas como <em>tests</em> o <em>contrastes</em> de hipótesis) permiten tomar decisiones sobre una población a partir de los datos obtenidos de una muestra.</p>
-<p>Antes de profundizar en los aspectos estadísticos, es importante distinguir entre dos tipos de hipótesis:</p>
-<ul>
-<li><p><strong>Hipótesis de investigación</strong>: representan la pregunta o problema que motiva el estudio.</p></li>
-<li><p><strong>Hipótesis estadística</strong>: es la formulación que puede ser evaluada mediante técnicas de estadística inferencial.</p></li>
-</ul>
-<p>El contraste de hipótesis se basa en la comparación de dos hipótesis estadísticas:</p>
-<ul>
-<li><p><strong>Hipótesis nula</strong> (<span class="math inline">\(H_0\)</span>): sostiene que no existen diferencias entre los grupos comparados (por ejemplo, <span class="math inline">\(\mu = \mu_0\)</span>​); por lo tanto, cualquier diferencia observada se debe únicamente al azar.</p></li>
-<li><p><strong>Hipótesis alternativa</strong> (<span class="math inline">\(H_1\)</span>): plantea que existen diferencias entre grupos (por ejemplo, <span class="math inline">\(\mu \neq \mu_0,~ \mu &gt; \mu_0~ ó~ \mu &lt; \mu_0\)</span>). Generalmente es la formulación matemática de nuestra hipótesis de investigación y es complementaria de <span class="math inline">\(H_0\)</span>. No se acepta ni se refuta de manera directa.</p></li>
-</ul>
-<p>El método estadístico nos permite cuantificar la diferencia entre grupos bajo el supuesto de que, si repitiésemos el experimento infinitas veces y obtuviésemos todas las muestras posibles del mismo tamaño, las diferencias entre grupos “iguales” seguirían una distribución muestral teórica. A partir de esta distribución, se define un valor límite (por ejemplo, que abarca el 95% o el 99% de las diferencias esperadas).</p>
-<ul>
-<li><p>Si la diferencia observada excede ese límite, se considera demasiado grande para ser atribuida al azar y se <strong>rechaza</strong> la hipótesis nula (<span class="math inline">\(H_0\)</span>).</p></li>
-<li><p>Si la diferencia cae dentro del rango esperado, <strong>no se rechaza</strong> <span class="math inline">\(H_0\)</span>, ya que podría deberse al azar. En estos casos, se concluye que los grupos “no son diferentes”, lo que no implica que “sean iguales”, ya que la variabilidad muestral impide demostrar una igualdad exacta.</p></li>
-</ul>
-<p>Los contrastes de hipótesis suelen realizarse suponiendo que se conoce <em>a priori</em> la distribución de la población y que se extrae una muestra aleatoria de la misma.</p>
-<section id="estadístico-de-prueba" class="level3"><h3 class="anchored" data-anchor-id="estadístico-de-prueba">Estadístico de prueba</h3>
-<p>Es el valor calculado a partir de los datos muestrales que se utiliza para tomar la decisión respecto de <span class="math inline">\(H_0\)</span>. Cada situación tiene un estadístico adecuado cuya magnitud, al compararse con su distribución teórica permite determinar si las diferencias observadas son atribuibles al azar. Por ejemplo:</p>
-<ul>
-<li><p>Para <strong>variables categóricas</strong> se utiliza el estadístico chi-cuadrado (<span class="math inline">\(\chi^2\)</span>).</p></li>
-<li><p>Para <strong>variables numéricas</strong>, se emplean distribuciones como la normal (<span class="math inline">\(Z\)</span>) o t de Student (<span class="math inline">\(t\)</span>).</p></li>
-</ul></section><section id="errores" class="level3"><h3 class="anchored" data-anchor-id="errores">Errores</h3>
-<p>En el razonamiento de los contrastes de hipótesis existen dos posibles errores:</p>
-<ul>
-<li><p><strong>Error tipo I (</strong><span class="math inline">\(\alpha\)</span><strong>)</strong>: ocurre cuando se <strong>rechaza la hipótesis nula</strong> siendo esta verdadera. Es decir, se concluye erróneamente que existe una diferencia cuando en realidad no la hay. Para minimizar este riesgo, se elige un <span class="math inline">\(\alpha\)</span> pequeño (por ejemplo, 0,01; 0,05 o 0,10).</p></li>
-<li><p><strong>Error tipo II (</strong><span class="math inline">\(\beta\)</span><strong>)</strong>: ocurre cuando <strong>no se rechaza la hipótesis nula siendo esta falsa</strong>, es decir, se falla en detectar una diferencia real. El valor de <span class="math inline">\(\beta\)</span> depende del valor real del parámetro, y suele ser mayor que <span class="math inline">\(\alpha\)</span>; sin embargo, <strong>no se conoce con certeza</strong> una vez realizada la prueba.</p></li>
-</ul>
-<p>Una vez finalizado el análisis, <strong>no es posible saber si se ha cometido alguno de estos errores</strong>, ya que el verdadero estado de la población es desconocido. Sin embargo, si se ha utilizado un <span class="math inline">\(\alpha\)</span> bajo, podemos tener mayor confianza en que, si se rechazó <span class="math inline">\(H_0\)</span>, el error tipo I es poco probable.</p>
-</section><section id="nivel-de-significancia" class="level3"><h3 class="anchored" data-anchor-id="nivel-de-significancia">Nivel de significancia</h3>
-<p>El <strong>nivel de significación</strong> (<span class="math inline">\(\alpha\)</span>) representa la probabilidad de cometer un <strong>error tipo I</strong>, es decir, rechazar <span class="math inline">\(H_0\)</span> cuando en realidad es verdadera. Se define antes del análisis (comúnmente 0,05 o 0,01) y determina el límite entre la región de no rechazo y la región crítica.</p>
-</section><section id="región-crítica" class="level3"><h3 class="anchored" data-anchor-id="región-crítica">Región crítica</h3>
-<p>Se denomina <strong>región crítica</strong> (o región de rechazo) al conjunto de valores del estadístico de prueba que llevan al rechazo de <span class="math inline">\(H_0\)</span>. Esta región se define según el nivel de significación (<span class="math inline">\(\alpha\)</span>), e incluye los valores extremos del estadístico que serían poco probables si <span class="math inline">\(H_0\)</span> fuera cierta. En una representación gráfica, la región crítica se ubica en una o ambas colas de la distribución, dependiendo del tipo de prueba</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="intro_inferencia_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>La regla de decisión es la siguiente:</p>
-<ul>
-<li><p>Si el valor calculado del estadístico cae dentro de la región crítica, se <strong>rechaza</strong> <span class="math inline">\(H_0\)</span> y se concluye que las diferencias observadas son <strong>estadísticamente significativas</strong>.</p></li>
-<li><p>Si el valor no cae en la región crítica, <strong>no se rechaza</strong> <span class="math inline">\(H_0\)</span>. En ese caso, las diferencias observadas pueden explicarse por el azar, y no se consideran estadísticamente significativas.</p></li>
-</ul></section><section id="valor-crítico" class="level3"><h3 class="anchored" data-anchor-id="valor-crítico">Valor crítico</h3>
-<p>El <strong>valor crítico</strong> o <strong><em>p</em>-valor</strong> es la probabilidad de obtener un resultado igual o más extremo que el observado, bajo la suposición de que <span class="math inline">\(H_0\)</span> es verdadera. Representa el menor nivel de <span class="math inline">\(\alpha\)</span> para el cual puede rechazarse <span class="math inline">\(H_0\)</span>.</p>
-<p>Si el valor <em>p</em> es muy pequeño, indica que el resultado observado sería poco probable si <span class="math inline">\(H_0\)</span> fuera cierta, por lo tanto, se rechaza la hipótesis nula.</p>
-<p>La regla práctica es:</p>
-<ul>
-<li><p>Si <span class="math inline">\(p \leq \alpha\)</span>, se <strong>rechaza</strong> <span class="math inline">\(H_0\)</span>.</p></li>
-<li><p>Si <span class="math inline">\(p &gt; \alpha\)</span>, <strong>no se rechaza</strong> <span class="math inline">\(H_0\)</span>.</p></li>
-</ul></section><section id="tipos-de-contraste" class="level3"><h3 class="anchored" data-anchor-id="tipos-de-contraste">Tipos de contraste</h3>
-<p>Los contrastes de hipótesis se clasifican según la forma de la hipótesis alternativa (<span class="math inline">\(H_1\)</span>). Esta clasificación determina si la prueba es <strong>unilateral</strong> (de cola izquierda o derecha) o <strong>bilateral</strong> (de dos colas).</p>
-<section id="test-de-cola-izquierda" class="level4"><h4 class="anchored" data-anchor-id="test-de-cola-izquierda">Test de cola izquierda</h4>
-<p>La hipótesis alternativa plantea que la media del primer grupo es significativamente <strong>menor</strong> que la del segundo:</p>
-<p><span class="math display">\[
-H_1: \mu_1 &lt; \mu_2
-\]</span></p>
-<p>La región crítica se encuentra en el extremo izquierdo de la distribución. Todo el área crítica tiene un tamaño <span class="math inline">\(\alpha\)</span> con un valor crítico de <span class="math inline">\(-1,645\)</span>.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="intro_inferencia_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-</section><section id="test-de-cola-derecha" class="level4"><h4 class="anchored" data-anchor-id="test-de-cola-derecha">Test de cola derecha</h4>
-<p>La hipótesis alternativa establece que la media del primer grupo es significativamente <strong>mayor</strong> que la del segundo:</p>
-<p><span class="math display">\[ H_1: \mu_1 &gt; \mu_2 \]</span></p>
-<p>La región crítica se concentra en el extremo derecho de la distribución y toda el área crítica tiene un tamaño <span class="math inline">\(\alpha\)</span> con un valor crítico de <span class="math inline">\(1,645\)</span>.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="intro_inferencia_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-</section><section id="pruebas-bilaterales" class="level4"><h4 class="anchored" data-anchor-id="pruebas-bilaterales">Pruebas bilaterales</h4>
-<p>La hipótesis alternativa afirma que existen diferencias entre los grupos, <strong>sin especificar la dirección</strong>:</p>
-<p><span class="math display">\[
-H_1: \mu_1 \neq \mu_2
-\]</span></p>
-<p>La región crítica se divide entre ambos extremos de la distribución, con valores críticos de <span class="math inline">\(\pm 1,96\)</span>. El nivel de significación total (<span class="math inline">\(\alpha\)</span>) se reparte en partes iguales entre las dos colas (<span class="math inline">\(\alpha/2\)</span> en cada una), lo que implica un 2,5% de probabilidad en cada cola si <span class="math inline">\(H_0\)</span> es verdadera.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="intro_inferencia_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-</section></section><section id="potencia-estadística" class="level3"><h3 class="anchored" data-anchor-id="potencia-estadística">Potencia estadística</h3>
-<p>La potencia estadística es la probabilidad de rechazar la hipótesis nula (<span class="math inline">\(H_0\)</span>) cuando esta es falsa, es decir, de detectar un efecto real. Se calcula como <span class="math inline">\(1 - \beta\)</span>, donde <span class="math inline">\(\beta\)</span> es la probabilidad de cometer un error de tipo II. Aumenta con el <strong>tamaño muestral</strong>, disminuye con la <strong>varianza</strong>, y depende de la <strong>magnitud del efecto</strong> que se desea detectar.</p>
-<p>Mientras que <span class="math inline">\(\alpha\)</span> se fija antes del análisis, <span class="math inline">\(\beta\)</span> varía según el valor real del parámetro. La potencia se considera adecuada cuando alcanza al menos el <strong>80%</strong>, lo que implica un 20% de riesgo de no detectar una diferencia real.</p>
-<p>No es posible reducir simultáneamente <span class="math inline">\(\alpha\)</span> y <span class="math inline">\(\beta\)</span>, por lo que el diseño de una prueba debe buscar un <strong>equilibrio entre ambos errores</strong>. La potencia proporciona un <strong>control adicional</strong> en la toma de decisiones, ya que no basta con obtener un valor <em>p</em> pequeño: también se requiere una potencia suficiente para respaldar la conclusión.</p>
-<p>La siguiente tabla resume las posibles situaciones en un contraste de hipótesis:</p>
+</header><section id="qué-es-un-meta-análisis" class="level2"><h2 class="anchored" data-anchor-id="qué-es-un-meta-análisis">¿Qué es un meta-análisis?</h2>
+<p>El meta-análisis es una herramienta estadística que permite <strong>sintetizar cuantitativamente</strong> la evidencia proveniente de investigaciones independientes que abordan un mismo problema de investigación. Se lo ha definido como un “análisis de análisis” <span class="citation" data-cites="glass1976">(<a href="#ref-glass1976" role="doc-biblioref">Glass 1976</a>)</span>, ya que su <strong>unidad de análisis</strong> no son individuos ni poblaciones, sino estudios científicos.</p>
+<p>Su objetivo principal es proporcionar un estimador numérico que resuma los resultados de los estudios incluidos, lo que permite evaluar la <strong>magnitud del efecto</strong> de una intervención o la relación entre variables en distintos contextos <span class="citation" data-cites="Harrer2021">(<a href="#ref-Harrer2021" role="doc-biblioref">Harrer et&nbsp;al. 2021</a>)</span>. Es importante destacar que los meta-análisis son adecuados exclusivamente para <strong>investigaciones cuantitativas</strong> y, en general, requieren que los estudios analizados compartan un diseño similar y estimen medidas de asociación comparables.</p>
+<p>A continuación, se resumen algunas de las principales ventajas y limitaciones del meta-análisis:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="table table-condensed table-hover caption-top table-sm table-striped small" data-quarto-postprocess="true">
 <thead><tr class="header">
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;"></th>
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">No rechazar H0</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Rechazar H0</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Ventajas</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Desventajas</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">H0 es cierta</td>
-<td style="text-align: left;">Correcto (1-α)</td>
-<td style="text-align: left;">Error tipo I (α)</td>
+<td style="text-align: left;">Permite una síntesis cuantitativa de la evidencia disponible.</td>
+<td style="text-align: left;">La validez de los resultados depende de la calidad metodológica de los estudios incluidos.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">H0 es falsa</td>
-<td style="text-align: left;">Error tipo II (β)</td>
-<td style="text-align: left;">Correcto (1-β)</td>
+<td style="text-align: left;">Aumenta la potencia estadística al combinar los datos de múltiples estudios.</td>
+<td style="text-align: left;">Puede estar afectado por sesgos de publicación.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mejora la precisión de los estimadores al reducir la variabilidad aleatoria.</td>
+<td style="text-align: left;">La heterogeneidad entre estudios puede dificultar la interpretación de los resultados.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Permite identificar patrones no evidentes en estudios individuales.</td>
+<td style="text-align: left;">Requiere una metodología rigurosa y criterios estrictos de selección de estudios.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Evalúa la consistencia de los resultados en diferentes poblaciones y contextos.</td>
+<td style="text-align: left;">No corrige errores metodológicos de los estudios primarios.</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-</section></section><section id="aplicaciones-e-interpretación" class="level2"><h2 class="anchored" data-anchor-id="aplicaciones-e-interpretación">Aplicaciones e Interpretación</h2>
-<p>La inferencia estadística permite responder preguntas de investigación tales como:</p>
+</section><section id="estimadores-de-efecto" class="level2"><h2 class="anchored" data-anchor-id="estimadores-de-efecto">Estimadores de efecto</h2>
+<p>En estudios individuales, suele asumirse que las variables de interés fueron medidas de manera uniforme en todos los participantes. Esto permite aplicar técnicas de estadística descriptiva, como el <a href="https://datos-ine.github.io/unidad_1/EDA.html">análisis exploratorio de datos (EDA)</a>, para caracterizar la muestra, explorar relaciones entre variables y ajustar modelos de regresión acordes a la estructura de los datos.</p>
+<p>Sin embargo, en los meta-análisis esta suposición rara vez se cumple. Aún cuando los criterios de inclusión sean estrictos, los estudios pueden diferir en su diseño, población, medición de variables o definición de resultados. Por esta razón, no es posible sintetizar la evidencia con herramientas de la estadística tradicional.</p>
+<p>Para integrar los resultados de diferentes estudios, los meta-análisis utilizan <strong>estimadores de efecto</strong> <span class="citation" data-cites="Page2021a">(<a href="#ref-Page2021a" role="doc-biblioref">Page et&nbsp;al. 2021</a>)</span>, también conocidos como <em>effect size</em> o tamaño del efecto <span class="citation" data-cites="Harrer2021">(<a href="#ref-Harrer2021" role="doc-biblioref">Harrer et&nbsp;al. 2021</a>)</span><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. En algunos casos, estos valores pueden extraerse directamente de los artículos; sin embargo, a menudo es necesario calcularlos a partir de los datos reportados.</p>
+<p>Un buen estimador de efecto debe cumplir con las siguientes condiciones:</p>
 <ul>
-<li><p>¿Es significativa la diferencia entre dos medias?</p></li>
-<li><p>¿Existe una relación entre dos variables?</p></li>
-<li><p>¿Cómo se distribuyen los datos respecto a un parámetro de interés?</p></li>
+<li><p><strong>Comparable:</strong> debe ser consistente entre los estudios incluidos.</p></li>
+<li><p><strong>Computable:</strong> debe poder calcularse a partir de la información disponible.</p></li>
+<li><p><strong>Confiable:</strong> debe permitir la estimación de su error estándar.</p></li>
+<li><p><strong>Interpretable:</strong> debe responder de manera clara a la pregunta de investigación.</p></li>
 </ul>
-<p>Al aplicar estos métodos, es crucial tener en cuenta la calidad y representatividad de la muestra, así como la validez de las asunciones subyacentes (normalidad, homogeneidad de varianzas, etc.).</p>
-<div class="callout callout-style-simple callout-warning">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>Este apunte sintetiza los conceptos esenciales y las herramientas básicas para llevar a cabo un análisis inferencial, que sirve de base para la interpretación de modelos y resultados en análisis cuantitativos. Quienes necesiten profundizar más en los temas, les recomendamos consultar las siguientes fuentes:</p>
-<ul>
-<li><p><a href="https://ine.gov.ar/descarga/Manual%20EpiIntermedia.pdf">Manual de Epidemiología: Fundamentos, Métodos y Aplicaciones</a> <span class="citation" data-cites="institutonacionaldeepidemiología2015">(<a href="#ref-institutonacionaldeepidemiolog%C3%ADa2015" role="doc-biblioref">Instituto Nacional de Epidemiología 2015</a>)</span>: Capítulo 3.</p></li>
-<li><p><a href="https://www.academia.edu/44058808/Estadistica_Mario_F_Triola_12ED?auto=download">Estadística 12A Edición</a> <span class="citation" data-cites="triola2018">(<a href="#ref-triola2018" role="doc-biblioref">Triola 2018</a>)</span>: Capítulos 8 y 9.</p></li>
-</ul>
-</div>
-</div>
-</div>
-<div class="hidden">
-<p><span class="citation" data-cites="ríusdíaz2012">Ríus Díaz et&nbsp;al. (<a href="#ref-r%C3%ADusd%C3%ADaz2012" role="doc-biblioref">2012</a>)</span></p>
-<p><span class="citation" data-cites="daniel2002">Daniel (<a href="#ref-daniel2002" role="doc-biblioref">2002</a>)</span></p>
-<p><span class="citation" data-cites="glantzs2006">Glantz, S (<a href="#ref-glantzs2006" role="doc-biblioref">2006</a>)</span></p>
-<p><span class="citation" data-cites="agresti2015">Agresti (<a href="#ref-agresti2015" role="doc-biblioref">2015</a>)</span></p>
-</div>
+<p>Desde una perspectiva estadística, los estimadores de efecto son análogos a los coeficientes en modelos de regresión o a las medidas de asociación en estudios epidemiológicos, ya que cuantifican la fuerza y dirección de la relación entre dos variables.</p>
+<p>Entre los estimadores de efecto más utilizados en investigación epidemiológica y aplicables a modelos de meta-análisis se encuentran: proporciones, tasas de incidencia, coeficientes de correlación, diferencias de medias, <em>odds ratio</em> (OR), riesgos relativos (RR) y <em>hazard ratio</em>.</p>
+<p>En la próxima sección describiremos la estructura de los modelos de meta-análisis de efectos fijos y de efectos aleatorios. Luego, exploraremos cómo se ajustan estos modelos según cada tipo de estimador epidemiológico y con su implementación práctica en R.</p>
 
 
 
 </section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-agresti2015" class="csl-entry" role="listitem">
-Agresti, Alan. 2015. <em>Foundations of Linear and Generalized Linear Models</em>. Wiley Series En Probability y Statistics. Hoboken, New Jersey: John Wiley &amp; Sons, Inc.
+<div id="ref-glass1976" class="csl-entry" role="listitem">
+Glass, Gene V. 1976. <span>«Primary, Secondary, and Meta-Analysis of Research»</span>. <em>Educational Researcher</em> 5 (10): 3-8. <a href="https://doi.org/10.2307/1174772">https://doi.org/10.2307/1174772</a>.
 </div>
-<div id="ref-daniel2002" class="csl-entry" role="listitem">
-Daniel, Wayne W. 2002. <em>Bioestadística: Base para el análisis de las ciencias de la salud</em>. 4.ª ed. Limusa Wiley.
+<div id="ref-Harrer2021" class="csl-entry" role="listitem">
+Harrer, Mathias, Pim Cuijpers, Toshi A Furukawa, y David D Ebert. 2021. <em>Doing Meta-Analysis With R: A Hands-On Guide</em>. Boca Raton, FL; London: Chapman &amp; Hall/CRC Press. <a href="https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074">https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074</a>.
 </div>
-<div id="ref-glantzs2006" class="csl-entry" role="listitem">
-Glantz, S. 2006. <em>Bioestadística</em>. 6.ª ed. Mexico: McGraw Hill.
+<div id="ref-Page2021a" class="csl-entry" role="listitem">
+Page, Matthew J., David Moher, Patrick M. Bossuyt, Isabelle Boutron, Tammy C. Hoffmann, Cynthia D. Mulrow, Larissa Shamseer, et&nbsp;al. 2021. <span>«PRISMA 2020 explanation and elaboration: Updated guidance and exemplars for reporting systematic reviews»</span>. <em>The BMJ</em> 372. <a href="https://doi.org/10.1136/bmj.n160">https://doi.org/10.1136/bmj.n160</a>.
 </div>
-<div id="ref-institutonacionaldeepidemiología2015" class="csl-entry" role="listitem">
-Instituto Nacional de Epidemiología. 2015. <em>MANUAL DE EPIDEMIOLOGÍA: FUNDAMENTOS, MÉTODOS Y APLICACIONES</em>. Edición 2015.
-</div>
-<div id="ref-ríusdíaz2012" class="csl-entry" role="listitem">
-Ríus Díaz, Francisca, Francisco Javier Barón Lopez, Elisa Sánchez Font, y Luis Parras Guijosa. 2012. <span>«Bioestadística: Métodos y Aplicaciones»</span>. <a href="http://virtual.uptc.edu.co/ova/estadistica/docs/libros/ftp.bioestadistica.uma.es/libro/">http://virtual.uptc.edu.co/ova/estadistica/docs/libros/ftp.bioestadistica.uma.es/libro/</a>.
-</div>
-<div id="ref-triola2018" class="csl-entry" role="listitem">
-Triola, Mario F. 2018. <em>ESTADÍSTICA Decimosegunda Edicion</em>. Pearson Educación de México, SA de CV.
-</div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reutilización</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.es">CC BY-NC 4.0</a></div></div></section></div></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notas</h2>
+<ol>
+<li id="fn1"><p>Si bien ambos términos son equivalentes, usaremos la denominación “estimador de efecto” presente en las normas PRISMA para evitar confusiones con los <em>effect size</em> calculados en los modelos de regresión tradicionales, que evalúan la magnitud del efecto de una variable independiente.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reutilización</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.es">CC BY-NC 4.0</a></div></div></section></div></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -1126,10 +898,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../extras/intro_R.html" class="pagination-link" aria-label="Introducción a R y RStudio">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introducción a R y RStudio</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../extras/intro_R.html" class="pagination-link" aria-label="Introducción a R y RStudio">
-        <span class="nav-page-text">Introducción a R y RStudio</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../unidad_2/02_fixed_random.html" class="pagination-link" aria-label="Modelos de meta-análisis">
+        <span class="nav-page-text">Modelos de meta-análisis</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
