@@ -1,0 +1,356 @@
+---
+title: "Modelos de meta-análisis"
+author:
+  - name: Tamara Ricardo
+    orcid: 0000-0002-0921-2611
+bibliography: "../references.bib"
+---
+
+```{r}
+#| echo: false
+source("../setup.R")
+```
+
+## Introducción
+
+Uno de los objetivos principales del modelado estadístico es representar la realidad de la manera más “sencilla” posible, capturando su estructura esencial y descartando elementos cuya variabilidad podría generar ruido en la interpretación de los fenómenos.
+
+Para ajustar un modelo estadístico, partimos de los datos disponibles y buscamos construir una representación basada en ellos. En el caso de los modelos de meta-análisis, los datos de interés son los **estimadores de efecto** obtenidos en cada estudio, y el objetivo principal es analizar la variabilidad entre ellos, la cual puede deberse a diferencias metodológicas, características de las poblaciones estudiadas u otras fuentes.
+
+Existen dos enfoques principales en meta-análisis: los modelos de efectos fijos y los modelos de efectos aleatorios. Durante este curso, describiremos sus características fundamentales y su implementación en R. Para quienes deseen profundizar en los fundamentos matemáticos de estos modelos, recomendamos consultar el [Capítulo 4](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pooling-es.html) de @Schwarzer2015 y el Capítulo 2 de @Harrer2021.
+
+## Modelos de efectos fijos
+
+El modelo de efectos fijos parte de la premisa de que todos los estimadores de efecto incluidos en el meta-análisis ($y_k$) provienen de una población homogénea. Es decir, se asume un único efecto verdadero subyacente, denotado como $\theta$, y que las diferencias observadas entre estudios se explican únicamente por el error muestral ($\epsilon_k$).
+
+$$
+y_k = \theta + \epsilon_k
+$$ {#eq-1}
+
+Este error muestral es dependiente del tamaño de la muestra y equivalente al error estándar del estimador. El objetivo es entonces calcular $\theta$ usando el promedio ponderado de los estimadores de efecto individuales.
+
+$$
+\theta = \frac{\sum{y_k w_k}}{\sum{w_k}} \qquad donde~w_k = \frac{1}{S^2_{y_k}}
+$$ {#eq-2}
+
+En el modelo de efectos fijos, los estudios con menor varianza poseen mayor influencia sobre la estimación global. Esta estrategia de ponderación se conoce como el **método de la varianza inversa**.
+
+Como se supone que los estudios son homogéneos entre sí, no se considera la existencia de fuentes de variabilidad adicionales. Por esta razón, también se les conoce como **modelo de efecto común** (*common effect model*) o **modelo de efectos equivalentes** (*equal effect model*).
+
+No obstante, en la práctica, es frecuente encontrar heterogeneidad real entre los estudios, lo que hace inadecuado el enfoque de efectos fijos. En estos casos, conviene optar por un modelo de efectos aleatorios, que incorpora explícitamente esa heterogeneidad en la estimación del efecto global.
+
+## Modelos de efectos aleatorios
+
+Los modelos de efectos aleatorios asumen que, además del error muestral, existen fuentes adicionales de variabilidad entre los estudios. A diferencia del modelo de efectos fijos, no se postula un único efecto verdadero común, sino que se considera que cada estudio estima un efecto específico, que varía alrededor de una media global.
+
+La relación entre el estimador de efecto para cada estudio ($y_k$) y su efecto verdadero se expresa como:
+
+$$
+y_k = \theta_k + \epsilon_k
+$$ {#eq-3}
+
+En este enfoque, los verdaderos efectos de los estudios ($\theta_k$) no son idénticos, sino que se distribuyen según una **distribución de probabilidad** con media $\mu$ y desvío estándar $\tau$,
+
+Reemplazando $\theta_k$ en la ecuación anterior:
+
+$$
+y_k = \mu + \tau_k + \epsilon_k
+$$ {#eq-4}
+
+donde:
+
+-    $\tau_k$ representa el **desvío del efecto verdadero del estudio** $k$ con respecto a la media global.
+
+-   $\epsilon_k$ es el error muestral.
+
+El objetivo del modelo es estimar la media de la distribución de efectos verdaderos ($\mu$), teniendo en cuenta tanto la variabilidad dentro de los estudios (error muestral) como la variabilidad entre estudios (**heterogeneidad**). Para ello, cada estudio se pondera mediante una versión ajustada del método de la varianza inversa:
+
+$$w^*_i = \frac{1}{S^2_{y_k} + \tau^2} \qquad donde~\tau^2 es~ la~ varianza~entre~estudios$$ {#eq-5}
+
+El valor de tau-cuadrado no se conoce de antemano y debe estimarse a partir de los datos. Entre los métodos más utilizados se encuentran el **estimador de DerSimonian y Laird** y la **máxima verosimilitud restringida** (REML). Aunque su desarrollo técnico excede los objetivos de este curso, es importante destacar que la elección del método puede influir tanto en la estimación del efecto global como en la amplitud de los intervalos de confianza.
+
+### Indicadores de heterogeneidad
+
+En un meta-análisis, la variabilidad en los resultados puede deberse a múltiples fuentes:
+
+-   **Variabilidad intraestudio**: refleja las diferencias entre los participantes dentro de cada estudio.
+
+-   **Heterogeneidad entre estudios**: variabilidad en los efectos estimados más allá de lo esperable por azar.
+
+-   **Error de muestreo** y otras fuentes de incertidumbre, que pueden influir en las diferencias observadas.
+
+La heterogeneidad entre estudios es particularmente importante, ya que indica si los efectos varían más de lo que se esperaría solo por error aleatorio. En la siguiente tabla, adaptada de @Schwarzer2015, se resumen los indicadores más utilizados para cuantificar la heterogeneidad:
+
+```{r}
+#| echo: false
+# Generar datos
+tibble(
+  Medida = c("Q de Cochran", 
+             "I²", 
+             "τ²", 
+             "H²"),
+    Interpretación = c(
+      "Evalúa si la heterogeneidad observada es estadísticamente significativa.",
+      "Cuantifica qué proporción de la variabilidad total se debe a heterogeneidad real.",
+      "Mide la variabilidad real entre los efectos verdaderos de los estudios.",
+      "Razón entre la varianza total observada y la varianza esperada bajo el supuesto de homogeneidad."
+    ),
+    Escala = c("Absoluta", 
+               "Porcentaje", 
+               "Varianza", 
+               "Absoluta"),
+    Rango = c("[0, ∞)", 
+              "[0, 100]", 
+              "[0, ∞)", 
+              "[1, ∞)"),
+    `Número de estudios` = c("Dependiente", 
+                             "Independiente", 
+                             "Independiente", 
+                             "Independiente"),
+    `Afectada por precisión` = c("Sí", 
+                                 "Sí", 
+                                 "No", 
+                                 "Sí")
+  ) |> 
+  
+  # Tabla 
+  kbl_format()
+```
+
+Estos indicadores permiten evaluar si las diferencias observadas entre los estudios justifican el uso de un modelo de efectos aleatorios en lugar de uno de efectos fijos.
+
+## Implementación en R
+
+Existen diversos paquetes para ajustar modelos de meta-análisis en R, siendo los más utilizados `metafor` [@metafor] y `meta` [@meta]. Ambos ajustan modelos robustos, pero difieren en su enfoque, facilidad de uso y otras características.
+
+```{r}
+#| echo: false
+# Generar datos
+tibble(
+  " " = c("Característica principal",  
+         "Curva de aprendizaje", 
+         "Tipo de datos",  
+         "Meta-regresiones",   
+         "Análisis de subgrupos",  
+         "Salida"),  
+  
+  metafor = c("Flexibilidad y potencia",
+              "Moderada a alta",
+              "Puede manejar diversos tipos de datos y transformaciones",
+              "Permite múltiples covariables e interacciones",
+              "Meta-regresión con predictores categóricos",
+              "Detallada, muestra estadísticos avanzados"),
+  
+  meta = c("Facilidad de uso",
+           "Apto para principiantes en R",
+           "Funciones específicas para cada tipo de datos",
+           "Permiten una o pocas covariables",
+           "Argumentos específicos para análisis de subgrupos",
+           "Concisa, orientada a interpretar los resultados")
+) |> 
+  # Tabla
+  kbl_format()
+```
+
+Dado que este curso se enfoca en la aplicación práctica del meta-análisis, utilizaremos principalmente el paquete `meta`, que ajusta por defecto modelos de efectos fijos y aleatorios, e incluye distintos estimadores de heterogeneidad estadística.
+
+### Estructura básica
+
+El paquete `meta` ofrece una serie de funciones para ajustar modelos de meta-análisis con una estructura uniforme. La función principal es `metagen()`, que permite trabajar con datos precalculados. Sus argumentos principales son:
+
+```{r}
+#| eval: false
+metagen(
+  TE, # <1>
+  seTE, # <2>
+  studlab, # <3>
+  data, # <4>
+  subset, # <5>
+  common, # <6>
+  random, # <7>
+  subgroup, # <8>
+  cluster # <9>
+)
+```
+
+1.  Estimador de efecto individual.
+
+2.  Error estándar el estimador de efecto individual.
+
+3.  Identificador único del estudio (opcional).
+
+4.  Conjunto de datos a utilizar (opcional).
+
+5.  Filtrar estudios por una condición (opcional).
+
+6.  Ajustar modelo de efectos fijos (`TRUE`/`FALSE`).
+
+7.  Ajustar modelo de efectos aleatorios (`TRUE`/`FALSE`).
+
+8.  Definir variable para análisis de subgrupos (opcional).
+
+9.  Definir variable para ajuste de modelo multinivel (opcional).
+
+### Ejemplo práctico
+
+Usaremos el conjunto de datos `dat.konstantopoulos2011`, incluido en la dependencia `metadat` [@metadat]. El mismo presenta los resultados de 56 estudios que comparan el rendimiento escolar de estudiantes que asisten a escuelas con un calendario escolar modificado —caracterizado por varios períodos cortos de vacaciones distribuidos a lo largo del año— con aquellos que asisten a escuelas con un calendario tradicional, que incluye un receso de verano largo y vacaciones más breves en invierno y primavera. Los resultados se expresan como diferencias de medias estandarizadas.
+
+Comenzaremos por cargar el paquete necesario:
+
+```{r}
+# Cargar el paquete meta
+library(meta)
+```
+
+Cargamos los datos y exploramos su estructura:
+
+```{r}
+# Cargar datos
+datos <- dat.konstantopoulos2011
+
+# Explorar estructura del dataset
+names(datos)
+```
+
+Las variables de entrada para `metagen()` serán `yi` (diferencia de medias estandarizada), `vi` (variabilidad de la estimación) y `study` (identificador único del estudio):
+
+```{r}
+# Ajustar el modelo
+mod <- metagen(TE = yi,
+               seTE = vi,
+               studlab = study,
+               common = TRUE,    
+               random = TRUE,    
+               backtransf = TRUE, 
+               data = datos)
+```
+
+Podemos acceder a la salida completa del modelo, con los estimadores de efecto y su $95\%~CI$ para cada estudio usando `summary()`, o a una versión más resumida imprimiendo el objeto donde almacenamos el modelo:
+
+```{r}
+# Resumen del modelo
+mod
+```
+
+Antes de analizar en detalle cada elemento de la salida debemos fijarnos en el valor de $I^2$, ya que si el porcentaje de heterogeneidad estadística es alto, debemos omitir los resultados del modelo de efectos fijos. En nuestro ejemplo $I^2 = 99,9\%$ nos indica que el modelo de efectos aleatorios es el más apropiado (podemos reajustar el modelo cambiando el argumento `common` a `FALSE` o simplemente ignorar estos coeficientes).
+
+Una vez que decidimos con cual modelo quedarnos, procedemos a interpretar la salida:
+
+-   `k`: número de estudios incluidos en el análisis.
+
+-   `Common effect model`: estimador de efecto, $95\%~IC$, estadístico z y significancia estadística para el modelo de efectos fijos.
+
+-   `Random effects model`: estimador de efecto, $95\%~IC$, estadístico z y significancia estadística para el modelo de efectos aleatorios.
+
+-   `Quantifying heterogeneity (with 95%-CIs)`: muestra las distintas medidas de heterogeneidad y los test de significancia asociados:
+
+    -   `tau^2`: variabilidad entre estudios (tau-cuadrado) y su $95\%~IC$.
+
+    -   `tau`: raíz cuadrada de la variabilidad entre estudios y su $95\%~IC$.
+
+    -   `I^2`: porcentaje de variabilidad atribuida a diferencias reales entre estudios ($I^2$).
+
+    -   `H`: raíz cuadrada del estadístico $H^2$, que mide la razón entre la varianza observada y la esperada.
+
+    -   `Q`: estadístico Q de Cochran con sus grados de libertad y significancia.
+
+-   `Details of meta-analysis methods`: indica los métodos estadísticos utilizados en el ajuste del modelo, incluyendo:
+
+    -   `Inverse variance method`: método de varianza inversa para ponderar los estudios.
+
+    -   `Restricted maximum-likelihood estimator for tau^2`: estimador de máxima verosimilitud restringida para tau-cuadrado.
+
+    -   `Q-Profile method for confidence interval of tau^2 and tau`: método para estimar el intervalo de confianza de tau y tau-cuadrado.
+
+    -   `Calculation of I^2 based on Q:` metodología aplicada para calcular $I^2$.
+
+### Interpretación de resultados
+
+En base a la salida anterior, podemos concluir que el meta-análisis realizado sobre 56 estudios individuales muestra que el rendimiento académico aumenta significativamente con la modificación del calendario escolar ($p < 0.005$). La alta heterogeneidad estadística ($I^2 = 99,9\%$) sugiere que la variabilidad observada se debe a diferencias reales entre estudios.
+
+### Representación gráfica
+
+Los resultados del meta-análisis pueden visualizarse mediante *forest plots*, gráficos que representan la distribución de los estimadores de efecto de los estudios individuales y sus intervalos de confianza en relación con el estimador global. Además, proporcionan información sobre la heterogeneidad entre estudios, facilitando la interpretación de los resultados.
+
+El paquete `meta` incluye la función `forest()`, que permite generar *forest plots* de forma rápida y con múltiples opciones de personalización. Para conocer todos los argumentos disponibles, se puede ejecutar `?forest` en la consola de R.
+
+Algunos de sus argumentos principales incluyen:
+
+```{r}
+#| eval: false
+forest(
+  mod, # <1>
+  sortvar, # <2>
+  smlab, # <3>
+  col.diamond, # <4>
+  col.square, # <5>
+  print.tau2 = TRUE, # <6>
+  print.I2 = TRUE, # <7>
+  print.Q = TRUE, # <8>
+  digits = 2, # <9>
+  ...)
+```
+
+1.  Nombre del modelo de meta-análisis.
+
+2.  Ordenar los estudios según una variable numérica
+
+3.  Etiqueta a mostrar para el estimador de efecto.
+
+4.  Color para mostrar el símbolo del estimador de efecto global.
+
+5.  Color para mostrar el símbolo de los estimadores de efecto individuales.
+
+6.  Mostrar tau-cuadrado (`TRUE`/`FALSE`).
+
+7.  Mostrar I-cuadrado (`TRUE`/`FALSE`).
+
+8.  Mostrar Q de Cochran (`TRUE`/`FALSE`).
+
+9.  Especificar el número de decimales a mostrar en los resultados.
+
+A continuación, generaremos un *forest plot* para representar gráficamente el modelo que ajustamos. Para mejorar su visualización, vamos a usar colores personalizados para los argumentos `col.diamond` y `col.square`:
+
+```{r}
+#| fig-height: 13
+#| fig-width: 9
+forest(mod,
+       smlab = "Diferencia de medias estandarizada",
+       col.diamond = "#8C0172",
+       col.square = "#6BD48C"
+       )
+```
+
+El gráfico consta de tres paneles principales:
+
+-   Panel izquierdo:
+
+    -   Identificador de estudio (`"studlab"`).
+
+    -   Columnas adicionales dependientes del estimador de efecto utilizado.
+
+-   Panel central:
+
+    -   Línea vertical de referencia que indica el valor de no efecto (0 en datos continuos, 1 en escalas logarítmicas).
+
+    -   Línea punteada que representa el estimador global del meta-análisis.
+
+    -   Un rombo que representa el estimador de efecto global, cuyo ancho indica el intervalo de confianza al 95%.
+
+    -   Cuadrados que representan los estimadores de los estudios individuales, con un tamaño proporcional al peso del estudio en el análisis.
+
+    -   Bigotes horizontales que indican los $95\%~IC$ de cada estudio.
+
+-   Panel derecho:
+
+    -   Estimador de efecto e intervalo de confianza al 95% de cada estudio.
+
+    -   Peso estadístico asignado a cada estudio en el modelo de efectos aleatorios.
+
+Se puede controlar la información que aparece en los lados del *forest plot* mediante los argumentos `leftcols`, `rightcols`, `leftlabs` y `rightlabs`. También es posible aplicar formatos predefinidos con `layout = "RevMan5"` o `layout = "JAMA"`, que ajustan el diseño según estilos ampliamente utilizados en la literatura científica.
+
+Los gráficos generados con `forest()` no son compatibles con `ggplot2` ni se autoescalan, lo que puede ser problemático si el número de estudios es grande, ya que el gráfico podría quedar ilegible en la vista predeterminada.
+
+Para evitar este problema, se recomienda exportar el gráfico a un archivo de imagen (por ejemplo, PDF o PNG) usando las funciones `pdf()` o `png(),` especificando un tamaño adecuado antes de ejecutarlo con `forest()`. En la última clase además veremos opciones de visualización avanzada para generar gráficos listos para su publicación.
+
+En la siguiente sección, exploraremos las funciones de meta que permiten ajustar modelos de meta-análisis para distintos estimadores de efecto en epidemiología. Luego, abordaremos métodos para controlar la heterogeneidad, tales como el análisis de moderadores y la meta-regresión y aprenderemos qué es y como se mide el sesgo de publicación.

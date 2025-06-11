@@ -1,5 +1,7 @@
 ---
-title: "Bienvenidos/as"
+title: ""
 ---
+
+![](images/meta-analysis_fusion.jpeg){fig-align="center"}
 
 Les damos la bienvenida al curso de "Introducción a la Revisión Sistemática con Meta-análisis". Antes de profundizar en los temas específicos, recomendamos a quienes lo requieran repasar el material introductorio sobre [**inferencia estadística**](extras/intro_inferencia.qmd) y primeros pasos en [**R y RStudio**](extras/intro_R.qmd). ya que les proporcionará una base sólida para aprovechar al máximo el curso. ¡Esperamos que disfruten y enriquezcan sus conocimientos!

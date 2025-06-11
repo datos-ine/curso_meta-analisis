@@ -1,0 +1,810 @@
+---
+title: "Estimadores de efecto"
+author: "Tamara Ricardo"
+bibliography: "../references.bib"
+---
+
+```{r}
+#| echo: false
+source("../setup.R")
+```
+
+## Introducción
+
+En esta sección repasaremos los principales estimadores de efecto utilizados en estudios epidemiológicos, junto con ejemplos prácticos para su ajuste e interpretación en R.
+
+Comenzaremos por cargar el paquete `meta`, que permite realizar análisis de efectos fijos y aleatorios, así como representar los resultados mediante gráficos tipo *forest plot*:
+
+```{r}
+#| message: true
+library(meta)
+```
+
+Para facilitar la exploración y manipulación de datos, utilizaremos funciones del paquete `tidyverse`[@tidyverse]:
+
+```{r}
+library(tidyverse)
+```
+
+En secciones anteriores, exploramos cómo personalizar los colores de los *forest plot* mediante los argumentos `col.diamond` y `col.square`. Para garantizar que los gráficos resultantes sean accesibles a personas con deficiencia en la percepción del color, emplearemos **paletas adaptadas** (*colorblind-friendly*) del paquete `scico` [@scico]:
+
+```{r}
+# Cargar el paquete
+library(scico)
+
+# Mostrar paletas categóricas disponibles
+scico_palette_show(categorical = TRUE)
+```
+
+En los ejemplos siguientes, emplearemos la paleta `"hawaii"`, que genera un gradiente entre tonos magenta y turquesa:
+
+```{r}
+# Paleta colorblind-friendly
+pal <- scico(n = 3, palette = "hawaii")
+```
+
+## Meta-análisis en estudios descriptivos
+
+En estudios descriptivos, los principales estimadores de efecto son la **correlación**, la **prevalencia** y la **tasa de incidencia**. A continuación, abordaremos cómo ajustar modelos de meta-análisis para cada uno de estos casos.
+
+### Correlaciones
+
+La correlación mide la fuerza y dirección de la relación lineal entre dos variables numéricas continuas, y se calcula mediante la siguiente fórmula:
+
+$$ 
+r_{xy} = \frac{Cov_{xy}}{S_xS_y} 
+$$ {#eq-1}
+
+donde:
+
+-   $Cov_{xy}$ es la covarianza entre las variables $x$ e $y$.
+
+-   $S_x$ y $S_y$ son los desvíos estándar de cada variable.
+
+Dado que los coeficientes de correlación se encuentran en un rango entre -1 y 1, su distribución no es simétrica, lo cual puede afectar la estimación del error estándar en muestras pequeñas. Para corregir este sesgo y estabilizar la varianza, se utiliza la **transformación *z* de Fisher**.
+
+La función `metacor()` permite ajustar modelos de meta-análisis para correlaciones y aplica automáticamente esta transformación cuando se especifica el argumento `sm = "ZCOR"`.
+
+Como ejemplo, utilizaremos la base de datos `dat.molloy2014`, que recopila resultados de 16 estudios sobre la relación entre concienciación y adherencia a la medicación.
+
+```{r}
+# Cargar datos
+datos_cor <- dat.molloy2014
+
+# Explorar la estructura de los datos
+glimpse(datos_cor)
+```
+
+Las principales variables de interés son:
+
+-   `ri`: coeficiente de correlación.
+
+-   `ni`: tamaño muestral de cada estudio.
+
+-   `authors`: identificador del estudio.
+
+Ajustamos un modelo de meta-análisis para correlaciones aplicando la transformación *z* de Fisher:
+
+```{r}
+mod_cor <- metacor(
+  cor = ri,          # <1>
+  n = ni,            # <2>
+  studlab = authors, # <3>
+  data = datos_cor,  # <4>
+  sm = "ZCOR",       # <5>
+  common = TRUE,     # <6>
+  random = TRUE,     # <7>
+  backtransf = TRUE  # <8>
+)
+```
+
+1.  Coeficiente de correlación para cada estudio.
+
+2.  Tamaño de la muestra en cada estudio.
+
+3.  Identificador único del estudio.
+
+4.  Conjunto de datos.
+
+5.  Estimador de efecto: **transformación z de Fisher para correlaciones.**
+
+6.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
+
+7.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
+
+8.  Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+
+Analicemos ahora la salida del modelo:
+
+```{r}
+mod_cor
+```
+
+El valor de $I^2$ indica que los datos presentan una heterogeneidad moderada y debe descartarse el modelo de efectos fijos.
+
+A diferencia de lo que vimos para datos precalculados, la salida nos muestra no solo el número de estudios incluidos (`k`) sino también el número total de observaciones (`o`).
+
+De acuerdo al modelo de efectos aleatorios, existe una correlación positiva baja entre la concienciación y la adherencia a la medicación.
+
+Generamos el *forest plot* para visualizar los resultados:
+
+```{r}
+#| fig-width: 8
+forest(
+  mod_cor, 
+  col.diamond.random = pal[1], 
+  col.square = pal[3],
+  common = FALSE,                                 # <1> 
+  smlab = "Correlación de Pearson",               # <2>
+  leftlabs = c("Estudio", "N"),                   # <3>
+  rightlabs = c("r", "95% IC", "Peso"),           # <4>
+  hetlab = "Heterogeneidad: ",                    # <5>
+  text.random = "Modelo de \n efectos aleatorios" # <6>
+)
+```
+
+1.  Omitir modelo de efectos fijos.
+
+2.  Personalizar etiqueta del estimador de efecto.
+
+3.  Personalizar etiquetas del panel izquierdo.
+
+4.  Personalizar etiquetas del panel derecho.
+
+5.  Personalizar etiqueta indicadores de heterogeneidad.
+
+6.  Personalizar etiqueta del estimador global.
+
+### Prevalencia
+
+La prevalencia representa la proporción de individuos con un evento de interés dentro de una población:
+
+$$ 
+p = \frac{k}{n} 
+$$ {#eq-2}
+
+donde:
+
+-   $k$ es el número de individuos con la condición/evento.
+
+-   $n$ es el tamaño total de la población o muestra.
+
+Dado que las proporciones pueden estar cercanas a los valores extremos (0 o 1), su distribución es asimétrica, lo que afecta el cálculo del error estándar. Para corregir este problema, se aplica una transformación **logit** a los datos.
+
+La función `metaprop()` permite ajustar modelos para prevalencias e incorpora automáticamente esta transformación con el argumento `sm = "PLOGIT"`.
+
+Para ejemplificar, usaremos la base de datos `dat.crisafulli2020`, que contiene resultados de 26 estudios sobre la prevalencia de la distrofia muscular de Duchenne en recién nacidos:
+
+```{r}
+# Cargar datos
+datos_prev <- dat.crisafulli2020
+
+# Explorar estructura de los datos
+glimpse(datos_prev)
+```
+
+Las principales variables de interés son:
+
+-   `cases`: individuos con el evento.
+
+-   `total`: tamaño muestral.
+
+-   `study`: identificador de estudio.
+
+Ajustamos el modelo de meta-análisis para proporciones aplicando la transformación logit:
+
+```{r}
+mod_prev <- metaprop(
+  event = cases,     # <1>
+  n = total,         # <2>
+  studlab = study,   # <3>
+  data = datos_prev, # <4>
+  sm = "PLOGIT",     # <5>
+  common = TRUE,     # <6>
+  random = TRUE,     # <7>
+  backtransf = TRUE,  # <8>
+  pscale = 100       # <9>
+)
+```
+
+1.  Casos observados en cada estudio.
+
+2.  Tamaño muestral del estudio.
+
+3.  Identificador único del estudio.
+
+4.  Conjunto de datos.
+
+5.  Estimador de efecto: **logit-proporción**.
+
+6.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
+
+7.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
+
+8.  Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+
+9.  Expresar los resultados en porcentajes.
+
+Analicemos ahora la salida del modelo:
+
+```{r}
+mod_prev
+```
+
+El valor de $I^2$ indica que los datos presentan una heterogeneidad moderada y debe descartarse el modelo de efectos fijos.
+
+El coeficiente del modelo de efectos aleatorios muestra una prevalencia del evento del 0,022%, por lo que vamos a expresarla en **casos por 100 000 habitantes** al momento de realizar el *forest plot*.
+
+```{r}
+#| fig-width: 9
+#| fig-height: 7
+forest(
+  mod_prev, 
+  col.diamond.random = pal[1], 
+  col.square = pal[3],
+  common = FALSE,                                 # <1> 
+  smlab = "Prevalencia \n (por 100 000 hab.)",    # <2>
+  leftlabs = c("Estudio", "Eventos", "N"),        # <3>
+  rightlabs = c("Prev.", "95% IC"),               # <4>
+  hetlab = "Heterogeneidad: ",                    # <5>
+  text.random = "Modelo de \n efectos aleatorios",# <6>
+  pscale = 100000                                 # <7>
+)
+```
+
+1.  Omitir modelo de efectos fijos.
+
+2.  Personalizar etiqueta del estimador de efecto.
+
+3.  Personalizar etiquetas del panel izquierdo.
+
+4.  Personalizar etiquetas del panel derecho.
+
+5.  Personalizar etiqueta indicadores de heterogeneidad.
+
+6.  Personalizar etiqueta del estimador global.
+
+7.  Expresar coeficientes en casos cada 100000 habitantes.
+
+### Tasa de incidencia
+
+La tasa de incidencia o *incidence rate* (IR) se utiliza para eventos que ocurren a lo largo del tiempo y se define como:
+
+$$
+IR = \frac {k}{T}
+$$ {#eq-3}
+
+donde:
+
+-   $k$ es el número de eventos observados.
+
+-   $T$ es la suma del tiempo-persona en riesgo en cada estudio.
+
+Dado que las tasas de incidencia pueden ser pequeñas y asimétricas, se recomienda aplicar una **transformación logarítmica** a los datos para estabilizar su varianza.
+
+La función `metarate()` ajusta modelos de meta-análisis para tasas de incidencia, aplicando esta transformación (`sm = "IRLN"`).
+
+Como ejemplo, usamos la base `dat.nielweise2008`, que contiene 9 estudios sobre la incidencia de infecciones sanguíneas asociadas al uso de catéteres:
+
+```{r}
+# Cargar datos
+datos_inc <- dat.nielweise2008
+
+# Explorar estructura de los datos
+glimpse(datos_inc)
+```
+
+Las principales variables de interés son:
+
+-   `x2i`: casos observados en el grupo i.
+
+-   `t2i`: años-persona en riesgo en el grupo i.
+
+-   `authors`: identificador de estudio.
+
+Ajustamos el modelo de meta-análisis para tasas de incidencia aplicando la transformación logarítmica:
+
+```{r}
+mod_inc <- metarate(
+  event = x2i,            # <1>
+  time = t2i,             # <2>
+  studlab = authors,      # <3>
+  data = datos_inc,       # <4>
+  sm = "IRLN",            # <5>
+  common = TRUE,          # <6>
+  random = TRUE,          # <7>
+  backtransf = TRUE       # <8>
+)
+```
+
+1.  Casos observados en cada estudio.
+
+2.  Tiempo-persona en riesgo en cada estudio.
+
+3.  Identificador único del estudio.
+
+4.  Conjunto de datos.
+
+5.  Estimador de efecto: **log-tasa de incidencia**.
+
+6.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
+
+7.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
+
+8.  Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+
+Analicemos ahora la salida del modelo:
+
+```{r}
+mod_inc
+```
+
+El valor de $I^2$ indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.
+
+El coeficiente del modelo de efectos aleatorio muestra que la tasa de incidencia del evento es muy baja dentro del grupo estudiado, por lo que vamos a expresarla en **casos por 1000 años-persona** cuando ajustemos el *forest plot*.
+
+```{r}
+#| fig-width: 9
+forest(
+  mod_inc, 
+  col.diamond.random = pal[1], 
+  col.square = pal[3],
+  common = FALSE,                                      # <1> 
+  smlab = "Tasa de incidencia \n (1000 años-persona)", # <2>
+  leftlabs = c("Estudio", "Eventos", "Tiempo"),        # <3>
+  rightlabs = c("Tasa", "95% IC", "Peso"),             # <4>
+  hetlab = "Heterogeneidad: ",                         # <5>
+  text.random = "Modelo de \n efectos aleatorios",     # <6>
+  pscale = 1000                                        # <7>
+)
+```
+
+1.  Omitir modelo de efectos fijos.
+
+2.  Personalizar etiqueta del estimador de efecto.
+
+3.  Personalizar etiquetas del panel izquierdo.
+
+4.  Personalizar etiquetas del panel derecho.
+
+5.  Personalizar etiqueta indicadores de heterogeneidad.
+
+6.  Personalizar etiqueta del estimador global.
+
+7.  Expresar coeficientes en casos cada 1000 años-persona.
+
+## Meta-análisis en estudios analíticos
+
+Dentro de los estudios analíticos (observacionales y/o experimentales), los estimadores de efecto más comunes son la **diferencia de medias**, el ***odds-ratio*** (OR), el **riesgo relativo** (RR) y la **razón de tasas de incidencia** (IRR). A continuación, mostraremos su implementación en R.
+
+### Diferencia de medias
+
+La diferencia de medias entre dos grupos de exposición se define como:
+
+$$
+ MD = \bar{x_e} - \bar{x_c}
+$$ {#eq-4}
+
+donde:
+
+-   $\bar{x_e}$ es la media muestral del grupo expuesto o tratado.
+
+-   $\bar{x_c}$ es la media muestral del grupo no expuesto o control.
+
+El cálculo de la diferencia de medias requiere que todas las mediciones se hayan tomado en la misma escala. Para los modelos de meta-análisis, se utiliza la **diferencia de medias estandarizada**, que elimina la dependencia de las unidades de medición al ponderar por el desvío estándar.
+
+La función `metacont()` ajusta modelos de meta-análisis para diferencias de medias estandarizadas con el argumento `sm = "SMD"`.
+
+Como ejemplo, utilizaremos la base de datos `dat.furukawa2003`, que contiene resultados de 17 estudios sobre la efectividad de la dosis de antidepresivos tricíclicos en casos de depresión severa.
+
+```{r}
+# Cargar datos
+datos_md <- dat.furukawa2003
+
+# Explorar estructura de los datos
+glimpse(datos_md)
+```
+
+Las principales variables de interés son:
+
+-   `Me`: media muestral en grupo expuesto/tratamiento.
+
+-   `Se`: desvío estándar de la media en grupo expuesto/tratamiento.
+
+-   `Ne`: tamaño muestral en grupo expuesto/tratamiento.
+
+-   `Mc`: media muestral en grupo no expuesto/control.
+
+-   `Sc`: desvío estándar de la media en grupo no expuesto/control.
+
+-   `Nc`: tamaño muestral en grupo no expuesto/control.
+
+-   `author`: identificador de estudio.
+
+Ajustamos el modelo de meta-análisis para diferencia de medias estandarizada:
+
+```{r}
+mod_md <- metacont(
+  n.e = Ne,         # <1>
+  mean.e = Me,      # <2>
+  sd.e = Se,        # <3>
+  n.c = Nc,         # <4>
+  mean.c = Mc,      # <5>
+  sd.c = Sc,        # <6>
+  studlab = author, # <7>
+  data = datos_md,  # <8>
+  sm = "SMD",       # <9>
+  common = TRUE,    # <10>
+  random = TRUE,    # <11>
+  backtransf = TRUE # <12>
+)
+```
+
+1.  Tamaño muestral del grupo expuesto en cada estudio.
+
+2.  Media del grupo expuesto en cada estudio.
+
+3.  Desvío estándar del grupo expuesto en cada estudio.
+
+4.  Tamaño muestral del grupo no expuesto o control en cada estudio.
+
+5.  Media del grupo no expuesto o control en cada estudio.
+
+6.  Desvío estándar del grupo no expuesto o control en cada estudio.
+
+7.  Identificador único del estudio.
+
+8.  Conjunto de datos.
+
+9.  Estimador de efecto: **diferencia de medias estandarizada**.
+
+10. Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
+
+11. Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
+
+12. Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+
+Analicemos ahora la salida del modelo:
+
+```{r}
+mod_md
+```
+
+El valor de $I^2$ indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.
+
+Los coeficientes del modelo de efectos aleatorios indican que el grupo tratado presenta un promedio significativamente menor de infecciones asociadas al uso de catéteres que el grupo control $(p<0,001)$.
+
+Generamos el *forest plot* para visualizar los resultados:
+
+```{r}
+#| fig-height: 6
+#| fig-width: 11
+forest(
+  mod_md, 
+  col.diamond.random = pal[1], 
+  col.square = pal[3],
+  common = FALSE,                                        # <1> 
+  smlab = "Diferencia de medias \n estandarizada",       # <2>
+  leftlabs = c("Estudio", 
+               rep(c("Total", "Media", "SD"),2)),        # <3>
+  rightlabs = c("SMD", "95% IC", "Peso"),                # <4>
+  hetlab = "Heterogeneidad: ",                           # <5>
+  text.random = "Modelo de \n efectos aleatorios",       # <6>
+)
+```
+
+1.  Omitir modelo de efectos fijos.
+
+2.  Personalizar etiqueta del estimador de efecto.
+
+3.  Personalizar etiquetas del panel izquierdo.
+
+4.  Personalizar etiquetas del panel derecho.
+
+5.  Personalizar etiqueta indicadores de heterogeneidad.
+
+6.  Personalizar etiqueta del estimador global.
+
+Para mejorar la visualización, podemos modificar el argumento `leftcols` para mostrar solamente el identificador de estudio en el panel izquierdo:
+
+```{r}
+#| fig-height: 6
+#| fig-width: 8
+forest(
+  mod_md,
+  common = FALSE,        
+  col.diamond = pal[1],
+  col.square = pal[3],
+  smlab = "Diferencia de medias \n estandarizada",
+  leftlabs = "Estudio",
+  rightlabs = c("SMD", "95% IC", "Peso"),
+  hetlab = "Heterogeneidad: ",
+  text.random = "Modelo de efectos aleatorios",
+  leftcols = "studlab"
+  )
+```
+
+### *Odds-ratio*
+
+El *odds ratio* (OR) o razón de productos cruzados se define como el cociente entre los [*odds*](https://es.wikipedia.org/wiki/Odds_ratio#Definici%C3%B3n_de_los_odds) del evento en el grupo expuesto/tratamiento y en el grupo no expuesto/control:
+
+$$
+OR =  \frac{a/b}{c/d}
+$$ {#eq-5}
+
+donde:
+
+-   $a$ es el número de eventos en el grupo expuesto/tratamiento.
+
+-   $b$ es el número de individuos sin el evento en el grupo expuesto/tratamiento.
+
+-   $c$ es el número de eventos en el grupo no expuesto/control.
+
+-   $d$ es el número de individuos sin el evento en el grupo no expuesto/control.
+
+El OR solo puede tomar valores positivos $(0-\infty)$, donde:
+
+-   $OR = 1$ indica ausencia de efecto.
+
+-   $OR >1$ sugiere un aumento en la probabilidad de ocurrencia del evento en el grupo expuesto.
+
+-   $OR < 1$ sugiere un posible efecto protector de la exposición o tratamiento.
+
+Dado que el OR sigue una distribución asimétrica, su análisis estadístico puede ser complejo. Para estabilizar la varianza y aproximar una distribución normal, se aplica una **transformación logarítmica**.
+
+La función `metabin()` ajusta modelos de meta-análisis para OR e incorpora automáticamente esta transformación mediante el argumento `sm = "OR"`. Además, incluye una corrección de continuidad para manejar estudios con valores de eventos iguales a cero.
+
+El siguiente ejemplo utiliza la base de datos `dat.collins1985b`, que contiene información de 9 estudios sobre el efecto de los diuréticos en la prevención de preeclampsia.
+
+Comenzamos cargando los datos y explorando su estructura:
+
+```{r}
+# Carga datos
+datos_or <- dat.collins1985b
+
+# Explorar estructura de los datos
+glimpse(datos_or)
+```
+
+Las variables de interés son:
+
+-   `pre.xti`: número de eventos en el grupo expuesto/tratamiento.
+
+-   `pre.nti`: tamaño muestral en el grupo expuesto/tratamiento.
+
+-   `pre.xci`: número de eventos en el grupo no expuesto/control.
+
+-   `pre.nti`: tamaño muestral en el grupo no expuesto/control.
+
+-   `author`: identificador del estudio.
+
+Ajustamos el modelo de meta-análisis para OR:
+
+```{r}
+mod_or <- metabin(
+  event.e = pre.xti,  # <1>
+  n.e = pre.nti,      # <2>
+  event.c = pre.xci,  # <3>
+  n.c = pre.nci,      # <4>
+  studlab = author,   # <5>
+  data = datos_or,    # <6>
+  sm = "OR",          # <7>
+  common = TRUE,      # <8>
+  random = TRUE,      # <9>
+  backtransf = TRUE   # <10>
+)
+```
+
+1.  Eventos en el grupo expuesto en cada estudio.
+
+2.  Tamaño muestral del grupo expuesto en cada estudio.
+
+3.  Eventos en el grupo no expuesto/control en cada estudio.
+
+4.  Tamaño muestral del grupo no expuesto/control en cada estudio.
+
+5.  Identificador único del estudio.
+
+6.  Conjunto de datos.
+
+7.  Estimador de efecto: **log-*odds ratio***.
+
+8.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
+
+9.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
+
+10. Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+
+Analicemos ahora la salida del modelo:
+
+```{r}
+mod_or
+```
+
+La salida del modelo nos muestra el número de estudios (`k`), el número de observaciones total (`o`) y por grupo de exposición (`o.e` y `o.c`) y el número de eventos.
+
+El valor de $I^2$ indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.
+
+De acuerdo al coeficiente del modelo de efectos aleatorios, el uso de diuréticos reduce significativamente las probabilidades de preeclampsia en comparación con el grupo control $(p = 0,021)$.
+
+Generamos el *forest plot* para visualizar los resultados:
+
+```{r}
+#| fig-height: 4
+#| fig-width: 8
+forest(
+  mod_md, 
+  col.diamond.random = pal[1], 
+  col.square = pal[3],
+  common = FALSE,                                        # <1> 
+  smlab = "Odds-ratio",                                  # <2>
+  leftcols = "studlab",                                  # <3>
+  leftlabs = "Estudio",                                  # <4>
+  rightlabs = c("OR", "95% IC", "Peso"),                 # <5>
+  hetlab = "Heterogeneidad: ",                           # <6>
+  text.random = "Modelo de \n efectos aleatorios",       # <7>
+)
+```
+
+1.  Omitir modelo de efectos fijos.
+
+2.  Personalizar etiqueta del estimador de efecto.
+
+3.  Mostrar solo el identificador de estudio en el panel izquierdo.
+
+4.  Personalizar etiquetas del panel izquierdo.
+
+5.  Personalizar etiquetas del panel derecho.
+
+6.  Personalizar etiqueta indicadores de heterogeneidad.
+
+7.  Personalizar etiqueta del estimador global.
+
+### Riesgo relativo
+
+El riesgo relativo (RR) o *risk ratio* mide la razón entre las probabilidades de desarrollar un evento en el grupo expuesto y en el grupo control:
+
+$$
+RR =  \frac{a/(a + b)}{c/(c + d)}
+$$
+
+donde:
+
+-   $a$ es el número de eventos en el grupo expuesto/tratamiento.
+
+-   $b$ es el número de individuos sin el evento en el grupo expuesto/tratamiento.
+
+-   $c$ es el número de eventos en el grupo no expuesto/control.
+
+-   $d$ es el número de individuos sin el evento en el grupo no expuesto/control.
+
+Al igual que el OR, el **RR** es una medida asimétrica y solo toma valores positivos $(0-\infty)$. Para estabilizar la varianza y mejorar la interpretación estadística, se usa una **transformación logarítmica**, lo que permite modelar el RR en un intervalo simétrico y facilita la comparación entre estudios.
+
+La función `metabin()` permite calcular el RR mediante el argumento `sm = "RR"`, que aplica automáticamente la transformación logarítmica. Debido a la similitud en el cálculo con el OR, omitiremos el ejemplo para esta medida de asociación.
+
+### Razón de tasas de incidencia
+
+La razón de tasas de incidencia (*incidence rate ratio* o IRR) compara la frecuencia de eventos en dos grupos considerando el tiempo-persona de exposición:
+
+$$
+IRR = \frac{IR_e}{IR_c}
+$$
+
+donde:
+
+-   $IR_e$ es la tasa de incidencia en el grupo expuesto/tratamiento.
+
+-   $IR_c$ es la tasa de incidencia en el grupo no expuesto/control.
+
+Al igual que para la tasa de incidencia, se recomienda realizar la **transformación logarítmica** de los datos para aproximarlos a una distribución normal.
+
+En `meta`, la función `metainc()` ajusta modelos de IRR con `sm = "IRR"`, aplicando automáticamente la transformación logarítmica.
+
+A modo de ejemplo, volveremos a usar la base `datos_inc`, esta vez comparando entre grupo de exposición y control.
+
+Las principales variables de interés para este caso son:
+
+-   `x1i`: casos observados en grupo expuesto/tratamiento.
+
+-   `t1i`: años-persona en grupo expuesto/tratamiento.
+
+-   `x2i`: casos observados en grupo no expuesto/control.
+
+-   `t2i`: años-persona en grupo no expuesto/control.
+
+-   `authors`: identificador de estudio.
+
+Ajustamos el modelo de meta-análisis para IRR aplicando la transformación logarítmica:
+
+```{r}
+# Ajusta modelo
+mod_irr <- metainc(
+  event.e = x1i,          # <1>
+  time.e = t1i,           # <2>
+  event.c = x2i,          # <3>
+  time.c = t2i,           # <4>
+  studlab = authors,      # <5>
+  data = datos_inc,       # <6>
+  sm = "IRR",             # <7>
+  common = TRUE,          # <8>
+  random = TRUE,          # <9>
+  backtransf = TRUE,      # <10>
+  )
+```
+
+1.  Casos observados en el grupo expuesto de cada estudio.
+
+2.  Tiempo-persona en riesgo en el grupo expuesto de cada estudio.
+
+3.  Casos observados en el grupo no expuesto/control de cada estudio.
+
+4.  Tiempo-persona en riesgo en el grupono expuesto/control de cada estudio.
+
+5.  Identificador único del estudio.
+
+6.  Conjunto de datos.
+
+7.  Estimador de efecto: **log-razón de tasas de incidencia**.
+
+8.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
+
+9.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
+
+10. Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+
+Analicemos ahora la salida del modelo:
+
+```{r}
+mod_irr
+```
+
+El valor de $I^2$ indica que los datos presentan una heterogeneidad baja y puede conservarse el modelo de efectos fijos.
+
+Los coeficientes del modelo de efectos fijos muestran una disminución estadísticamente significativa del riesgo en el grupo tratado $(p = 0,24)$, pero la misma deja de ser significativa en el de efectos aleatorios $(p = 0,81)$.
+
+Generamos el *forest plot* para visualizar los resultados, usando los argumentos `col.diamond.random` y `col.diamond.common` para mostrar en diferentes colores los estimadores globales del modelo de efectos fijos y el modelo de efectos aleatorios:
+
+```{r}
+#| fig-height: 4
+#| fig-width: 9
+forest(
+  mod_irr,
+  col.diamond.random = pal[1],                      # <1>
+  col.diamond.common = pal[2],                      # <2>
+  col.square = pal[3],          
+  smlab = "Razón de tasas de incidencia",           # <3>
+  leftcols = "studlab",                             # <4>
+  leftlabs = "Estudio",                             # <5>
+  rightlabs = c("IRR", "95% IC", 
+                "Peso (fijo)", "Peso (aleatorio)"), # <6>
+  hetlab = "Heterogeneidad: ",                      # <7>
+  text.random = "Modelo de efectos aleatorios",     # <8>
+  text.common = "Modelo de efectos fijos"           # <9>
+)
+```
+
+1.  Color para el símbolo del estimador de efecto global del modelo de efectos aleatorios.
+
+2.  Color para el símbolo del estimador de efecto global del modelo de efectos fijos.
+
+3.  Personalizar etiqueta del estimador de efecto.
+
+4.  Mostrar solo el identificador de estudio en el panel izquierdo.
+
+5.  Personalizar etiquetas del panel izquierdo.
+
+6.  Personalizar etiquetas del panel derecho.
+
+7.  Personalizar etiqueta indicadores de heterogeneidad.
+
+8.  Personalizar etiqueta del estimador global para el modelo de efectos aleatorios.
+
+9.  Personalizar etiqueta del estimador global para el modelo de efectos fijos.
+
+::: {.callout-caution appearance="simple"}
+## Nota
+
+-   Debido a la extensión del curso, nos enfocaremos exclusivamente en la implementación en R de los modelos para cada medida de asociación. Quienes deseen profundizar en el desarrollo matemático de estos modelos pueden consultar los capítulos [3](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/effects.html) y [4.2](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pooling-es.html#pooling-es-r) de @Harrer2021.
+
+-   Actualmente, el paquete `meta` no incluye funciones específicas para modelar el tiempo hasta el evento (*hazard ratio*, HR). Sin embargo, si los estudios reportan el log-HR y su error estándar, es posible utilizar la función `metagen()` con el argumento `sm = "HR"` para obtener una estimación combinada del efecto. Para una explicación detallada del proceso, pueden consultar el capítulo 2.6.1 de @Schwarzer2015.
+:::

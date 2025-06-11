@@ -24,11 +24,8 @@ website:
     pinned: true
     left:
       - text: "Introducción a la Revisión Sistemática con Meta-análisis"
-        menu: 
-          - text: "Unidad 1"
-          - text: "Unidad 2"
-          - text: "Unidad 3"
-            
+        href: index.qmd
+
     right:
       - icon: cloud-download
         text: "Descargas"
@@ -58,27 +55,20 @@ website:
   # Barra lateral
   sidebar:
     contents:
-      - section: "Unidad 1"
-        icon: file-earmark-bar-graph
-          
-      - section: "Unidad 2"
-        icon: file-earmark-bar-graph
-        # contents: 
-        #   - unidad_2/intro.qmd
-        #   - unidad_2/fixed_random.qmd
-        #   - unidad_2/tipos_estimador.qmd
-        #   - unidad_2/mod_bias.qmd
-          
-      - section: "Unidad 3"
-        icon: file-earmark-bar-graph
-      
-      - section: "Material suplementario"
+      - section: "Material Introductorio"
         icon: file-earmark-bar-graph
         contents:
           - extras/intro_inferencia.qmd
           - extras/intro_R.qmd
           
-  
+      - section: "Meta-análisis"
+        icon: file-earmark-bar-graph
+        contents:
+          - unidad_2/01_intro.qmd
+          - unidad_2/02_fixed_random.qmd
+          - unidad_2/03_tipos_estimador.qmd
+          - unidad_2/04_mod_bias.qmd
+        
   # Botón de anterior/siguiente
   page-navigation: true
   

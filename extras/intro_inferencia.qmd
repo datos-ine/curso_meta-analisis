@@ -30,9 +30,7 @@ crit_n <-
 
 La **estadística inferencial** es la rama de la estadística que permite extraer conclusiones sobre una población a partir de una muestra de datos. Este proceso se sustenta en dos procedimientos principales: la **estimación** y la **prueba de hipótesis**.
 
-La **población** se define como el conjunto completo de individuos u observaciones de interés, mientras que la **muestra** es el subconjunto representativo de esa población, diseñado para reflejar sus características fundamentales.
-
-Para describir la población se utilizan **parámetros**, valores numéricos como la media poblacional $(\mu)$, mientras que los datos muestrales se resumen con **estadísticos**, por ejemplo, la media muestral $(\bar{x})$.
+La **población** se define como el conjunto completo de individuos u observaciones de interés, mientras que la **muestra** es el subconjunto representativo de esa población, diseñado para reflejar sus características fundamentales. Para describir la población se utilizan **parámetros**, valores numéricos como la media poblacional $(\mu)$, mientras que los datos muestrales se resumen con **estadísticos**, por ejemplo, la media muestral $(\bar{x})$.
 
 ![](/images/poblacion_muestra.svg){fig-align="center" width="80%"}
 

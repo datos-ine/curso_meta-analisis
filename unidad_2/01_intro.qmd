@@ -1,0 +1,66 @@
+---
+title: "Introducción"
+author:
+  - name: Tamara Ricardo
+    orcid: 0000-0002-0921-2611
+bibliography: "../references.bib"
+---
+
+```{r}
+#| echo: false
+source("../setup.R")
+```
+
+## ¿Qué es un meta-análisis?
+
+El meta-análisis es una herramienta estadística que permite **sintetizar cuantitativamente** la evidencia proveniente de investigaciones independientes que abordan un mismo problema de investigación. Se lo ha definido como un "análisis de análisis" [@glass1976], ya que su **unidad de análisis** no son individuos ni poblaciones, sino estudios científicos.
+
+Su objetivo principal es proporcionar un estimador numérico que resuma los resultados de los estudios incluidos, lo que permite evaluar la **magnitud del efecto** de una intervención o la relación entre variables en distintos contextos [@Harrer2021]. Es importante destacar que los meta-análisis son adecuados exclusivamente para **investigaciones cuantitativas** y, en general, requieren que los estudios analizados compartan un diseño similar y estimen medidas de asociación comparables.
+
+A continuación, se resumen algunas de las principales ventajas y limitaciones del meta-análisis:
+
+```{r}
+#| echo: false
+# Generar datos
+tibble(
+  Ventajas = c("Permite una síntesis cuantitativa de la evidencia disponible.",
+               "Aumenta la potencia estadística al combinar los datos de múltiples estudios.",
+               "Mejora la precisión de los estimadores al reducir la variabilidad aleatoria.",
+               "Permite identificar patrones no evidentes en estudios individuales.",
+               "Evalúa la consistencia de los resultados en diferentes poblaciones y contextos."),
+  Desventajas = c("La validez de los resultados depende de la calidad metodológica de los estudios incluidos.",
+                  "Puede estar afectado por sesgos de publicación.",
+                  "La heterogeneidad entre estudios puede dificultar la interpretación de los resultados.",
+                  "Requiere una metodología rigurosa y criterios estrictos de selección de estudios.",
+                  "No corrige errores metodológicos de los estudios primarios.")
+) |> 
+  
+  # Generar tabla
+  kbl_format()
+```
+
+## Estimadores de efecto
+
+En estudios individuales, suele asumirse que las variables de interés fueron medidas de manera uniforme en todos los participantes. Esto permite aplicar técnicas de estadística descriptiva, como el [análisis exploratorio de datos (EDA)](https://datos-ine.github.io/unidad_1/EDA.html), para caracterizar la muestra, explorar relaciones entre variables y ajustar modelos de regresión acordes a la estructura de los datos.
+
+Sin embargo, en los meta-análisis esta suposición rara vez se cumple. Aún cuando los criterios de inclusión sean estrictos, los estudios pueden diferir en su diseño, población, medición de variables o definición de resultados. Por esta razón, no es posible sintetizar la evidencia con herramientas de la estadística tradicional.
+
+Para integrar los resultados de diferentes estudios, los meta-análisis utilizan **estimadores de efecto** [@Page2021a], también conocidos como *effect size* o tamaño del efecto [@Harrer2021][^1]. En algunos casos, estos valores pueden extraerse directamente de los artículos; sin embargo, a menudo es necesario calcularlos a partir de los datos reportados.
+
+[^1]: Si bien ambos términos son equivalentes, usaremos la denominación "estimador de efecto" presente en las normas PRISMA para evitar confusiones con los *effect size* calculados en los modelos de regresión tradicionales, que evalúan la magnitud del efecto de una variable independiente.
+
+Un buen estimador de efecto debe cumplir con las siguientes condiciones:
+
+-   **Comparable:** debe ser consistente entre los estudios incluidos.
+
+-   **Computable:** debe poder calcularse a partir de la información disponible.
+
+-   **Confiable:** debe permitir la estimación de su error estándar.
+
+-   **Interpretable:** debe responder de manera clara a la pregunta de investigación.
+
+Desde una perspectiva estadística, los estimadores de efecto son análogos a los coeficientes en modelos de regresión o a las medidas de asociación en estudios epidemiológicos, ya que cuantifican la fuerza y dirección de la relación entre dos variables.
+
+Entre los estimadores de efecto más utilizados en investigación epidemiológica y aplicables a modelos de meta-análisis se encuentran: proporciones, tasas de incidencia, coeficientes de correlación, diferencias de medias, *odds ratio* (OR), riesgos relativos (RR) y *hazard ratio*.
+
+En la próxima sección describiremos la estructura de los modelos de meta-análisis de efectos fijos y de efectos aleatorios. Luego, exploraremos cómo se ajustan estos modelos según cada tipo de estimador epidemiológico y con su implementación práctica en R.

@@ -1,0 +1,544 @@
+---
+title: "Exploración de la heterogeneidad"
+author:
+  - name: Tamara Ricardo
+    orcid: 0000-0002-0921-2611
+bibliography: "../references.bib"
+---
+
+```{r}
+#| echo: false 
+source("../setup.R")
+```
+
+## Introducción
+
+En la clase anterior abordamos el ajuste de modelos de efectos fijos y aleatorios, la representación gráfica de los resultados mediante *forest plots* y la estimación de la heterogeneidad estadística. En esta clase, nos enfocaremos en distintas estrategias para controlar la heterogeneidad observada y evaluar la robustez de los modelos ajustados.
+
+## Análisis de moderadores
+
+El análisis de moderadores permite explorar fuentes de heterogeneidad entre los estudios incluidos en un meta-análisis. Puede realizarse incorporando como moderador una variable categórica (**análisis de subgrupos**) o una variable numérica (**metarregresión**).
+
+Este enfoque contribuye a:
+
+-   Evaluar hipótesis sobre variaciones en la magnitud del efecto entre estudios.
+
+-   Interpretar diferencias observadas en los resultados.
+
+Para evitar sesgos de selección, es fundamental definir las variables moderadoras **durante la extracción de datos** en la revisión sistemática.
+
+El análisis de moderadores consta de dos etapas:
+
+-   Estimación del efecto **dentro de cada subgrupo.**
+
+-   Prueba estadística para evaluar diferencias **entre subgrupos**.
+
+### Análisis de sugbgrupos
+
+Para evaluar el efecto de una variable categórica, ajustamos el modelo de meta-análisis incluyendo el argumento `subgroup`. En el siguiente ejemplo, realizaremos un análisis de subgrupos a partir del [modelo para prevalencia](tipos_estimador.qmd#prevalencia) previamente ajustado, utilizando el país (`country`) como moderador.
+
+Cargamos los paquetes necesarios:
+
+```{r}
+# Cargar paquetes
+library(meta)       # Modelos de meta-análisis
+library(janitor)    # Tablas de frecuencia
+library(tidyverse)  # Manejo de datos
+```
+
+Cargamos los datos y exploramos su estructura:
+
+```{r}
+# Cargar datos
+datos_prev <- dat.crisafulli2020
+
+# Inspeccionar estructura de los datos
+glimpse(datos_prev)
+```
+
+Usaremos la función `tabyl()` del paquete `janitor` [@janitor] para generar una tabla de frecuencias de los niveles de la variable `country`:
+
+```{r}
+tabyl(datos_prev, country) |>   # Generar tabla de frecuencia
+  arrange(-n) |>                # Ordenar por frecuencia
+  adorn_pct_formatting()        # Proporciones a porcentajes
+```
+
+Como la mayoría de los estudios provienen de Italia y la frecuencia en otros países es baja, creamos una variable dicotómica `pais_cat`:
+
+```{r}
+datos_prev <- datos_prev |> 
+  mutate(pais_cat = if_else(
+    country  == "IT", # Condición
+    "Italia",         # Valor si la condición se cumple
+    "Otro/s" ))        # Valor si la condición no se cumple
+```
+
+Ajustamos el modelo de meta-análisis para proporciones, incorporando `pais_cat` como moderador:
+
+```{r}
+# Ajustar modelo
+mod_sg <- metaprop(
+  event = cases,          # Casos observados
+  n = total,              # Tamaño de la muestra
+  studlab = study,        # Identificador del estudio
+  data = datos_prev,      # Conjunto de datos
+  sm = "PLOGIT",          # Transformación logit
+  common = FALSE,         # Omitir modelo de efectos fijos
+  random = TRUE,          # Modelo de efectos aleatorios
+  pscale = 100000,        # Escala a casos/100 000 habitantes
+  subgroup = pais_cat     # <1>
+)
+```
+
+1.  Moderador categórico
+
+```{r}
+# Salida del modelo ajustado
+mod_sg
+```
+
+La salida del modelo incluye dos secciones adicionales:
+
+-   `Results for subgroups (random effects model)`: muestra los resultados para cada categoría del moderador, incluyendo:
+
+    -   Identificador de las categorías del moderador.
+
+    -   `k`: número de estudios en la categoría/subgrupo.
+
+    -   `events`: prevalencia en la categoría/subgrupo.
+
+    -   `95%-CI`: intervalo de confianza al 95% para la prevalencia en la categoría/subgrupo.
+
+    -   `tau^2`: varianza dentro de la categoría/subgrupo.
+
+    -   `tau`: desvío estándar en la categoría/subgrupo.
+
+    -   `Q`: estadístico Q de Cochran para la categoría/subgrupo.
+
+    -   `I^2`: porcentaje de heterogeneidad observado en la categoría/subgrupo.
+
+-   `Test for subgroup differences (random effects model)`: prueba de hipótesis para detectar diferencias significativas entre subgrupos.
+
+En este ejemplo, observamos una prevalencia significativamente mayor en Italia en comparación con otros países $(p = 0,013)$.
+
+Podemos visualizar los resultados del análisis de moderadores incorporando los siguiente argumentos a la función `forest()`:
+
+```{r}
+#| fig-height: 4
+#| fig-width: 9
+forest(
+  mod_sg,
+  layout = "subgroup",         # <1>
+  sort.subgroup = TRUE,        # <2>
+  calcwidth.subgroup = TRUE,   # <3>
+  calcwidth.tests = TRUE,      # <4>
+  print.subgroup.name = FALSE, # <5>
+  smlab = "Prevalencia \n (por 100 000 hab.)",
+  rightlabs = c("Eventos", "95% IC"),
+  hetlab = "Heterogeneidad: ",
+  text.random = "Modelo de efectos aleatorios", 
+  label.test.subgroup.random = "Diferencias entre subgrupos" # <6>
+)
+```
+
+1.  `layout = "subgroup"`: muestra los estimadores de efecto para cada subgrupo y el estimador global, omitiendo los resultados de los estudios individuales.
+
+2.  `sort.subgroup`: ordena alfabéticamente las categorías de la variable moderadora.
+
+3.  `calcwidth.subgroup`: ajusta el ancho del forest plot para que se muestren correctamente las etiquetas de las categorías/subgrupos.
+
+4.  `calcwidth.tests`: ajusta el ancho del forest plot para que se muestren correctamente las etiquetas del test de hipótesis de diferencias en las categorías/subgrupos.
+
+5.  `print.subgroup.name`: muestra la etiqueta de la variable moderadora delante de cada categoría (`TRUE`, por defecto) o lo oculta (`FALSE`).
+
+6.  `label.test.subgroup.random`: etiqueta para los resultados del test para diferencias entre subgrupos en el modelo de efectos aleatorios.
+
+Cuando graficamos un análisis de subgrupos, el argumento `col.diamond` modifica el color del estimador global y de los estimadores por subgrupo. El argumento `col.square` **no** tiene efecto en este caso.
+
+### Metarregresión
+
+La metarregresión evalúa el efecto de una variable continua (por ejemplo, el año de publicación, `pubyear`) sobre la magnitud del efecto.
+
+```{r}
+# Ajustar modelo
+mod_prev <- metaprop(
+  event = cases,          # Casos observados
+  n = total,              # Tamaño de la muestra
+  studlab = study,        # Identificador del estudio
+  data = datos_prev,      # Conjunto de datos
+  sm = "PLOGIT",          # Transformación logit
+  common = FALSE,         # Omitir modelo de efectos fijos
+  random = TRUE,          # Modelo de efectos aleatorios
+  pscale = 100000,        # Escala a casos/100 000 habitantes
+ )
+```
+
+Al modelo anterior le aplicamos la función `metareg()`, incluyendo `pubyear` como moderador en el argumento `formula`:
+
+```{r}
+# Ajustar modelo de metarregresión
+mod_year <- metareg(mod_prev,
+                    formula = ~ pubyear)
+
+# Resumen del modelo ajustado
+summary(mod_year)
+```
+
+Los resultados muestran un efecto estadísticamente significativo del año de publicación sobre la prevalencia del evento $(p = 0,008)$.
+
+#### *Bubble plots*
+
+Los resultados de la metarregresión se visualizan usando *bubble plots.* Estos gráficos representan en el eje $X$ el valor del moderador continuo y en el eje $Y$ el efecto estimado para cada estudio. Cada burbuja representa un estudio individual, y su tamaño es proporcional al peso del estudio (generalmente inversamente proporcional a la varianza). Además, el gráfico incluye una línea de regresión con su intervalo de confianza del 95%, permitiendo visualizar la tendencia general.
+
+La función `bubble()` genera este gráfico de forma rápida:
+
+```{r}
+bubble(
+  mod_year,              # <1>
+  cex = "common",        # <2>
+  col.line = pal[2]      # <3>
+)
+```
+
+1.  Modelo de meta-análisis.
+
+2.  Tamaño de las burbujas.
+
+3.  Color para la línea de regresión.
+
+Para ajustar el tamaño de las burbujas según el peso de cada estudio usaremos la función `rescale()` del paquete `plotrix`:
+
+```{r}
+# Peso de cada estudio
+wt <- plotrix::rescale(
+    x = 1 / mod_year$vi,
+    newrange = c(0.5, 3))
+```
+
+Para ajustar el tamaño de las burbujas según el peso de cada estudio, se puede modificar el argumento `cex` utilizando la función `rescale()` del paquete `plotrix`:
+
+```{r}
+bubble(
+  mod_year,
+  cex = wt,  # Ajusta la escala de los símbolos
+  col.line = pal[2]
+)
+```
+
+### Visualización avanzada con paquete orchaRd
+
+Este contenido es opcional y está dirigido a personas con conocimientos más avanzados en R que deseen crear visualizaciones personalizables y listas para presentación en informes o publicaciones científicas.
+
+El paquete `orchaRd` [@orchaRd] permite crear visualizaciones estéticamente más atractivas y compatibles con `ggplot2`. Para instalarlo ejecutamos el siguiente código:
+
+```{r}
+#| eval: false
+remotes::install_github("daniel1noble/orchaRd")
+```
+
+Un aspecto a tener en cuenta es que los modelos ajustados con `meta` no son reconocidos por `orchaRd`, por lo que debemos reajustarlos en `metafor`.
+
+Cargamos los paquetes requeridos:
+
+```{r}
+library(metafor)
+library(orchaRd)
+library(scico)
+```
+
+Previo al ajuste del modelo, debemos calcular los estimadores de efecto individuales utilizando la función `escalc()`:
+
+```{r}
+dat_orchard <- escalc(
+  measure = "PLO",     # estimador de efecto
+  xi = cases,          # número de casos
+  ni = total,          # tamaño muestral
+  data = datos_prev    # conjunto de datos
+  )  
+```
+
+Ajustamos el modelo de meta-análisis con moderadores utilizando la función `rma.mv()` de `metafor`:
+
+```{r}
+mod_orchard <- rma.mv(
+  yi = yi,                             # <1>
+  V = vi,                              # <2>
+  mods = ~ factor(pais_cat) + pubyear, # <3>
+  random = ~ 1|study,                  # <4>
+  data = dat_orchard)                   # <5>
+```
+
+1.  Estimador de efecto individual.
+
+2.  Error estándar del estimador.
+
+3.  Moderadores categóricos y/o numéricos.
+
+4.  Definir efecto aleatorio.
+
+5.  Conjunto de datos.
+
+Podemos generar un *forest plot* con los estimadores individuales y el estimador global usando la función `caterpillars()`:
+
+```{r}
+caterpillars(mod_orchard, 
+             group = "study", 
+             xlab = "log(prevalencia)", g = TRUE) 
+```
+
+Si queremos un gráfico más avanzado que muestre el análisis de subgrupos, usaremos la función `orchard_plot()`:
+
+```{r}
+orchard_plot(
+  mod_orchard,          
+  group = "study",      # <1>
+  mod = "pais_cat",     # <2>
+  xlab = "prevalencia", # <3>
+  transfm = "invlogit"  # <4>
+  ) 
+```
+
+1.  `group`: identificador de estudio.
+
+2.  `mod`: nombre del moderador (1 para estimador de efecto global).
+
+3.  `xlab`: nombre del estimador de efecto.
+
+4.  `transf`: mostrar los datos en escala original (opcional).
+
+Con el argumento `scale_fill_scico_d()` podemos usar cualquiera de las paletas *colorblind-friendly* incluidas en `scico`:
+
+```{r}
+# Forest plot por subgrupos
+orchard_plot(
+  mod_orchard, 
+  group = "study",
+  mod = "pais_cat",
+  xlab = "prevalencia",
+  transfm = "invlogit"
+  ) +
+  # Paleta colorblind-friendly
+  scale_color_scico_d(palette = "hawaii") + # color de borde
+  scale_fill_scico_d(palette = "hawaii")    # color de relleno
+```
+
+Generamos el *bubble plot* para el moderador continuo (`pubyear`):
+
+```{r}
+bubble_plot(
+  mod_orchard,           
+  transfm = "invlogit", # <1>
+  mod = "pubyear",      # <2>
+  group = "study",      # <3>
+  est.col = "orange",     # <4>
+  ci.col = "magenta")      # <5>
+```
+
+1.  Muestra resultados como proporciones
+
+2.  Moderador continuo
+
+3.  Identificador único de estudio
+
+4.  Color de la línea de regresión
+
+5.  Color de las líneas del 95% IC
+
+Si quisiera generar un *bubble plot* para cada nivel de `pais_cat`, puedo usar el argumento `by`:
+
+```{r}
+bubble_plot(
+  mod_orchard,           
+  transfm = "invlogit",
+  mod = "pubyear",     
+  group = "study",      
+  est.col = pal[2],     
+  ci.col = pal[1],      
+  by = "pais_cat"
+  ) +
+  
+  # Paleta colorblind-friendly
+  scale_color_scico_d(palette = "glasgow") + # color de borde
+  scale_fill_scico_d(palette = "glasgow")    # color de relleno
+```
+
+## Sesgo de publicación y análisis de sensibilidad
+
+El sesgo de publicación (*publication bias*) se refiere a la tendencia de publicar con mayor frecuencia estudios con resultados positivos, estadísticamente significativos o con grandes tamaños del efecto. Esto puede distorsionar la síntesis de la evidencia en un meta-análisis, produciendo una sobreestimación del efecto global. Por ello, es esencial evaluar y ajustar el sesgo de publicación para garantizar que los resultados sean lo más precisos y representativos posible.
+
+### ***Funnel plots***
+
+El *funnel plot* o gráfico de embudo representa en el eje $Y$ el tamaño muestral o la precisión de los estudios, y en el eje $X$ el estimador de efecto para cada estudio. En ausencia de sesgo de publicación, se espera una distribución simétrica que forme un patrón similar a un embudo; de lo contrario, se observa asimetría.
+
+Para generar un *funnel plot*, se utiliza la función `funnel()`:
+
+```{r}
+funnel(mod_prev)
+```
+
+### **Test de Egger**
+
+El test de Egger evalúa la simetría del funnel plot mediante una regresión lineal entre el estimador de efecto y su error estándar. Un *p*-valor menor a 0,05 sugiere la presencia de sesgo de publicación.
+
+Este test se implementa con la función `metabias()`:
+
+```{r}
+metabias(
+  mod_prev,               # modelo de meta-análisis
+  method.bias = "Egger"   # aplica test de Egger (opción por defecto)
+  )
+```
+
+### **Test de Begg**
+
+El test de Begg utiliza la correlación de rangos para evaluar la relación entre el tamaño del efecto y el error estándar. Un *p*-valor menor que 0,05 indica la presencia de sesgo de publicación.
+
+Se implementa añadiendo el argumento `method.bias = "Begg"` a la función `metabias()`:
+
+```{r}
+metabias(
+  mod_prev,             # modelo de meta-análisis
+  method.bias = "Begg"  # aplica test de Begg
+  )
+```
+
+### ***Trim-and-fill***
+
+El método *trim-and-fill* estima el número de estudios faltantes debido al sesgo de publicación y ajusta la media global en consecuencia, incorporando estudios hipotéticos. Esto ayuda a corregir la estimación del efecto global.
+
+Se utiliza la función `trimfill()`:
+
+```{r}
+trimfill(mod_prev)
+```
+
+Generalmente, se recomienda utilizar dos o más métodos para evaluar el sesgo de publicación y obtener una visión más completa de su impacto en el meta-análisis. En el ejemplo anterior, no hubiera sido necesario realizar el *trim-and-fill* ya que el funnel plot tiene una forma bastante simétrica y el *p*-valor de los test de Egger y Begg fue menor a 0,05.
+
+### Análisis de sensibilidad
+
+El análisis de sensibilidad permite evaluar la **robustez** de los resultados de un meta-análisis. Una estrategia común consiste en **reajustar el modelo** excluyendo estudios con menor tamaño muestral o de menor calidad, y luego comparar el estimador de efecto y su intervalo de confianza del 95% con los del modelo original. Otra alternativa es el análisis ***leave-one-out***, que implica eliminar un estudio a la vez para observar cómo varía el estimador global.
+
+La función `leave_one_out()` del paquete `orchaRd` permite realizar este tipo de análisis:
+
+```{r}
+leave_one <- leave_one_out(mod_orchard, group = "study")
+```
+
+Este procedimiento ayuda a identificar si algún estudio influye de **manera desproporcionada** en los resultados del meta-análisis. Al igual que en modelos anteriores, los resultados pueden representarse gráficamente:
+
+```{r}
+orchard_leave1out(leave1out = leave_one,     # Objeto leave-one-out
+                  xlab = "logit-prevalencia" # Nombre del estimador
+                  )
+```
+
+En el gráfico, el eje $Y$ representa cada elemento del grupo (en este caso, cada estudio), mientras que el eje $X$ muestra el estimador de efecto. Para cada estudio, se presenta el resultado del modelo al excluirlo: estimador de efecto global, su intervalo de confianza, el intervalo de predicción, y los **"puntos fantasma"**, que marcan la ubicación del estudio excluido.
+
+## Modelos multinivel
+
+Todos los modelos de meta-análisis pueden considerarse modelos multinivel, ya que implican múltiples fuentes de variación. Los modelos de efectos aleatorios, consideran dos niveles de variabilidad:
+
+-   **Error aleatorio**: variabilidad entre participantes dentro de un mismo estudio.
+
+-   **Heterogeneidad entre estudios**: diferencias sistemáticas entre los efectos reportados por estudios distintos.
+
+En este contexto, los individuos están “anidados” dentro de cada estudio, lo que configura una estructura jerárquica de los datos, similar a la de los modelos de efectos mixtos.
+
+Sin embargo, en algunos casos esta estructurano refleja adecuadamente la falta de independencia presente en los datos. Por ejemplo, puede suceder que un mismo estudio reporte múltiples estimadores de efecto correspondientes a distintos grupos de participantes, momentos temporales, sitios de estudio, tratamientos o desenlaces. En estas situaciones, asumir independencia entre las estimaciones dentro de un estudio puede conducir a **inferencias sesgadas**.
+
+Los **modelos de tres niveles** incorporan una capa adicional de variabilidad que permite modelar la **heterogeneidad intraestudio**. De este modo, se mejora el ajuste del modelo y se pueden utilizar todas las estimaciones disponibles, sin necesidad de promediarlas o seleccionar una por estudio, evitando así pérdida de información.
+
+### Ajuste en R
+
+Si bien el paquete recomendado para ajustar modelos multinivel es `metafor`, su uso requiere conocimientos más avanzados de estadística y de programación en R. Por ese motivo, continuaremos utilizando el paquete `meta`, que permite incorporar una estructura de tres niveles mediante el argumento `cluster`.
+
+Trabajaremos con el conjunto de datos `dat.bornmann2007`, que contiene los resultados de 21 estudios sobre diferencias de género en la adjudicación de becas y subsidios para investigación:
+
+```{r}
+# Cargar datos
+datos <- dat.bornmann2007
+
+# Explorar datos
+glimpse(datos)
+```
+
+Las variables de interés son:
+
+-   `waward`: número de mujeres que recibieron la beca/subsidio.
+
+-   `wtotal`: número de mujeres que se postularon a la beca/subsidio.
+
+-   `maward`: número de varones que recibieron la beca/subsidio.
+
+-   `mtotal`: número de varones que se postularon a la beca/subsidio.
+
+El conjunto de datos contiene 66 observaciones, lo que sugiere que varios estudios reportan **más de un estimador de efecto**. Para confirmarlo, generamos una tabla de frecuencias por estudio:
+
+```{r}
+# Tabla frecuencias por autor
+tabyl(datos, study)
+```
+
+Como se observa, cada estudio aporta entre 1 y 9 estimaciones. Veamos qué ocurre si ajustamos un modelo de efectos aleatorios convencional:
+
+```{r}
+# Ajustar modelo
+mod <- metabin(event.e = waward,  # Mujeres que recibieron la beca
+               n.e = wtotal,      # Mujeres que se postularon
+               event.c = maward,  # Varones que recibieron la beca
+               n.c = mtotal,      # Varones que se postularon
+               data = datos,      # Tabla de datos
+               sm = "OR",         # Estimador de efecto
+               common = FALSE,    # Omitir modelo de efectos fijos
+               studlab = study)   # Identificador único del estudio
+
+# Salida del modelo
+mod
+```
+
+El modelo muestra que las mujeres tienen significativamente menor probabilidad de recibir subsidios, y que existe una alta heterogeneidad estadística ($I^2 = 70,6\%$). Sin embargo, este modelo asume independencia entre las 66 observaciones, lo que podría distorsionar la estimación de los coeficientes.
+
+Antes de ajustar un modelo de tres niveles, generamos una nueva variable con un identificador único por observación:
+
+```{r}
+datos <- datos |> 
+  mutate(id = seq(1, 66))
+```
+
+Para incorporar la estructura multinivel, utilizamos el argumento `cluster`. Como existen múltiples observaciones por estudio, definimos `study` como clúster e `id` como identificador de cada observación:
+
+```{r}
+#| code-line-numbers: "9-10"
+# Ajustar modelo de tres niveles
+mod_m <- metabin(event.e = waward,  # Mujeres que recibieron la beca
+               n.e = wtotal,      # Mujeres que se postularon
+               event.c = maward,  # Varones que recibieron la beca
+               n.c = mtotal,      # Varones que se postularon
+               data = datos,      # Tabla de datos
+               sm = "OR",         # Estimador de efecto
+               common = FALSE,    # Omitir modelo de efectos fijos
+               studlab = id,  # Identificador único del estudio
+               cluster = study
+) 
+```
+
+Ahora veamos la salida del modelo:
+
+```{r}
+mod_m
+```
+
+Podemos observar que el estimador global, su intervalo de confianza y la significación estadística difieren del modelo anterior. Además, la heterogeneidad se descompone en dos componentes:
+
+-   $\tau^2_1$ (entre estudios, o clústeres)
+
+-   $\tau^2_2$ (heterogeneidad dentro del estudio)
+
+Esta descomposición permite una estimación más precisa de la variabilidad real y evita subestimar o sobreestimar la incertidumbre asociada al efecto global.
+
+Al igual que en los modelos de efectos fijos y aleatorios, podemos representar gráficamente los resultados mediante *forest plots* y realizar análisis de moderadores. Sin embargo, para evaluar sesgo de publicación debemos usar el modelo de efectos aleatorios.
+
+::: {.callout-note appearance="simple"}
+Hasta aquí hemos cubierto los aspectos básicos para evaluar fuentes de heterogeneidad en modelos de meta-análisis. Quienes tengan interés en profundizar en las medidas de heterogeneidad y su aplicación, recomendamos consultar el artículo de [@bown2010] y los capítulos [7](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/subgroup.html), [8](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/metareg.html) y [9](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pub-bias.html) de @Harrer2021.
+:::
