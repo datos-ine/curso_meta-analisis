@@ -315,6 +315,12 @@ window.Quarto = {
  <span class="menu-text">Exploración de la heterogeneidad</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/05_graficos_avanzados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Herramientas avanzadas</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -413,13 +419,14 @@ y_k = \mu + \tau_k + \epsilon_k
 <p>El valor de tau-cuadrado no se conoce de antemano y debe estimarse a partir de los datos. Entre los métodos más utilizados se encuentran el <strong>estimador de DerSimonian y Laird</strong> y la <strong>máxima verosimilitud restringida</strong> (REML). Aunque su desarrollo técnico excede los objetivos de este curso, es importante destacar que la elección del método puede influir tanto en la estimación del efecto global como en la amplitud de los intervalos de confianza.</p>
 <section id="indicadores-de-heterogeneidad" class="level3">
 <h3 class="anchored" data-anchor-id="indicadores-de-heterogeneidad">Indicadores de heterogeneidad</h3>
-<p>En un meta-análisis, la variabilidad en los resultados puede deberse a múltiples fuentes:</p>
+<p>En un meta-análisis, la variabilidad observada en los resultados puede deberse a diversas fuentes:</p>
 <ul>
 <li><p><strong>Variabilidad intraestudio</strong>: refleja las diferencias entre los participantes dentro de cada estudio.</p></li>
-<li><p><strong>Heterogeneidad entre estudios</strong>: variabilidad en los efectos estimados más allá de lo esperable por azar.</p></li>
-<li><p><strong>Error de muestreo</strong> y otras fuentes de incertidumbre, que pueden influir en las diferencias observadas.</p></li>
+<li><p><strong>Heterogeneidad entre estudios</strong>: representa la variación en los efectos estimados que no puede atribuirse únicamente al azar.</p></li>
+<li><p><strong>Error de muestreo</strong> y otras fuentes de incertidumbre, que también pueden influir en las diferencias observadas.</p></li>
 </ul>
-<p>La heterogeneidad entre estudios es particularmente importante, ya que indica si los efectos varían más de lo que se esperaría solo por error aleatorio. En la siguiente tabla, adaptada de <span class="citation" data-cites="Schwarzer2015">Schwarzer, Carpenter, y Rücker (<a href="#ref-Schwarzer2015" role="doc-biblioref">2015</a>)</span>, se resumen los indicadores más utilizados para cuantificar la heterogeneidad:</p>
+<p>La <strong>heterogeneidad entre estudios</strong> es particularmente importante, ya que permite evaluar si los efectos estimados varían más de lo esperado por error aleatorio. Identificar y cuantificar esta heterogeneidad es esencial para decidir si corresponde utilizar un modelo de efectos aleatorios en lugar de uno de efectos fijos.</p>
+<p>La siguiente tabla, adaptada de <span class="citation" data-cites="Schwarzer2015">Schwarzer, Carpenter, y Rücker (<a href="#ref-Schwarzer2015" role="doc-biblioref">2015</a>)</span>, presenta los principales indicadores utilizados para cuantificar la heterogeneidad:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="table table-condensed table-hover caption-top table-sm table-striped small" data-quarto-postprocess="true">
@@ -430,41 +437,41 @@ y_k = \mu + \tau_k + \epsilon_k
 <th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Escala</th>
 <th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Rango</th>
 <th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Número de estudios</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Afectada por precisión</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Precisión</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Q de Cochran</td>
-<td style="text-align: left;">Evalúa si la heterogeneidad observada es estadísticamente significativa.</td>
+<td style="text-align: left;">Evalúa si la variabilidad observada es mayor a la esperada por azar.</td>
 <td style="text-align: left;">Absoluta</td>
 <td style="text-align: left;">[0, ∞)</td>
 <td style="text-align: left;">Dependiente</td>
-<td style="text-align: left;">Sí</td>
+<td style="text-align: left;">Dependiente</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">I²</td>
-<td style="text-align: left;">Cuantifica qué proporción de la variabilidad total se debe a heterogeneidad real.</td>
+<td style="text-align: left;">Porcentaje de la variación total atribuible a la heterogeneidad entre estudios.</td>
 <td style="text-align: left;">Porcentaje</td>
 <td style="text-align: left;">[0, 100]</td>
 <td style="text-align: left;">Independiente</td>
-<td style="text-align: left;">Sí</td>
+<td style="text-align: left;">Dependiente</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">τ²</td>
-<td style="text-align: left;">Mide la variabilidad real entre los efectos verdaderos de los estudios.</td>
-<td style="text-align: left;">Varianza</td>
-<td style="text-align: left;">[0, ∞)</td>
-<td style="text-align: left;">Independiente</td>
-<td style="text-align: left;">No</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">H²</td>
-<td style="text-align: left;">Razón entre la varianza total observada y la varianza esperada bajo el supuesto de homogeneidad.</td>
+<td style="text-align: left;">Razón entre la varianza observada y la varianza esperada bajo homogeneidad.</td>
 <td style="text-align: left;">Absoluta</td>
 <td style="text-align: left;">[1, ∞)</td>
 <td style="text-align: left;">Independiente</td>
-<td style="text-align: left;">Sí</td>
+<td style="text-align: left;">Dependiente</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">τ²</td>
+<td style="text-align: left;">Varianza entre los efectos verdaderos de los estudios incluidos.</td>
+<td style="text-align: left;">Varianza</td>
+<td style="text-align: left;">[0, ∞)</td>
+<td style="text-align: left;">Independiente</td>
+<td style="text-align: left;">Independiente</td>
 </tr>
 </tbody>
 </table>
@@ -472,7 +479,19 @@ y_k = \mu + \tau_k + \epsilon_k
 
 </div>
 </div>
-<p>Estos indicadores permiten evaluar si las diferencias observadas entre los estudios justifican el uso de un modelo de efectos aleatorios en lugar de uno de efectos fijos.</p>
+<p>Estos indicadores permiten evaluar si las diferencias observadas entre los estudios justifican el uso de un modelo de efectos aleatorios. A modo de síntesis:</p>
+<ul>
+<li><p>El estadístico <span class="math inline">\(Q\)</span> de Cochran aumenta con el número de estudios (<span class="math inline">\(k\)</span>) y su precisión (tamaño muestral).</p></li>
+<li><p>Tanto <span class="math inline">\(I^2\)</span> como <span class="math inline">\(H^2\)</span> se derivan de <span class="math inline">\(Q\)</span> y son independientes del número de estudios, pero no de su precisión.</p></li>
+<li><p>La varianza entre estudios, <span class="math inline">\(\tau^2\)</span>, y su desvío estándar (<span class="math inline">\(\tau\)</span>), son independientes tanto de <span class="math inline">\(k\)</span> como de la precisión, pero su interpretación es menos intuitiva.</p></li>
+</ul>
+<p>Entre estos indicadores, <span class="math inline">\(I^2\)</span> y su intervalo de confianza del 95 % son los más comúnmente reportados. Su interpretación usual es:</p>
+<ul>
+<li><p>Hasta 25 %: heterogeneidad baja.</p></li>
+<li><p>Entre 25 % y 50 %: heterogeneidad moderada.</p></li>
+<li><p>Más del 75 %: heterogeneidad alta.</p></li>
+</ul>
+<p>Para complementar la información proporcionada por <span class="math inline">\(I^2\)</span>, se recomienda reportar un <strong>intervalo de predicción</strong>, que indica el rango en el que podrían encontrarse los efectos verdaderos de estudios futuros, considerando la heterogeneidad estimada a partir de la evidencia actual.</p>
 </section>
 </section>
 <section id="implementación-en-r" class="level2">
@@ -539,8 +558,11 @@ y_k = \mu + \tau_k + \epsilon_k
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-1-7" class="code-annotation-target"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a>  common,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-1-8" class="code-annotation-target"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a>  random,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-1-9" class="code-annotation-target"><a href="#annotated-cell-1-9" aria-hidden="true" tabindex="-1"></a>  subgroup,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-1-10" class="code-annotation-target"><a href="#annotated-cell-1-10" aria-hidden="true" tabindex="-1"></a>  cluster</span>
-<span id="annotated-cell-1-11"><a href="#annotated-cell-1-11" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-1-10" class="code-annotation-target"><a href="#annotated-cell-1-10" aria-hidden="true" tabindex="-1"></a>  cluster,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-1-11" class="code-annotation-target"><a href="#annotated-cell-1-11" aria-hidden="true" tabindex="-1"></a>  prediction,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="11" onclick="event.preventDefault();">11</a><span id="annotated-cell-1-12" class="code-annotation-target"><a href="#annotated-cell-1-12" aria-hidden="true" tabindex="-1"></a>  backtransf,</span>
+<span id="annotated-cell-1-13"><a href="#annotated-cell-1-13" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="annotated-cell-1-14"><a href="#annotated-cell-1-14" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
@@ -578,6 +600,14 @@ y_k = \mu + \tau_k + \epsilon_k
 <dt data-target-cell="annotated-cell-1" data-target-annotation="9">9</dt>
 <dd>
 <span data-code-cell="annotated-cell-1" data-code-lines="10" data-code-annotation="9">Definir variable para ajuste de modelo multinivel (opcional).</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="10">10</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="11" data-code-annotation="10">Calcular intervalo de predicción (<code>TRUE</code>/<code>FALSE</code>, opcional).</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="11">11</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="12" data-code-annotation="11">Mostrar resultados en la escala original de los datos (<code>TRUE</code>/<code>FALSE</code>, opcional).</span>
 </dd>
 </dl>
 </div>
@@ -661,10 +691,51 @@ Details of meta-analysis methods:
 <li><p><code>Calculation of I^2 based on Q:</code> metodología aplicada para calcular <span class="math inline">\(I^2\)</span>.</p></li>
 </ul></li>
 </ul>
+<p>El paquete <code>meta</code> no calcula el intervalo de predicción por defecto, si nos interesa obtenerlo podemos actualizar el modelo de la siguiente forma:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular el intervalo de predicción</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">update</span>(mod, <span class="at">prediction =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida del modelo</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>mod</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 56
+
+                                         95%-CI      z p-value
+Common effect model  -0.0133 [-0.0140; -0.0126] -38.82       0
+Random effects model  0.1219 [ 0.0365;  0.2074]   2.80  0.0052
+Prediction interval          [-0.5328;  0.7767]               
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.1048 [0.0739; 0.1588]; tau = 0.3238 [0.2719; 0.3985]
+ I^2 = 99.9%; H = 41.32
+
+Test of heterogeneity:
+        Q d.f. p-value
+ 93892.81   55       0
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Prediction interval based on t-distribution (df = 55)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Límite inferior intervalo de predicción</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mod<span class="sc">$</span>lower.predict</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.5328297</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Límite superior intervalo de predicción</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>mod<span class="sc">$</span>upper.predict</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7767285</code></pre>
+</div>
+</div>
 </section>
 <section id="interpretación-de-resultados" class="level3">
 <h3 class="anchored" data-anchor-id="interpretación-de-resultados">Interpretación de resultados</h3>
-<p>En base a la salida anterior, podemos concluir que el meta-análisis realizado sobre 56 estudios individuales muestra que el rendimiento académico aumenta significativamente con la modificación del calendario escolar (<span class="math inline">\(p &lt; 0.005\)</span>). La alta heterogeneidad estadística (<span class="math inline">\(I^2 = 99,9\%\)</span>) sugiere que la variabilidad observada se debe a diferencias reales entre estudios.</p>
+<p>En base a la salida anterior, podemos concluir que el meta-análisis realizado sobre 56 estudios individuales muestra que el rendimiento académico aumenta significativamente con la modificación del calendario escolar (<span class="math inline">\(p &lt; 0.005\)</span>). La alta heterogeneidad estadística (<span class="math inline">\(I^2 = 99,9\%\)</span>) sugiere que la variabilidad observada se debe a diferencias reales entre estudios y el intervalo de predicción incluye la posibilidad de obtener asociaciones negativas en futuros estudios.</p>
 </section>
 <section id="representación-gráfica" class="level3">
 <h3 class="anchored" data-anchor-id="representación-gráfica">Representación gráfica</h3>
@@ -672,93 +743,98 @@ Details of meta-analysis methods:
 <p>El paquete <code>meta</code> incluye la función <code>forest()</code>, que permite generar <em>forest plots</em> de forma rápida y con múltiples opciones de personalización. Para conocer todos los argumentos disponibles, se puede ejecutar <code>?forest</code> en la consola de R.</p>
 <p>Algunos de sus argumentos principales incluyen:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-6-2" class="code-annotation-target"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a>  mod,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-6-3" class="code-annotation-target"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a>  sortvar,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-6-4" class="code-annotation-target"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a>  smlab,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-6-5" class="code-annotation-target"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a>  col.diamond,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-6-6" class="code-annotation-target"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a>  col.square,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-6-7" class="code-annotation-target"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.tau2 =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-6-8" class="code-annotation-target"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.I2 =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-6-9" class="code-annotation-target"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.Q =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-6-10" class="code-annotation-target"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>,</span>
-<span id="annotated-cell-6-11"><a href="#annotated-cell-6-11" aria-hidden="true" tabindex="-1"></a>  ...)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-9-2" class="code-annotation-target"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a>  mod,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>  sortvar,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-9-4" class="code-annotation-target"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a>  smlab,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-9-5" class="code-annotation-target"><a href="#annotated-cell-9-5" aria-hidden="true" tabindex="-1"></a>  col.diamond,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-9-6" class="code-annotation-target"><a href="#annotated-cell-9-6" aria-hidden="true" tabindex="-1"></a>  col.square,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-9-7" class="code-annotation-target"><a href="#annotated-cell-9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.tau2 =</span> <span class="cn">TRUE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-9-8" class="code-annotation-target"><a href="#annotated-cell-9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.I2 =</span> <span class="cn">TRUE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-9-9" class="code-annotation-target"><a href="#annotated-cell-9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.Q =</span> <span class="cn">TRUE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-9-10" class="code-annotation-target"><a href="#annotated-cell-9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="annotated-cell-9-11"><a href="#annotated-cell-9-11" aria-hidden="true" tabindex="-1"></a>  ...)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="2" data-code-annotation="1">Nombre del modelo de meta-análisis.</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="2" data-code-annotation="1">Nombre del modelo de meta-análisis.</span>
 </dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="3" data-code-annotation="2">Ordenar los estudios según una variable numérica</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="3" data-code-annotation="2">Ordenar los estudios según una variable numérica</span>
 </dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="4" data-code-annotation="3">Etiqueta a mostrar para el estimador de efecto.</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="4" data-code-annotation="3">Etiqueta a mostrar para el estimador de efecto.</span>
 </dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="4">4</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="5" data-code-annotation="4">Color para mostrar el símbolo del estimador de efecto global.</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="5" data-code-annotation="4">Color para mostrar el símbolo del estimador de efecto global.</span>
 </dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="5">5</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="6" data-code-annotation="5">Color para mostrar el símbolo de los estimadores de efecto individuales.</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="6" data-code-annotation="5">Color para mostrar el símbolo de los estimadores de efecto individuales.</span>
 </dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="6">6</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="7" data-code-annotation="6">Mostrar tau-cuadrado (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="7" data-code-annotation="6">Mostrar tau-cuadrado (<code>TRUE</code>/<code>FALSE</code>).</span>
 </dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="7">7</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="8" data-code-annotation="7">Mostrar I-cuadrado (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="8" data-code-annotation="7">Mostrar I-cuadrado (<code>TRUE</code>/<code>FALSE</code>).</span>
 </dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="8">8</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="9" data-code-annotation="8">Mostrar Q de Cochran (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="9" data-code-annotation="8">Mostrar Q de Cochran (<code>TRUE</code>/<code>FALSE</code>).</span>
 </dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="9">9</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="9">9</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="10" data-code-annotation="9">Especificar el número de decimales a mostrar en los resultados.</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="10" data-code-annotation="9">Especificar el número de decimales a mostrar en los resultados.</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>A continuación, generaremos un <em>forest plot</em> para representar gráficamente el modelo que ajustamos. Para mejorar su visualización, vamos a usar colores personalizados para los argumentos <code>col.diamond</code> y <code>col.square</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(mod,</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">smlab =</span> <span class="st">"Diferencia de medias estandarizada"</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">col.diamond =</span> <span class="st">"#8C0172"</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">col.square =</span> <span class="st">"#6BD48C"</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>       )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(mod,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">smlab =</span> <span class="st">"Diferencia de medias estandarizada"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">col.diamond =</span> <span class="st">"#8C0172"</span>,   <span class="co"># Color estimador global</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">col.square =</span> <span class="st">"#6BD48C"</span>,    <span class="co"># Color estimadores individuales</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">common =</span> <span class="cn">FALSE</span>,            <span class="co"># Omitir modelo de efectos fijos</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">prediction =</span> <span class="cn">TRUE</span>          <span class="co"># Mostrar intervalo de predicción</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>       )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02_fixed_random_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="02_fixed_random_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>El gráfico consta de tres paneles principales:</p>
+<section id="panel-izquierdo" class="level4">
+<h4 class="anchored" data-anchor-id="panel-izquierdo">Panel izquierdo</h4>
 <ul>
-<li><p>Panel izquierdo:</p>
+<li><p>Muestra el <strong>identificador único de cada estudio</strong> (generalmente el apellido del primer autor y el año de publicación).</p></li>
+<li><p>Puede incluir <strong>columnas adicionales</strong> según el tipo de estimador de efecto utilizado (por ejemplo, tamaño muestral, número de eventos, medias y desvíos estándar, etc.).</p></li>
+</ul>
+</section>
+<section id="panel-central" class="level4">
+<h4 class="anchored" data-anchor-id="panel-central">Panel central</h4>
 <ul>
-<li><p>Identificador de estudio (<code>"studlab"</code>).</p></li>
-<li><p>Columnas adicionales dependientes del estimador de efecto utilizado.</p></li>
-</ul></li>
-<li><p>Panel central:</p>
+<li><p><strong>Línea vertical de referencia</strong>: indica el valor de no efecto (<code>0</code> para diferencias de medias o coeficientes de correlación; <code>1</code> para datos en escala logarítmica).</p></li>
+<li><p><strong>Estimador global</strong>: representado por una línea punteada vertical que finaliza en un <strong>rombo</strong>. La posición del mismo indica el valor puntual estimado y su ancho el intervalo de confianza (<span class="math inline">\(95\%~IC\)</span>).</p></li>
+<li><p><strong>Estimadores individuales</strong>: representados por <strong>cuadrados</strong>, cuyo tamaño está dado por el peso estadístico del estudio, con bigotes horizontales que indican su <span class="math inline">\(95\%~IC\)</span>.</p></li>
+<li><p>Opcionalmente, se puede incluir una <strong>línea horizontal roja</strong> que representa el <strong>intervalo de predicción</strong>.</p></li>
+<li><p>En la parte inferior del gráfico se reportan los valores de <span class="math inline">\(I^2\)</span>, <span class="math inline">\(\tau^2\)</span> y la significancia del test Q de Cochran.</p></li>
+</ul>
+</section>
+<section id="panel-derecho" class="level4">
+<h4 class="anchored" data-anchor-id="panel-derecho">Panel derecho</h4>
 <ul>
-<li><p>Línea vertical de referencia que indica el valor de no efecto (0 en datos continuos, 1 en escalas logarítmicas).</p></li>
-<li><p>Línea punteada que representa el estimador global del meta-análisis.</p></li>
-<li><p>Un rombo que representa el estimador de efecto global, cuyo ancho indica el intervalo de confianza al 95%.</p></li>
-<li><p>Cuadrados que representan los estimadores de los estudios individuales, con un tamaño proporcional al peso del estudio en el análisis.</p></li>
-<li><p>Bigotes horizontales que indican los <span class="math inline">\(95\%~IC\)</span> de cada estudio.</p></li>
-</ul></li>
-<li><p>Panel derecho:</p>
-<ul>
-<li><p>Estimador de efecto e intervalo de confianza al 95% de cada estudio.</p></li>
-<li><p>Peso estadístico asignado a cada estudio en el modelo de efectos aleatorios.</p></li>
-</ul></li>
+<li><p>Muestra el valor del <strong>estimador de efecto</strong> para cada estudio y su <span class="math inline">\(95\%~IC\)</span>.</p></li>
+<li><p>Indica el <strong>peso estadístico</strong> asignado a cada estudio en el modelo.</p></li>
 </ul>
 <p>Se puede controlar la información que aparece en los lados del <em>forest plot</em> mediante los argumentos <code>leftcols</code>, <code>rightcols</code>, <code>leftlabs</code> y <code>rightlabs</code>. También es posible aplicar formatos predefinidos con <code>layout = "RevMan5"</code> o <code>layout = "JAMA"</code>, que ajustan el diseño según estilos ampliamente utilizados en la literatura científica.</p>
 <p>Los gráficos generados con <code>forest()</code> no son compatibles con <code>ggplot2</code> ni se autoescalan, lo que puede ser problemático si el número de estudios es grande, ya que el gráfico podría quedar ilegible en la vista predeterminada.</p>
@@ -767,6 +843,7 @@ Details of meta-analysis methods:
 
 
 
+</section>
 </section>
 </section>
 
@@ -1021,7 +1098,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/datos-ine\.github\.io\/curso_meta-analisis\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

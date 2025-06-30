@@ -1,0 +1,429 @@
+---
+title: "Herramientas avanzadas"
+author:
+  - name: Tamara Ricardo
+    orcid: 0000-0002-0921-2611
+bibliography: "../references.bib"
+---
+
+## Introducción
+
+Esta sección es **opcional** y está dirigida a personas con conocimientos más avanzados de R. Presentaremos una serie de paquetes adicionales que permiten generar visualizaciones más flexibles y listas para incluir en informes técnicos o publicaciones científicas, así como funciones complementarias para trabajar con modelos multinivel y metarregresiones múltiples.
+
+Para utilizarlos, es necesario **reajustar los modelos usando el paquete** `metafor`, ya que no son compatibles con la salida de `meta`.
+
+## Ejemplo práctico en R
+
+### Instalación de paquetes
+
+```{r}
+#| eval: false
+# Instalar paquetes adicionales
+install.packages("metaviz")
+
+remotes::install_github("MathiasHarrer/dmetar")
+
+remotes::install_github("daniel1noble/orchaRd")
+```
+
+### Carga de paquetes
+
+```{r}
+# Cargar paquetes
+pacman::p_load(metafor,
+               orchaRd,
+               metaviz,
+               dmetar,
+               scico,
+               tidyverse)
+```
+
+### Ajuste del modelo
+
+Trabajaremos nuevamente con el dataset `dat.bornmann2007`, que analiza el sesgo de género en la adjudicación de subsidios para investigación:
+
+```{r}
+# Cargar datos
+datos <- dat.bornmann2007 |> 
+  # Crear identificador único
+  rowid_to_column(var = "id")
+```
+
+El paquete `metafor` no cuenta con funciones específicas para cada medida de asociación, por lo que es necesario calcular previamente los estimadores de efecto usando la función `escalc()`:
+
+```{r}
+datos <- escalc(measure = "OR", # <1>
+                ai = waward,    # <2>
+                n1i = wtotal,   # <3>
+                ci = maward,    # <4>
+                n2i = mtotal,   # <5>
+                data = datos,
+                slab = study)
+```
+
+1.  `measure`: medida de asociación a usar como estimador de efecto.
+
+2.  `ai`: número de eventos en el grupo expuesto.
+
+3.  `n1i`: tamaño muestral en el grupo expuesto.
+
+4.  `ci`: número de eventos en el grupo no expuesto.
+
+5.  `n2i`: tamaño muestral en el grupo no expuesto.
+
+Si no tuviéramos el tamaño muestral en cada grupo, podríamos reemplazar `n1i` por `bi` (expuestos sin el evento) y `n2i` por `di` (no expuestos con el evento).
+
+> Los argumentos a completar van a depender de la medida de asociación que especificamos en el argumento `measure`.
+>
+> Para acceder a la ayuda de la función y ver opciones disponibles, ejecutar el comando `?escalc` en la consola de R.
+
+Exploremos el resultado:
+
+```{r}
+glimpse(datos)
+```
+
+Se añadieron dos nuevas variables, que utilizaremos para ajustar el modelo:
+
+-   `yi`: estimador de efecto individual en escala logarítmica (log-OR).
+
+-   `vi`: varianza del estimador.
+
+Como los datos incluyen más de una observación por estudio, usaremos la función `rma.mv()` para ajustar un modelo multinivel:
+
+```{r}
+mod <- rma.mv(yi = yi,               # <1>
+              V = vi,                # <2>
+              data = datos,          # <3>
+              slab = study,          # <4>
+              mods = ~ type,         # <5>
+              random = ~ 1|study/id, # <6>
+              intercept = TRUE       # <7>
+              )
+```
+
+1.  `yi`: estimador de efecto individual.
+
+2.  `V`: varianza del estimador.
+
+3.  `data`: tabla de datos.
+
+4.  `slab`: identificador único del estudio.
+
+5.  `mods`: especifica el moderador/es para metarregresión o análisis de subgrupos.
+
+6.  `random`: define la estructura jerárquica de los datos:
+
+    -   `~ 1 | study`: ajusta un modelo de efectos aleatorios.
+
+    -   `~ 1 | study/id`: ajusta un modelo multinivel.
+
+7.  `intercept`: calcular el intercepto (`TRUE` por defecto/ `FALSE`).
+
+> Para conocer otros tipos de modelos disponibles, se recomienda consultar las viñetas de ayuda del paquete `metafor` y las funciones `rma()`, `rma.uni()`, `rma.mv()`, etc.
+
+## Visualización avanzada de resultados
+
+### Paquete **`orchaRd`**
+
+El paquete `orchaRd` [@orchaRd] permite crear gráficos visualmente atractivos y altamente personalizable basados en el motor gráfico `ggplot2`.
+
+La función `orchard_plot()` genera un gráfico donde el estimador global se representa por un punto de color con "ramas" horizontales representando el intervalo de confianza (línea gruesa) y el intervalo de predicción (línea fina). Cada estimador individual se representa con puntos más claros, cuyo tamaño depende de la precisión del estudio.
+
+Los argumentos principales son:
+
+```{r}
+orchard_plot(
+  object = mod,     # <1>
+  mod = "1",        # <2>
+  group = "study",  # <3>
+  xlab = "log(OR)", # <4> 
+  k = TRUE,         # <5>
+  g = TRUE          # <6>
+)
+```
+
+1.  `object`: modelo de meta-análisis o tabla de resultados (obligatorio).
+
+2.  `mod`: moderador/es del modelo (`"1"` para mostrar solo el estimador global).
+
+3.  `group`: identificador del estudio o clúster (obligatorio).
+
+4.  `xlab`: título a mostrar en el eje $X$ (obligatorio).
+
+5.  `k`: mostrar etiqueta con número de estudios (`TRUE`/`FALSE`).
+
+6.  `g`: mostrar etiqueta con número de clústers (`TRUE`/`FALSE`).
+
+Podemos agregar el moderador categórico añadiendo en nombre de la variable entre comillas en el argumento `mod`. Además, vamos a añadir escalas de colores personalizadas:
+
+```{r}
+# Guardar orchard plot en un objeto
+g1 <- orchard_plot(
+  mod,
+  mod = "type",
+  group = "study",
+  xlab = "log(OR)",
+  k = TRUE,              
+  g = TRUE)
+
+# Personalizar con ggplot2
+g1 +
+  # Escalas colorblind-friendly
+  scale_color_scico_d(palette = "hawaii") + # color de borde
+  scale_fill_scico_d(palette = "hawaii") +  # color de relleno
+  
+  theme_bw()
+```
+
+La función `caterpillars()` genera un gráfico similar al *forest plot* donde se muestra el estimador de efecto individual con su $95\%~IC$ y el estimador global, omitiendo las tablas de resultados, lo cual resulta de gran utilidad cuando el número de estudios es grande:
+
+```{r}
+caterpillars(
+  mod,    
+  mod = "1",         # <1>
+  group = "study",   # <2>
+  xlab = "log(OR)",  # <3>
+  k = TRUE,          # <4>
+  g = TRUE           # <5>
+  )
+```
+
+1.  `mod`: moderador/es del modelo (`"1"` para mostrar solo el estimador global).
+
+2.  `group`: identificador del estudio o clúster (obligatorio).
+
+3.  `xlab`: título a mostrar en el eje $X$ (obligatorio).
+
+4.  `k`: mostrar etiqueta con número de estudios (`TRUE`/`FALSE`).
+
+5.  `g`: mostrar etiqueta con número de clústers (`TRUE`/`FALSE`).
+
+Podemos añadir los estimadores de efecto globales por nivel del moderador categórico usando el argumento `mod` y modificar los colres con los argumentos `colerrorbar`, `colpoint` y `colpoly`. La opción por defecto no muestra los identificadores de estudio, pero al estar basado en `ggplot2`, podemos añadirlo como una capa de anotación de texto:
+
+```{r}
+caterpillars(mod,    
+             mod = "type",
+             group = "study",      
+             xlab = "log(OR)",   
+             k = TRUE,              
+             g = TRUE,
+             colerrorbar = "#705C52",
+             colpoint = "#1B0D33",
+             colpoly = "#87B666") +
+  
+  # Añadir capa identificador de estudio
+  geom_text(aes(label = mod$slab), 
+            size = 2, 
+            nudge_x = 1,
+            check_overlap = T)
+```
+
+La función `bubble_plot()` nos permite generar *bubble plots* para moderadores continuos:
+
+```{r}
+# Añadir moderador continuo
+mod1 <- update(mod, mods = ~ type + year)
+  
+# Bubble plot
+bubble_plot(
+  mod1,          
+  group = "study",      
+  xlab = "Año de publicación",  # <1>
+  k = TRUE,              
+  g = TRUE,
+  transfm = "invlogit",  
+  mod = "year",
+  est.col = "orange",           # <2>
+  ci.col = "magenta",           # <3>
+  pi.col = "purple",            # <4>
+  ci.lwd = 0.75,                # <5>
+  pi.lwd = 0.75                 # <6>
+  )
+```
+
+1.  `xlab`: nombre del moderador continuo.
+
+2.  `est.col`: color de la línea de regresión.
+
+3.  `ci.col`: color para el intervalo de confianza de la línea de regresión.
+
+4.  `pi.col`: color para el intervalo de predicción de la línea de regresión.
+
+5.  `ci.lwd`: grosor de línea para el intervalo de confianza de la línea de regresión.
+
+6.  `pi.lwd`: grosor de línea para el intervalo de predicción de la línea de regresión.
+
+Puedo estratificar los *bubble plot* según niveles del moderador categórico usando el argumento `by`:
+
+```{r}
+bubble_plot(
+  mod1,          
+  group = "study",      
+  xlab = "Año de publicación",  # <1>
+  k = TRUE,              
+  g = TRUE,
+  transfm = "invlogit",  
+  mod = "year",
+  est.col = "orange",           
+  ci.col = "magenta",           
+  pi.col = "purple",            
+  ci.lwd = 0.75,                
+  pi.lwd = 0.75,
+  by = "type"
+  ) +
+  
+  # Color de las burbujas
+  scale_fill_scico_d()
+```
+
+#### Análisis de sensibilidad
+
+La función `leave_one_out()` del paquete `orchaRd` permite realizar un análisis de sensibilidad del modelo de meta-análisis, especificando en el argumento `group` el nombre de la variable que queremos usar para remover estudios iterativamente:
+
+```{r}
+leave_one <- leave_one_out(mod, group = "study")
+```
+
+Este procedimiento ayuda a identificar si algún estudio influye de **manera desproporcionada** en los resultados del meta-análisis. Podemos graficar los resultados usando la función `orchard_leave1out()`:
+
+```{r}
+orchard_leave1out(leave1out = leave_one,    
+                  xlab = "log(OR)")
+```
+
+En el gráfico, el eje $Y$ representa cada elemento del grupo (en este caso, cada estudio), mientras que el eje $X$ muestra el estimador de efecto. Para cada estudio, se presenta el resultado del modelo al excluirlo: estimador de efecto global, su intervalo de confianza, el intervalo de predicción, y los **"puntos fantasma"**, que marcan la ubicación del estudio excluido.
+
+> 🔗 Otras opciones de gráficos con `orchaRd`: [LINK](https://daniel1noble.github.io/orchaRd/#introduction)
+
+### Paquete `metaviz`
+
+El paquete `metaviz` [@metaviz] proporciona funciones para generar gráficos altamente personalizables y compatibles con `ggplot2`, ideales para informes técnicos y publicaciones científicas.
+
+Una de sus principales funciones es `viz_forest()`, que permite crear *forest plots* con gran control estético. Es importante tener en cuenta que **no es compatible con modelos multinivel**, por lo que debe utilizarse con estimadores individuales previamente calculados mediante `escalc()` del paquete `metafor`.
+
+```{r}
+#| fig-height: 10
+# Forest plot básico
+viz_forest(x = datos |> select(yi, vi), # <1>
+           study_labels = datos$study,  # <2>
+           group = datos$type,          # <3>
+           method = "REML",             # <4>
+           x_trans_function = exp,      # <5>
+           annotate_CI = TRUE,          # <6>
+           type = "standard")           # <7>
+```
+
+-   `x`: columnas con el estimador (`yi`) y su varianza (`vi`).
+
+-   `study_labels`: etiquetas para los estudios individuales (opcional).
+
+-   `group`: variable categórica para agrupar y colorear las observaciones (opcional).
+
+-   `method`: método para estimar la heterogeneidad (por ej., `"REML"`).
+
+-   `x_trans_function`: transforma los valores del eje $X$ (e.g., `exp` para OR).
+
+-   `annotate_CI`: agrega una tabla con los estimadores de efecto y sus $95\%~CI$.
+
+-   `type`: tipo de gráfico a mostrar (`"standard"`, `"study_only"`, `"summary_only"`, etc.).
+
+El argumento `variant` puede tomar valores `"classic"`, `"thick"` o `"rain"` para cambiar el estilo visual del gráfico. También podemos modificarlo usando las funciones específicas `viz_thickforet()` y `viz_rainforest()`.
+
+```{r}
+# Estilo "thick"
+viz_thickforest(
+  x = datos |> select(yi, vi),
+  group = datos$type,
+  method = "REML",
+  x_trans_function = exp,
+  annotate_CI = TRUE,
+  type = "summary_only"
+)
+
+# Estilo "rainforest"
+viz_rainforest(
+  x = datos |> select(yi, vi),
+  group = datos$type,
+  method = "REML",
+  x_trans_function = exp,
+  annotate_CI = TRUE,
+  type = "summary_only"
+)
+```
+
+`metaviz` también ofrece funciones para crear *funnel plots* más informativos y estéticamente atractivos. Por ejemplo `viz_funnel()`:
+
+```{r}
+viz_funnel(x = datos |> select(yi, vi), # <1>
+           group = datos$type,          # <2>
+           contours_col = "Purples") +  # <3>
+  # Cambiar colores de los puntos
+  scale_color_viridis_d()
+```
+
+1.  `x`: columnas que contienen los estimadores de efecto individuales y su varianza.
+
+2.  `group`: columna con la variable moderadora.
+
+3.  `contours_col`: sombreado para el intervalo de confianza del *funnel plot*.
+
+La función `viz_sunset()` genera una visualización alternativa al funnel plot, incorporando información sobre la **potencia estadística** de cada estudio:
+
+```{r}
+viz_sunset(x = datos |> select(yi, vi))
+```
+
+Este gráfico es especialmente útil para detectar estudios con bajo poder estadístico o que podrían estar influyendo en la asimetría del funnel plot.
+
+## Funciones adicionales
+
+El paquete `orchaRd` permite generar una tabla de resultados del modelo con la función `mod_results()`:
+
+```{r}
+mod_results(mod, 
+            group = "study", 
+            mod = "type")
+```
+
+Tamnién podemos calcular la bondad de ajuste ($R^2$) usando la función `r2_ml()`:
+
+```{r}
+r2_ml(mod)
+```
+
+Si queremos obtener el $I^2$ correspondiente a la heterogeneidad intra-clúster ($I^2_{nivel2}$) e inter-clúster ($I^2_{nivel3}$) para el modelo multinivel podemos usar la función `i2_ml()` de `orchaRd`:
+
+```{r}
+i2_ml(mod)
+```
+
+El paquete `dmetar` [@dmetar] también permite calcular estos $I^2$ usando la función `mlm.variance.distribution()`:
+
+```{r}
+mlm.variance.distribution(mod)
+```
+
+También podemos graficar el aporte de cada componente a la varianza:
+
+```{r}
+i2 <- mlm.variance.distribution(mod) 
+
+plot(i2)
+```
+
+La función `find.outliers()` del paquete `dmetar` permite detectar outliers en modelos de efectos aleatorios ajustados con `meta` o `metafor` (no permite estructuras multinivel):
+
+```{r}
+# Reajustar modelo
+mod2 <- rma(yi = yi,               
+           vi = vi,     
+           method = "REML",
+           mods = ~ type,         
+           data = datos)
+
+# Detectar outliers
+find.outliers(mod2)
+```
+
+podemos obtener la tabla de coeficientes del modelo usando la función `mod_results()`:

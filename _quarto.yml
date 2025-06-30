@@ -68,7 +68,7 @@ website:
           - unidad_2/02_fixed_random.qmd
           - unidad_2/03_tipos_estimador.qmd
           - unidad_2/04_mod_bias.qmd
-        
+          - unidad_2/05_graficos_avanzados.qmd
   # Botón de anterior/siguiente
   page-navigation: true
   

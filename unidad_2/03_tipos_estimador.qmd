@@ -87,14 +87,15 @@ Ajustamos un modelo de meta-análisis para correlaciones aplicando la transforma
 
 ```{r}
 mod_cor <- metacor(
-  cor = ri,          # <1>
-  n = ni,            # <2>
-  studlab = authors, # <3>
-  data = datos_cor,  # <4>
-  sm = "ZCOR",       # <5>
-  common = TRUE,     # <6>
-  random = TRUE,     # <7>
-  backtransf = TRUE  # <8>
+  cor = ri,           # <1>
+  n = ni,             # <2>
+  studlab = authors,  # <3>
+  data = datos_cor,   # <4>
+  sm = "ZCOR",        # <5>
+  common = TRUE,      # <6>
+  random = TRUE,      # <7>
+  backtransf = TRUE,  # <8>
+  prediction = TRUE   # <9>
 )
 ```
 
@@ -106,13 +107,31 @@ mod_cor <- metacor(
 
 4.  Conjunto de datos.
 
-5.  Estimador de efecto: **transformación z de Fisher para correlaciones.**
+5.  Estimador de efecto (`"ZCOR"` por defecto/`"COR"`).
 
-6.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
+6.  Ajustar el modelo de efectos fijos (`TRUE` por defecto /`FALSE`).
 
-7.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
+7.  Ajustar el modelo de efectos aleatorios (`TRUE` por defecto /`FALSE`).
 
-8.  Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+8.  Mostrar resultados en escala original de los datos (`TRUE` por defecto /`FALSE`).
+
+9.  Calcular el intervalo de predicción (`TRUE`/`FALSE` por defecto).
+
+::: {.callout-warning appearance="simple"}
+No es necesario especificar los argumentos `common`, `random`, `sm`, `backstransf` o `prediction` a menos que se desee cambiar las opciones por defecto.
+
+El siguiente código genera los mismos resultados que el ejemplo:
+
+```{r}
+metacor(
+  cor = ri,           
+  n = ni,
+  studlab = authors,
+  data = datos_cor,
+  prediction = TRUE
+)
+```
+:::
 
 Analicemos ahora la salida del modelo:
 
@@ -124,7 +143,7 @@ El valor de $I^2$ indica que los datos presentan una heterogeneidad moderada y d
 
 A diferencia de lo que vimos para datos precalculados, la salida nos muestra no solo el número de estudios incluidos (`k`) sino también el número total de observaciones (`o`).
 
-De acuerdo al modelo de efectos aleatorios, existe una correlación positiva baja entre la concienciación y la adherencia a la medicación.
+De acuerdo al modelo de efectos aleatorios, existe una correlación positiva baja entre la concienciación y la adherencia a la medicación. Sin embargo, el intervalo de predicción incluye la posibilidad de que futuros estudios reporten correlaciones negativas.
 
 Generamos el *forest plot* para visualizar los resultados:
 
@@ -134,12 +153,13 @@ forest(
   mod_cor, 
   col.diamond.random = pal[1], 
   col.square = pal[3],
-  common = FALSE,                                 # <1> 
-  smlab = "Correlación de Pearson",               # <2>
-  leftlabs = c("Estudio", "N"),                   # <3>
-  rightlabs = c("r", "95% IC", "Peso"),           # <4>
-  hetlab = "Heterogeneidad: ",                    # <5>
-  text.random = "Modelo de \n efectos aleatorios" # <6>
+  common = FALSE,                                  # <1> 
+  smlab = "Correlación de Pearson",                # <2>
+  leftlabs = c("Estudio", "N"),                    # <3>
+  rightlabs = c("r", "95% IC", "Peso"),            # <4>
+  hetlab = "Heterogeneidad: ",                     # <5>
+  text.random = "Modelo de \n efectos aleatorios", # <6>
+  prediction = TRUE                                # <7>
 )
 ```
 
@@ -154,6 +174,8 @@ forest(
 5.  Personalizar etiqueta indicadores de heterogeneidad.
 
 6.  Personalizar etiqueta del estimador global.
+
+7.  Mostrar intervalo de predicción (opcional).
 
 ### Prevalencia
 
@@ -195,15 +217,13 @@ Ajustamos el modelo de meta-análisis para proporciones aplicando la transformac
 
 ```{r}
 mod_prev <- metaprop(
-  event = cases,     # <1>
-  n = total,         # <2>
-  studlab = study,   # <3>
-  data = datos_prev, # <4>
-  sm = "PLOGIT",     # <5>
-  common = TRUE,     # <6>
-  random = TRUE,     # <7>
-  backtransf = TRUE,  # <8>
-  pscale = 100       # <9>
+  event = cases,      # <1>
+  n = total,          # <2>
+  studlab = study,    # <3>
+  data = datos_prev,  # <4>
+  sm = "PLOGIT",      # <5>
+  prediction = TRUE,  # <6>
+  pscale = 100        # <7>
 )
 ```
 
@@ -215,15 +235,11 @@ mod_prev <- metaprop(
 
 4.  Conjunto de datos.
 
-5.  Estimador de efecto: **logit-proporción**.
+5.  Estimador de efecto (`"PLOGIT"` por defecto, ver ayuda de la función para otras opciones).
 
-6.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
+6.  Calcular intervalos de predicción (`TRUE`/`FALSE` por defecto).
 
-7.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
-
-8.  Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
-
-9.  Expresar los resultados en porcentajes.
+7.  Expresar los estimadores de efecto como porcentajes.
 
 Analicemos ahora la salida del modelo:
 
@@ -231,7 +247,7 @@ Analicemos ahora la salida del modelo:
 mod_prev
 ```
 
-El valor de $I^2$ indica que los datos presentan una heterogeneidad moderada y debe descartarse el modelo de efectos fijos.
+El valor de $I^2$ indica que los datos presentan una heterogeneidad moderada y puede descartarse el modelo de efectos fijos. Como la heterogeneidad no es demasiado alta, el intervalo de predicción es similar al intervalo de confianza del modelo de efectos aleatorios.
 
 El coeficiente del modelo de efectos aleatorios muestra una prevalencia del evento del 0,022%, por lo que vamos a expresarla en **casos por 100 000 habitantes** al momento de realizar el *forest plot*.
 
@@ -311,9 +327,7 @@ mod_inc <- metarate(
   studlab = authors,      # <3>
   data = datos_inc,       # <4>
   sm = "IRLN",            # <5>
-  common = TRUE,          # <6>
-  random = TRUE,          # <7>
-  backtransf = TRUE       # <8>
+  prediction = TRUE       # <6>
 )
 ```
 
@@ -325,13 +339,9 @@ mod_inc <- metarate(
 
 4.  Conjunto de datos.
 
-5.  Estimador de efecto: **log-tasa de incidencia**.
+5.  Estimador de efecto (`"IRLN"` por defecto, ver ayuda de la función para otras opciones).
 
-6.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
-
-7.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
-
-8.  Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+6.  Calcular intervalos de predicción (`TRUE`/`FALSE` por defecto).
 
 Analicemos ahora la salida del modelo:
 
@@ -339,7 +349,7 @@ Analicemos ahora la salida del modelo:
 mod_inc
 ```
 
-El valor de $I^2$ indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.
+El valor de $I^2$ indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos. El intervalo de predicción muestra que se pueden esperar tasas más altas o bajas en estudios futuros.
 
 El coeficiente del modelo de efectos aleatorio muestra que la tasa de incidencia del evento es muy baja dentro del grupo estudiado, por lo que vamos a expresarla en **casos por 1000 años-persona** cuando ajustemos el *forest plot*.
 
@@ -434,9 +444,7 @@ mod_md <- metacont(
   studlab = author, # <7>
   data = datos_md,  # <8>
   sm = "SMD",       # <9>
-  common = TRUE,    # <10>
-  random = TRUE,    # <11>
-  backtransf = TRUE # <12>
+  prediction = TRUE # <10>
 )
 ```
 
@@ -456,13 +464,9 @@ mod_md <- metacont(
 
 8.  Conjunto de datos.
 
-9.  Estimador de efecto: **diferencia de medias estandarizada**.
+9.  Estimador de efecto (`"SMD"` por defecto, ver ayuda de la función para otras opciones).
 
-10. Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
-
-11. Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
-
-12. Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+10. Calcular intervalos de predicción (`TRUE`/`FALSE` por defecto).
 
 Analicemos ahora la salida del modelo:
 
@@ -472,7 +476,7 @@ mod_md
 
 El valor de $I^2$ indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.
 
-Los coeficientes del modelo de efectos aleatorios indican que el grupo tratado presenta un promedio significativamente menor de infecciones asociadas al uso de catéteres que el grupo control $(p<0,001)$.
+Los coeficientes del modelo de efectos aleatorios indican que el grupo tratado con antidepresivos tricíclicos presenta una reducción en los síntomas respecto del grupo control $(p<0,001)$. El intervalo de predicción muestra que es posible que estudios futuros encuentren el efecto inverso al estimado.
 
 Generamos el *forest plot* para visualizar los resultados:
 
@@ -589,9 +593,7 @@ mod_or <- metabin(
   studlab = author,   # <5>
   data = datos_or,    # <6>
   sm = "OR",          # <7>
-  common = TRUE,      # <8>
-  random = TRUE,      # <9>
-  backtransf = TRUE   # <10>
+  prediction = TRUE   # <8>
 )
 ```
 
@@ -607,13 +609,9 @@ mod_or <- metabin(
 
 6.  Conjunto de datos.
 
-7.  Estimador de efecto: **log-*odds ratio***.
+7.  Estimador de efecto (`"OR"` para Odds-ratio, `"RR"` para riesgo relativo, ver ayuda de la función para otras opciones).
 
-8.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
-
-9.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
-
-10. Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+8.  Calcular intervalos de predicción (`TRUE`/`FALSE` por defecto).
 
 Analicemos ahora la salida del modelo:
 
@@ -625,7 +623,7 @@ La salida del modelo nos muestra el número de estudios (`k`), el número de obs
 
 El valor de $I^2$ indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.
 
-De acuerdo al coeficiente del modelo de efectos aleatorios, el uso de diuréticos reduce significativamente las probabilidades de preeclampsia en comparación con el grupo control $(p = 0,021)$.
+De acuerdo al coeficiente del modelo de efectos aleatorios, el uso de diuréticos reduce significativamente las probabilidades de preeclampsia en comparación con el grupo control $(p = 0,021)$. Sin embargo, el intervalo de predicción no descarta que futuros estudios encuentren la relación inversa.
 
 Generamos el *forest plot* para visualizar los resultados:
 
@@ -660,27 +658,11 @@ forest(
 
 7.  Personalizar etiqueta del estimador global.
 
-### Riesgo relativo
+::: {.callout-warning appearance="simple"}
+## Importante
 
-El riesgo relativo (RR) o *risk ratio* mide la razón entre las probabilidades de desarrollar un evento en el grupo expuesto y en el grupo control:
-
-$$
-RR =  \frac{a/(a + b)}{c/(c + d)}
-$$
-
-donde:
-
--   $a$ es el número de eventos en el grupo expuesto/tratamiento.
-
--   $b$ es el número de individuos sin el evento en el grupo expuesto/tratamiento.
-
--   $c$ es el número de eventos en el grupo no expuesto/control.
-
--   $d$ es el número de individuos sin el evento en el grupo no expuesto/control.
-
-Al igual que el OR, el **RR** es una medida asimétrica y solo toma valores positivos $(0-\infty)$. Para estabilizar la varianza y mejorar la interpretación estadística, se usa una **transformación logarítmica**, lo que permite modelar el RR en un intervalo simétrico y facilita la comparación entre estudios.
-
-La función `metabin()` permite calcular el RR mediante el argumento `sm = "RR"`, que aplica automáticamente la transformación logarítmica. Debido a la similitud en el cálculo con el OR, omitiremos el ejemplo para esta medida de asociación.
+La función `metabin()` también permite estimar el riesgo relativo mediante el argumento `sm = "RR"`, así como otros estimadores de efecto para variables binomiales, como la diferencia de riesgos (`"RD"`), la efectividad de vacunas (`"VE"`), entre otros. Dado que su implementación es análoga a la utilizada para la razón de odds (`"OR"`), no se desarrollarán ejemplos específicos para las mismas.
+:::
 
 ### Razón de tasas de incidencia
 
@@ -726,9 +708,7 @@ mod_irr <- metainc(
   studlab = authors,      # <5>
   data = datos_inc,       # <6>
   sm = "IRR",             # <7>
-  common = TRUE,          # <8>
-  random = TRUE,          # <9>
-  backtransf = TRUE,      # <10>
+  prediction = TRUE       # <8>
   )
 ```
 
@@ -744,13 +724,9 @@ mod_irr <- metainc(
 
 6.  Conjunto de datos.
 
-7.  Estimador de efecto: **log-razón de tasas de incidencia**.
+7.  Estimador de efecto (`"IRR"` para razón de tasas de incidencia, ver ayuda de la función para otras opciones).
 
-8.  Ajustar el modelo de efectos fijos (`TRUE`/`FALSE`).
-
-9.  Ajustar el modelo de efectos aleatorios (`TRUE`/`FALSE`).
-
-10. Mostrar resultados en escala original de los datos (`TRUE`/`FALSE`).
+8.  Calcular intervalos de predicción (`TRUE`/`FALSE` por defecto).
 
 Analicemos ahora la salida del modelo:
 
@@ -760,7 +736,7 @@ mod_irr
 
 El valor de $I^2$ indica que los datos presentan una heterogeneidad baja y puede conservarse el modelo de efectos fijos.
 
-Los coeficientes del modelo de efectos fijos muestran una disminución estadísticamente significativa del riesgo en el grupo tratado $(p = 0,24)$, pero la misma deja de ser significativa en el de efectos aleatorios $(p = 0,81)$.
+Los coeficientes del modelo de efectos fijos muestran una disminución estadísticamente significativa del riesgo en el grupo tratado $(p = 0,24)$, pero la misma deja de ser significativa en el de efectos aleatorios $(p = 0,81)$. El intervalo de predicción muestra que futuros estudios pueden detectar un efecto inverso al estimado.
 
 Generamos el *forest plot* para visualizar los resultados, usando los argumentos `col.diamond.random` y `col.diamond.common` para mostrar en diferentes colores los estimadores globales del modelo de efectos fijos y el modelo de efectos aleatorios:
 

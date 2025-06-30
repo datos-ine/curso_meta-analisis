@@ -311,6 +311,12 @@ window.Quarto = {
  <span class="menu-text">Exploración de la heterogeneidad</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/05_graficos_avanzados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Herramientas avanzadas</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -334,7 +340,6 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#diferencia-de-medias" id="toc-diferencia-de-medias" class="nav-link" data-scroll-target="#diferencia-de-medias">Diferencia de medias</a></li>
   <li><a href="#odds-ratio" id="toc-odds-ratio" class="nav-link" data-scroll-target="#odds-ratio"><em>Odds-ratio</em></a></li>
-  <li><a href="#riesgo-relativo" id="toc-riesgo-relativo" class="nav-link" data-scroll-target="#riesgo-relativo">Riesgo relativo</a></li>
   <li><a href="#razón-de-tasas-de-incidencia" id="toc-razón-de-tasas-de-incidencia" class="nav-link" data-scroll-target="#razón-de-tasas-de-incidencia">Razón de tasas de incidencia</a></li>
   </ul></li>
   </ul>
@@ -401,7 +406,7 @@ Attaching package: 'meta'</code></pre>
     ci</code></pre>
 </div>
 </div>
-<p>Para facilitar la exploración y manipulación de datos, utilizaremos funciones del paquete <code>tidyverse</code>[<span class="citation" data-cites="tidyverse">Wickham et&nbsp;al. (<a href="#ref-tidyverse" role="doc-biblioref">2019</a>)</span>]:</p>
+<p>Para facilitar la exploración y manipulación de datos, utilizaremos funciones del paquete <code>tidyverse</code><span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham et&nbsp;al. 2019</a>)</span>:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -480,8 +485,9 @@ $ quality   &lt;int&gt; 1, 1, 2, 1, 2, 2, 1, 3, 2, 3, 2, 2, 1, 2, 3, 1</code></p
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-6-6" class="code-annotation-target"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"ZCOR"</span>,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-6-7" class="code-annotation-target"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-6-8" class="code-annotation-target"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-6-9" class="code-annotation-target"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span></span>
-<span id="annotated-cell-6-10"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-6-9" class="code-annotation-target"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-6-10" class="code-annotation-target"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction =</span> <span class="cn">TRUE</span></span>
+<span id="annotated-cell-6-11"><a href="#annotated-cell-6-11" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
@@ -502,33 +508,51 @@ $ quality   &lt;int&gt; 1, 1, 2, 1, 2, 2, 1, 3, 2, 3, 2, 2, 1, 2, 3, 1</code></p
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="6" data-code-annotation="5">Estimador de efecto: <strong>transformación z de Fisher para correlaciones.</strong></span>
+<span data-code-cell="annotated-cell-6" data-code-lines="6" data-code-annotation="5">Estimador de efecto (<code>"ZCOR"</code> por defecto/<code>"COR"</code>).</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="7" data-code-annotation="6">Ajustar el modelo de efectos fijos (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="7" data-code-annotation="6">Ajustar el modelo de efectos fijos (<code>TRUE</code> por defecto /<code>FALSE</code>).</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="8" data-code-annotation="7">Ajustar el modelo de efectos aleatorios (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="8" data-code-annotation="7">Ajustar el modelo de efectos aleatorios (<code>TRUE</code> por defecto /<code>FALSE</code>).</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="9" data-code-annotation="8">Mostrar resultados en escala original de los datos (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="9" data-code-annotation="8">Mostrar resultados en escala original de los datos (<code>TRUE</code> por defecto /<code>FALSE</code>).</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="9">9</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="10" data-code-annotation="9">Calcular el intervalo de predicción (<code>TRUE</code>/<code>FALSE</code> por defecto).</span>
 </dd>
 </dl>
 </div>
 </div>
-<p>Analicemos ahora la salida del modelo:</p>
+<div class="callout callout-style-simple callout-warning">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>No es necesario especificar los argumentos <code>common</code>, <code>random</code>, <code>sm</code>, <code>backstransf</code> o <code>prediction</code> a menos que se desee cambiar las opciones por defecto.</p>
+<p>El siguiente código genera los mismos resultados que el ejemplo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mod_cor</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metacor</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor =</span> ri,           </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> ni,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> authors,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_cor,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction =</span> <span class="cn">TRUE</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of studies: k = 16
 Number of observations: o = 3509
 
-                        COR           95%-CI    z  p-value
-Common effect model  0.1245 [0.0916; 0.1572] 7.36 &lt; 0.0001
-Random effects model 0.1488 [0.0878; 0.2087] 4.75 &lt; 0.0001
+                        COR            95%-CI    z  p-value
+Common effect model  0.1245 [ 0.0916; 0.1572] 7.36 &lt; 0.0001
+Random effects model 0.1488 [ 0.0878; 0.2087] 4.75 &lt; 0.0001
+Prediction interval         [-0.0534; 0.3393]              
 
 Quantifying heterogeneity (with 95%-CIs):
  tau^2 = 0.0081 [0.0017; 0.0378]; tau = 0.0901 [0.0412; 0.1944]
@@ -543,12 +567,45 @@ Details of meta-analysis methods:
 - Restricted maximum-likelihood estimator for tau^2
 - Q-Profile method for confidence interval of tau^2 and tau
 - Calculation of I^2 based on Q
+- Prediction interval based on t-distribution (df = 15)
+- Fisher's z transformation of correlations</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Analicemos ahora la salida del modelo:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mod_cor</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 16
+Number of observations: o = 3509
+
+                        COR            95%-CI    z  p-value
+Common effect model  0.1245 [ 0.0916; 0.1572] 7.36 &lt; 0.0001
+Random effects model 0.1488 [ 0.0878; 0.2087] 4.75 &lt; 0.0001
+Prediction interval         [-0.0534; 0.3393]              
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.0081 [0.0017; 0.0378]; tau = 0.0901 [0.0412; 0.1944]
+ I^2 = 60.7% [32.1%; 77.2%]; H = 1.59 [1.21; 2.10]
+
+Test of heterogeneity:
+     Q d.f. p-value
+ 38.16   15  0.0009
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Prediction interval based on t-distribution (df = 15)
 - Fisher's z transformation of correlations</code></pre>
 </div>
 </div>
 <p>El valor de <span class="math inline">\(I^2\)</span> indica que los datos presentan una heterogeneidad moderada y debe descartarse el modelo de efectos fijos.</p>
 <p>A diferencia de lo que vimos para datos precalculados, la salida nos muestra no solo el número de estudios incluidos (<code>k</code>) sino también el número total de observaciones (<code>o</code>).</p>
-<p>De acuerdo al modelo de efectos aleatorios, existe una correlación positiva baja entre la concienciación y la adherencia a la medicación.</p>
+<p>De acuerdo al modelo de efectos aleatorios, existe una correlación positiva baja entre la concienciación y la adherencia a la medicación. Sin embargo, el intervalo de predicción incluye la posibilidad de que futuros estudios reporten correlaciones negativas.</p>
 <p>Generamos el <em>forest plot</em> para visualizar los resultados:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
@@ -560,8 +617,9 @@ Details of meta-analysis methods:
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-8-7" class="code-annotation-target"><a href="#annotated-cell-8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">leftlabs =</span> <span class="fu">c</span>(<span class="st">"Estudio"</span>, <span class="st">"N"</span>),</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-8-8" class="code-annotation-target"><a href="#annotated-cell-8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">rightlabs =</span> <span class="fu">c</span>(<span class="st">"r"</span>, <span class="st">"95% IC"</span>, <span class="st">"Peso"</span>),</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-8-9" class="code-annotation-target"><a href="#annotated-cell-8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">hetlab =</span> <span class="st">"Heterogeneidad: "</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-8-10" class="code-annotation-target"><a href="#annotated-cell-8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">text.random =</span> <span class="st">"Modelo de </span><span class="sc">\n</span><span class="st"> efectos aleatorios"</span></span>
-<span id="annotated-cell-8-11"><a href="#annotated-cell-8-11" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-8-10" class="code-annotation-target"><a href="#annotated-cell-8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">text.random =</span> <span class="st">"Modelo de </span><span class="sc">\n</span><span class="st"> efectos aleatorios"</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-8-11" class="code-annotation-target"><a href="#annotated-cell-8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction =</span> <span class="cn">TRUE</span></span>
+<span id="annotated-cell-8-12"><a href="#annotated-cell-8-12" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
@@ -588,12 +646,16 @@ Details of meta-analysis methods:
 <dd>
 <span data-code-cell="annotated-cell-8" data-code-lines="10" data-code-annotation="6">Personalizar etiqueta del estimador global.</span>
 </dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="11" data-code-annotation="7">Mostrar intervalo de predicción (opcional).</span>
+</dd>
 </dl>
 </div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -614,11 +676,11 @@ p = \frac{k}{n}
 <p>La función <code>metaprop()</code> permite ajustar modelos para prevalencias e incorpora automáticamente esta transformación con el argumento <code>sm = "PLOGIT"</code>.</p>
 <p>Para ejemplificar, usaremos la base de datos <code>dat.crisafulli2020</code>, que contiene resultados de 26 estudios sobre la prevalencia de la distrofia muscular de Duchenne en recién nacidos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>datos_prev <span class="ot">&lt;-</span> dat.crisafulli2020</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar estructura de los datos</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(datos_prev)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>datos_prev <span class="ot">&lt;-</span> dat.crisafulli2020</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar estructura de los datos</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(datos_prev)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 26
 Columns: 7
@@ -645,11 +707,9 @@ $ total   &lt;int&gt; 177413, 234396, 91157, 10000, 532302, 371698, 301283, 4203
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-10-4" class="code-annotation-target"><a href="#annotated-cell-10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-10-5" class="code-annotation-target"><a href="#annotated-cell-10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_prev,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-10-6" class="code-annotation-target"><a href="#annotated-cell-10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"PLOGIT"</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-10-7" class="code-annotation-target"><a href="#annotated-cell-10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-10-8" class="code-annotation-target"><a href="#annotated-cell-10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-10-9" class="code-annotation-target"><a href="#annotated-cell-10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-10-10" class="code-annotation-target"><a href="#annotated-cell-10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">pscale =</span> <span class="dv">100</span></span>
-<span id="annotated-cell-10-11"><a href="#annotated-cell-10-11" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-10-7" class="code-annotation-target"><a href="#annotated-cell-10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction =</span> <span class="cn">TRUE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-10-8" class="code-annotation-target"><a href="#annotated-cell-10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">pscale =</span> <span class="dv">100</span></span>
+<span id="annotated-cell-10-9"><a href="#annotated-cell-10-9" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
@@ -670,30 +730,22 @@ $ total   &lt;int&gt; 177413, 234396, 91157, 10000, 532302, 371698, 301283, 4203
 </dd>
 <dt data-target-cell="annotated-cell-10" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="6" data-code-annotation="5">Estimador de efecto: <strong>logit-proporción</strong>.</span>
+<span data-code-cell="annotated-cell-10" data-code-lines="6" data-code-annotation="5">Estimador de efecto (<code>"PLOGIT"</code> por defecto, ver ayuda de la función para otras opciones).</span>
 </dd>
 <dt data-target-cell="annotated-cell-10" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="7" data-code-annotation="6">Ajustar el modelo de efectos fijos (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-10" data-code-lines="7" data-code-annotation="6">Calcular intervalos de predicción (<code>TRUE</code>/<code>FALSE</code> por defecto).</span>
 </dd>
 <dt data-target-cell="annotated-cell-10" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="8" data-code-annotation="7">Ajustar el modelo de efectos aleatorios (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-10" data-target-annotation="8">8</dt>
-<dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="9" data-code-annotation="8">Mostrar resultados en escala original de los datos (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-10" data-target-annotation="9">9</dt>
-<dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="10" data-code-annotation="9">Expresar los resultados en porcentajes.</span>
+<span data-code-cell="annotated-cell-10" data-code-lines="8" data-code-annotation="7">Expresar los estimadores de efecto como porcentajes.</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>Analicemos ahora la salida del modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mod_prev</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mod_prev</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of studies: k = 26
 Number of observations: o = 6831388
@@ -702,6 +754,7 @@ Number of events: e = 1545
                      events           95%-CI
 Common effect model  0.0226 [0.0215; 0.0238]
 Random effects model 0.0222 [0.0206; 0.0240]
+Prediction interval         [0.0174; 0.0284]
 
 Quantifying heterogeneity (with 95%-CIs):
  tau^2 = 0.0126; tau = 0.1121; I^2 = 33.2% [0.0%; 58.6%]; H = 1.22 [1.00; 1.55]
@@ -715,11 +768,12 @@ Details of meta-analysis methods:
 - Random intercept logistic regression model
 - Maximum-likelihood estimator for tau^2
 - Calculation of I^2 based on Q
+- Prediction interval based on t-distribution (df = 25)
 - Logit transformation
 - Events per 100 observations</code></pre>
 </div>
 </div>
-<p>El valor de <span class="math inline">\(I^2\)</span> indica que los datos presentan una heterogeneidad moderada y debe descartarse el modelo de efectos fijos.</p>
+<p>El valor de <span class="math inline">\(I^2\)</span> indica que los datos presentan una heterogeneidad moderada y puede descartarse el modelo de efectos fijos. Como la heterogeneidad no es demasiado alta, el intervalo de predicción es similar al intervalo de confianza del modelo de efectos aleatorios.</p>
 <p>El coeficiente del modelo de efectos aleatorios muestra una prevalencia del evento del 0,022%, por lo que vamos a expresarla en <strong>casos por 100 000 habitantes</strong> al momento de realizar el <em>forest plot</em>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="annotated-cell-12"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-12-1"><a href="#annotated-cell-12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
@@ -769,7 +823,7 @@ Details of meta-analysis methods:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -778,9 +832,9 @@ Details of meta-analysis methods:
 <section id="tasa-de-incidencia" class="level3">
 <h3 class="anchored" data-anchor-id="tasa-de-incidencia">Tasa de incidencia</h3>
 <p>La tasa de incidencia o <em>incidence rate</em> (IR) se utiliza para eventos que ocurren a lo largo del tiempo y se define como:</p>
-<p><span class="math display">\[
+<p><span id="eq-3"><span class="math display">\[
 IR = \frac {k}{T}
-\]</span> {#eq-3}​</p>
+\tag{3}\]</span></span></p>
 <p>donde:</p>
 <ul>
 <li><p><span class="math inline">\(k\)</span> es el número de eventos observados.</p></li>
@@ -790,11 +844,11 @@ IR = \frac {k}{T}
 <p>La función <code>metarate()</code> ajusta modelos de meta-análisis para tasas de incidencia, aplicando esta transformación (<code>sm = "IRLN"</code>).</p>
 <p>Como ejemplo, usamos la base <code>dat.nielweise2008</code>, que contiene 9 estudios sobre la incidencia de infecciones sanguíneas asociadas al uso de catéteres:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>datos_inc <span class="ot">&lt;-</span> dat.nielweise2008</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar estructura de los datos</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(datos_inc)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>datos_inc <span class="ot">&lt;-</span> dat.nielweise2008</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar estructura de los datos</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(datos_inc)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 9
 Columns: 7
@@ -821,10 +875,8 @@ $ t2i     &lt;int&gt; 1988, 1461, 10962, 1503, 483, 913, 6840, 1015, 440</code><
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-14-4" class="code-annotation-target"><a href="#annotated-cell-14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> authors,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-14-5" class="code-annotation-target"><a href="#annotated-cell-14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_inc,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-14-6" class="code-annotation-target"><a href="#annotated-cell-14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"IRLN"</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-14-7" class="code-annotation-target"><a href="#annotated-cell-14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-14-8" class="code-annotation-target"><a href="#annotated-cell-14-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-14-9" class="code-annotation-target"><a href="#annotated-cell-14-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span></span>
-<span id="annotated-cell-14-10"><a href="#annotated-cell-14-10" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-14-7" class="code-annotation-target"><a href="#annotated-cell-14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction =</span> <span class="cn">TRUE</span></span>
+<span id="annotated-cell-14-8"><a href="#annotated-cell-14-8" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-14" data-target-annotation="1">1</dt>
@@ -845,26 +897,18 @@ $ t2i     &lt;int&gt; 1988, 1461, 10962, 1503, 483, 913, 6840, 1015, 440</code><
 </dd>
 <dt data-target-cell="annotated-cell-14" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="6" data-code-annotation="5">Estimador de efecto: <strong>log-tasa de incidencia</strong>.</span>
+<span data-code-cell="annotated-cell-14" data-code-lines="6" data-code-annotation="5">Estimador de efecto (<code>"IRLN"</code> por defecto, ver ayuda de la función para otras opciones).</span>
 </dd>
 <dt data-target-cell="annotated-cell-14" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="7" data-code-annotation="6">Ajustar el modelo de efectos fijos (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-14" data-target-annotation="7">7</dt>
-<dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="8" data-code-annotation="7">Ajustar el modelo de efectos aleatorios (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-14" data-target-annotation="8">8</dt>
-<dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="9" data-code-annotation="8">Mostrar resultados en escala original de los datos (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-14" data-code-lines="7" data-code-annotation="6">Calcular intervalos de predicción (<code>TRUE</code>/<code>FALSE</code> por defecto).</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>Analicemos ahora la salida del modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mod_inc</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>mod_inc</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of studies: k = 9
 Number of events: e = 77
@@ -872,6 +916,7 @@ Number of events: e = 77
                        rate           95%-CI
 Common effect model  0.0039 [0.0031; 0.0048]
 Random effects model 0.0043 [0.0027; 0.0070]
+Prediction interval         [0.0010; 0.0196]
 
 Quantifying heterogeneity (with 95%-CIs):
  tau^2 = 0.3699 [0.0940; 1.5145]; tau = 0.6082 [0.3065; 1.2307]
@@ -886,10 +931,11 @@ Details of meta-analysis methods:
 - Restricted maximum-likelihood estimator for tau^2
 - Q-Profile method for confidence interval of tau^2 and tau
 - Calculation of I^2 based on Q
+- Prediction interval based on t-distribution (df = 8)
 - Log transformation</code></pre>
 </div>
 </div>
-<p>El valor de <span class="math inline">\(I^2\)</span> indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.</p>
+<p>El valor de <span class="math inline">\(I^2\)</span> indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos. El intervalo de predicción muestra que se pueden esperar tasas más altas o bajas en estudios futuros.</p>
 <p>El coeficiente del modelo de efectos aleatorio muestra que la tasa de incidencia del evento es muy baja dentro del grupo estudiado, por lo que vamos a expresarla en <strong>casos por 1000 años-persona</strong> cuando ajustemos el <em>forest plot</em>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="annotated-cell-16"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-16-1"><a href="#annotated-cell-16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
@@ -939,7 +985,7 @@ Details of meta-analysis methods:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -954,7 +1000,7 @@ Details of meta-analysis methods:
 <p>La diferencia de medias entre dos grupos de exposición se define como:</p>
 <p><span id="eq-4"><span class="math display">\[
 MD = \bar{x_e} - \bar{x_c}
-\tag{3}\]</span></span></p>
+\tag{4}\]</span></span></p>
 <p>donde:</p>
 <ul>
 <li><p><span class="math inline">\(\bar{x_e}\)</span> es la media muestral del grupo expuesto o tratado.</p></li>
@@ -964,11 +1010,11 @@ MD = \bar{x_e} - \bar{x_c}
 <p>La función <code>metacont()</code> ajusta modelos de meta-análisis para diferencias de medias estandarizadas con el argumento <code>sm = "SMD"</code>.</p>
 <p>Como ejemplo, utilizaremos la base de datos <code>dat.furukawa2003</code>, que contiene resultados de 17 estudios sobre la efectividad de la dosis de antidepresivos tricíclicos en casos de depresión severa.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>datos_md <span class="ot">&lt;-</span> dat.furukawa2003</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar estructura de los datos</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(datos_md)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>datos_md <span class="ot">&lt;-</span> dat.furukawa2003</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar estructura de los datos</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(datos_md)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 17
 Columns: 7
@@ -1003,10 +1049,8 @@ $ Sc     &lt;dbl&gt; 9.60, 8.20, 8.80, 10.50, 10.60, 11.00, 11.20, 7.60, 5.20, 1
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-18-8" class="code-annotation-target"><a href="#annotated-cell-18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> author,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-18-9" class="code-annotation-target"><a href="#annotated-cell-18-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_md,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-18-10" class="code-annotation-target"><a href="#annotated-cell-18-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"SMD"</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-18-11" class="code-annotation-target"><a href="#annotated-cell-18-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="11" onclick="event.preventDefault();">11</a><span id="annotated-cell-18-12" class="code-annotation-target"><a href="#annotated-cell-18-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="12" onclick="event.preventDefault();">12</a><span id="annotated-cell-18-13" class="code-annotation-target"><a href="#annotated-cell-18-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span></span>
-<span id="annotated-cell-18-14"><a href="#annotated-cell-18-14" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-18-11" class="code-annotation-target"><a href="#annotated-cell-18-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction =</span> <span class="cn">TRUE</span></span>
+<span id="annotated-cell-18-12"><a href="#annotated-cell-18-12" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
@@ -1043,26 +1087,18 @@ $ Sc     &lt;dbl&gt; 9.60, 8.20, 8.80, 10.50, 10.60, 11.00, 11.20, 7.60, 5.20, 1
 </dd>
 <dt data-target-cell="annotated-cell-18" data-target-annotation="9">9</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="10" data-code-annotation="9">Estimador de efecto: <strong>diferencia de medias estandarizada</strong>.</span>
+<span data-code-cell="annotated-cell-18" data-code-lines="10" data-code-annotation="9">Estimador de efecto (<code>"SMD"</code> por defecto, ver ayuda de la función para otras opciones).</span>
 </dd>
 <dt data-target-cell="annotated-cell-18" data-target-annotation="10">10</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="11" data-code-annotation="10">Ajustar el modelo de efectos fijos (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-18" data-target-annotation="11">11</dt>
-<dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="12" data-code-annotation="11">Ajustar el modelo de efectos aleatorios (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-18" data-target-annotation="12">12</dt>
-<dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="13" data-code-annotation="12">Mostrar resultados en escala original de los datos (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-18" data-code-lines="11" data-code-annotation="10">Calcular intervalos de predicción (<code>TRUE</code>/<code>FALSE</code> por defecto).</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>Analicemos ahora la salida del modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mod_md</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mod_md</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of studies: k = 17
 Number of observations: o = 902 (o.e = 479, o.c = 423)
@@ -1070,6 +1106,7 @@ Number of observations: o = 902 (o.e = 479, o.c = 423)
                          SMD             95%-CI     z  p-value
 Common effect model  -0.3918 [-0.5286; -0.2551] -5.62 &lt; 0.0001
 Random effects model -0.6056 [-0.9326; -0.2787] -3.63   0.0003
+Prediction interval          [-1.8940;  0.6827]               
 
 Quantifying heterogeneity (with 95%-CIs):
  tau^2 = 0.3415 [0.1422; 1.1791]; tau = 0.5844 [0.3771; 1.0859]
@@ -1084,11 +1121,12 @@ Details of meta-analysis methods:
 - Restricted maximum-likelihood estimator for tau^2
 - Q-Profile method for confidence interval of tau^2 and tau
 - Calculation of I^2 based on Q
+- Prediction interval based on t-distribution (df = 16)
 - Hedges' g (bias corrected standardised mean difference; using exact formulae)</code></pre>
 </div>
 </div>
 <p>El valor de <span class="math inline">\(I^2\)</span> indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.</p>
-<p>Los coeficientes del modelo de efectos aleatorios indican que el grupo tratado presenta un promedio significativamente menor de infecciones asociadas al uso de catéteres que el grupo control <span class="math inline">\((p&lt;0,001)\)</span>.</p>
+<p>Los coeficientes del modelo de efectos aleatorios indican que el grupo tratado con antidepresivos tricíclicos presenta una reducción en los síntomas respecto del grupo control <span class="math inline">\((p&lt;0,001)\)</span>. El intervalo de predicción muestra que es posible que estudios futuros encuentren el efecto inverso al estimado.</p>
 <p>Generamos el <em>forest plot</em> para visualizar los resultados:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="annotated-cell-20"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-20-1"><a href="#annotated-cell-20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
@@ -1134,29 +1172,29 @@ Details of meta-analysis methods:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Para mejorar la visualización, podemos modificar el argumento <code>leftcols</code> para mostrar solamente el identificador de estudio en el panel izquierdo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  mod_md,</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,        </span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> pal[<span class="dv">1</span>],</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> pal[<span class="dv">3</span>],</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Diferencia de medias </span><span class="sc">\n</span><span class="st"> estandarizada"</span>,</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">leftlabs =</span> <span class="st">"Estudio"</span>,</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">rightlabs =</span> <span class="fu">c</span>(<span class="st">"SMD"</span>, <span class="st">"95% IC"</span>, <span class="st">"Peso"</span>),</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">hetlab =</span> <span class="st">"Heterogeneidad: "</span>,</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">text.random =</span> <span class="st">"Modelo de efectos aleatorios"</span>,</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">leftcols =</span> <span class="st">"studlab"</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  mod_md,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,        </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> pal[<span class="dv">1</span>],</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> pal[<span class="dv">3</span>],</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Diferencia de medias </span><span class="sc">\n</span><span class="st"> estandarizada"</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">leftlabs =</span> <span class="st">"Estudio"</span>,</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">rightlabs =</span> <span class="fu">c</span>(<span class="st">"SMD"</span>, <span class="st">"95% IC"</span>, <span class="st">"Peso"</span>),</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">hetlab =</span> <span class="st">"Heterogeneidad: "</span>,</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">text.random =</span> <span class="st">"Modelo de efectos aleatorios"</span>,</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">leftcols =</span> <span class="st">"studlab"</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -1167,7 +1205,7 @@ Details of meta-analysis methods:
 <p>El <em>odds ratio</em> (OR) o razón de productos cruzados se define como el cociente entre los <a href="https://es.wikipedia.org/wiki/Odds_ratio#Definici%C3%B3n_de_los_odds"><em>odds</em></a> del evento en el grupo expuesto/tratamiento y en el grupo no expuesto/control:</p>
 <p><span id="eq-5"><span class="math display">\[
 OR =  \frac{a/b}{c/d}
-\tag{4}\]</span></span></p>
+\tag{5}\]</span></span></p>
 <p>donde:</p>
 <ul>
 <li><p><span class="math inline">\(a\)</span> es el número de eventos en el grupo expuesto/tratamiento.</p></li>
@@ -1186,11 +1224,11 @@ OR =  \frac{a/b}{c/d}
 <p>El siguiente ejemplo utiliza la base de datos <code>dat.collins1985b</code>, que contiene información de 9 estudios sobre el efecto de los diuréticos en la prevención de preeclampsia.</p>
 <p>Comenzamos cargando los datos y explorando su estructura:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga datos</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>datos_or <span class="ot">&lt;-</span> dat.collins1985b</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar estructura de los datos</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(datos_or)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga datos</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>datos_or <span class="ot">&lt;-</span> dat.collins1985b</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar estructura de los datos</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(datos_or)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 9
 Columns: 16
@@ -1230,10 +1268,8 @@ $ ned.xci &lt;int&gt; 2, 1, 1, 2, 8, NA, 7, 0, 0</code></pre>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-23-6" class="code-annotation-target"><a href="#annotated-cell-23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> author,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-23-7" class="code-annotation-target"><a href="#annotated-cell-23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_or,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-23-8" class="code-annotation-target"><a href="#annotated-cell-23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"OR"</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-23-9" class="code-annotation-target"><a href="#annotated-cell-23-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-23-10" class="code-annotation-target"><a href="#annotated-cell-23-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-23-11" class="code-annotation-target"><a href="#annotated-cell-23-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span></span>
-<span id="annotated-cell-23-12"><a href="#annotated-cell-23-12" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-23-9" class="code-annotation-target"><a href="#annotated-cell-23-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction =</span> <span class="cn">TRUE</span></span>
+<span id="annotated-cell-23-10"><a href="#annotated-cell-23-10" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-23" data-target-annotation="1">1</dt>
@@ -1262,26 +1298,18 @@ $ ned.xci &lt;int&gt; 2, 1, 1, 2, 8, NA, 7, 0, 0</code></pre>
 </dd>
 <dt data-target-cell="annotated-cell-23" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-23" data-code-lines="8" data-code-annotation="7">Estimador de efecto: <strong>log-<em>odds ratio</em></strong>.</span>
+<span data-code-cell="annotated-cell-23" data-code-lines="8" data-code-annotation="7">Estimador de efecto (<code>"OR"</code> para Odds-ratio, <code>"RR"</code> para riesgo relativo, ver ayuda de la función para otras opciones).</span>
 </dd>
 <dt data-target-cell="annotated-cell-23" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-23" data-code-lines="9" data-code-annotation="8">Ajustar el modelo de efectos fijos (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-23" data-target-annotation="9">9</dt>
-<dd>
-<span data-code-cell="annotated-cell-23" data-code-lines="10" data-code-annotation="9">Ajustar el modelo de efectos aleatorios (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-23" data-target-annotation="10">10</dt>
-<dd>
-<span data-code-cell="annotated-cell-23" data-code-lines="11" data-code-annotation="10">Mostrar resultados en escala original de los datos (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-23" data-code-lines="9" data-code-annotation="8">Calcular intervalos de predicción (<code>TRUE</code>/<code>FALSE</code> por defecto).</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>Analicemos ahora la salida del modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mod_or</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>mod_or</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of studies: k = 9
 Number of observations: o = 6942 (o.e = 3759, o.c = 3183)
@@ -1290,6 +1318,7 @@ Number of events: e = 636
                          OR           95%-CI     z  p-value
 Common effect model  0.6677 [0.5620; 0.7932] -4.60 &lt; 0.0001
 Random effects model 0.5956 [0.3843; 0.9233] -2.32   0.0205
+Prediction interval         [0.1520; 2.3343]               
 
 Quantifying heterogeneity (with 95%-CIs):
  tau^2 = 0.3008 [0.0723; 2.2027]; tau = 0.5484 [0.2689; 1.4842]
@@ -1304,12 +1333,13 @@ Details of meta-analysis methods:
 - Inverse variance method (random effects model)
 - Restricted maximum-likelihood estimator for tau^2
 - Q-Profile method for confidence interval of tau^2 and tau
-- Calculation of I^2 based on Q</code></pre>
+- Calculation of I^2 based on Q
+- Prediction interval based on t-distribution (df = 8)</code></pre>
 </div>
 </div>
 <p>La salida del modelo nos muestra el número de estudios (<code>k</code>), el número de observaciones total (<code>o</code>) y por grupo de exposición (<code>o.e</code> y <code>o.c</code>) y el número de eventos.</p>
 <p>El valor de <span class="math inline">\(I^2\)</span> indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.</p>
-<p>De acuerdo al coeficiente del modelo de efectos aleatorios, el uso de diuréticos reduce significativamente las probabilidades de preeclampsia en comparación con el grupo control <span class="math inline">\((p = 0,021)\)</span>.</p>
+<p>De acuerdo al coeficiente del modelo de efectos aleatorios, el uso de diuréticos reduce significativamente las probabilidades de preeclampsia en comparación con el grupo control <span class="math inline">\((p = 0,021)\)</span>. Sin embargo, el intervalo de predicción no descarta que futuros estudios encuentren la relación inversa.</p>
 <p>Generamos el <em>forest plot</em> para visualizar los resultados:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="annotated-cell-25"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-25-1"><a href="#annotated-cell-25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
@@ -1359,27 +1389,24 @@ Details of meta-analysis methods:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
 </div>
-</section>
-<section id="riesgo-relativo" class="level3">
-<h3 class="anchored" data-anchor-id="riesgo-relativo">Riesgo relativo</h3>
-<p>El riesgo relativo (RR) o <em>risk ratio</em> mide la razón entre las probabilidades de desarrollar un evento en el grupo expuesto y en el grupo control:</p>
-<p><span class="math display">\[
-RR =  \frac{a/(a + b)}{c/(c + d)}
-\]</span></p>
-<p>donde:</p>
-<ul>
-<li><p><span class="math inline">\(a\)</span> es el número de eventos en el grupo expuesto/tratamiento.</p></li>
-<li><p><span class="math inline">\(b\)</span> es el número de individuos sin el evento en el grupo expuesto/tratamiento.</p></li>
-<li><p><span class="math inline">\(c\)</span> es el número de eventos en el grupo no expuesto/control.</p></li>
-<li><p><span class="math inline">\(d\)</span> es el número de individuos sin el evento en el grupo no expuesto/control.</p></li>
-</ul>
-<p>Al igual que el OR, el <strong>RR</strong> es una medida asimétrica y solo toma valores positivos <span class="math inline">\((0-\infty)\)</span>. Para estabilizar la varianza y mejorar la interpretación estadística, se usa una <strong>transformación logarítmica</strong>, lo que permite modelar el RR en un intervalo simétrico y facilita la comparación entre estudios.</p>
-<p>La función <code>metabin()</code> permite calcular el RR mediante el argumento <code>sm = "RR"</code>, que aplica automáticamente la transformación logarítmica. Debido a la similitud en el cálculo con el OR, omitiremos el ejemplo para esta medida de asociación.</p>
+<div class="callout callout-style-simple callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Importante
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La función <code>metabin()</code> también permite estimar el riesgo relativo mediante el argumento <code>sm = "RR"</code>, así como otros estimadores de efecto para variables binomiales, como la diferencia de riesgos (<code>"RD"</code>), la efectividad de vacunas (<code>"VE"</code>), entre otros. Dado que su implementación es análoga a la utilizada para la razón de odds (<code>"OR"</code>), no se desarrollarán ejemplos específicos para las mismas.</p>
+</div>
+</div>
 </section>
 <section id="razón-de-tasas-de-incidencia" class="level3">
 <h3 class="anchored" data-anchor-id="razón-de-tasas-de-incidencia">Razón de tasas de incidencia</h3>
@@ -1414,10 +1441,8 @@ IRR = \frac{IR_e}{IR_c}
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-26-7" class="code-annotation-target"><a href="#annotated-cell-26-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> authors,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-26-8" class="code-annotation-target"><a href="#annotated-cell-26-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_inc,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-26-9" class="code-annotation-target"><a href="#annotated-cell-26-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"IRR"</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-26-10" class="code-annotation-target"><a href="#annotated-cell-26-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-26-11" class="code-annotation-target"><a href="#annotated-cell-26-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-26-12" class="code-annotation-target"><a href="#annotated-cell-26-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span>,</span>
-<span id="annotated-cell-26-13"><a href="#annotated-cell-26-13" aria-hidden="true" tabindex="-1"></a>  )</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-26-10" class="code-annotation-target"><a href="#annotated-cell-26-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction =</span> <span class="cn">TRUE</span></span>
+<span id="annotated-cell-26-11"><a href="#annotated-cell-26-11" aria-hidden="true" tabindex="-1"></a>  )</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-26" data-target-annotation="1">1</dt>
@@ -1446,26 +1471,18 @@ IRR = \frac{IR_e}{IR_c}
 </dd>
 <dt data-target-cell="annotated-cell-26" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-26" data-code-lines="9" data-code-annotation="7">Estimador de efecto: <strong>log-razón de tasas de incidencia</strong>.</span>
+<span data-code-cell="annotated-cell-26" data-code-lines="9" data-code-annotation="7">Estimador de efecto (<code>"IRR"</code> para razón de tasas de incidencia, ver ayuda de la función para otras opciones).</span>
 </dd>
 <dt data-target-cell="annotated-cell-26" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-26" data-code-lines="10" data-code-annotation="8">Ajustar el modelo de efectos fijos (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-26" data-target-annotation="9">9</dt>
-<dd>
-<span data-code-cell="annotated-cell-26" data-code-lines="11" data-code-annotation="9">Ajustar el modelo de efectos aleatorios (<code>TRUE</code>/<code>FALSE</code>).</span>
-</dd>
-<dt data-target-cell="annotated-cell-26" data-target-annotation="10">10</dt>
-<dd>
-<span data-code-cell="annotated-cell-26" data-code-lines="12" data-code-annotation="10">Mostrar resultados en escala original de los datos (<code>TRUE</code>/<code>FALSE</code>).</span>
+<span data-code-cell="annotated-cell-26" data-code-lines="10" data-code-annotation="8">Calcular intervalos de predicción (<code>TRUE</code>/<code>FALSE</code> por defecto).</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>Analicemos ahora la salida del modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>mod_irr</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mod_irr</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of studies: k = 9
 Number of events: e = 125
@@ -1473,6 +1490,7 @@ Number of events: e = 125
                         IRR           95%-CI     z p-value
 Common effect model  0.6602 [0.4608; 0.9459] -2.26  0.0236
 Random effects model 0.6728 [0.4314; 1.0494] -1.75  0.0806
+Prediction interval         [0.2796; 1.6192]              
 
 Quantifying heterogeneity (with 95%-CIs):
  tau^2 = 0.0936 [0.0000; 1.4845]; tau = 0.3060 [0.0000; 1.2184]
@@ -1487,11 +1505,12 @@ Details of meta-analysis methods:
 - Inverse variance method (random effects model)
 - Restricted maximum-likelihood estimator for tau^2
 - Q-Profile method for confidence interval of tau^2 and tau
-- Calculation of I^2 based on Q</code></pre>
+- Calculation of I^2 based on Q
+- Prediction interval based on t-distribution (df = 8)</code></pre>
 </div>
 </div>
 <p>El valor de <span class="math inline">\(I^2\)</span> indica que los datos presentan una heterogeneidad baja y puede conservarse el modelo de efectos fijos.</p>
-<p>Los coeficientes del modelo de efectos fijos muestran una disminución estadísticamente significativa del riesgo en el grupo tratado <span class="math inline">\((p = 0,24)\)</span>, pero la misma deja de ser significativa en el de efectos aleatorios <span class="math inline">\((p = 0,81)\)</span>.</p>
+<p>Los coeficientes del modelo de efectos fijos muestran una disminución estadísticamente significativa del riesgo en el grupo tratado <span class="math inline">\((p = 0,24)\)</span>, pero la misma deja de ser significativa en el de efectos aleatorios <span class="math inline">\((p = 0,81)\)</span>. El intervalo de predicción muestra que futuros estudios pueden detectar un efecto inverso al estimado.</p>
 <p>Generamos el <em>forest plot</em> para visualizar los resultados, usando los argumentos <code>col.diamond.random</code> y <code>col.diamond.common</code> para mostrar en diferentes colores los estimadores globales del modelo de efectos fijos y el modelo de efectos aleatorios:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="annotated-cell-28"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-28-1"><a href="#annotated-cell-28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
@@ -1551,7 +1570,7 @@ Details of meta-analysis methods:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="03_tipos_estimador_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -1826,7 +1845,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/datos-ine\.github\.io\/curso_meta-analisis\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

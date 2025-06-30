@@ -59,7 +59,7 @@ $$ {#eq-4}
 
 donde:
 
--    $\tau_k$ representa el **desvío del efecto verdadero del estudio** $k$ con respecto a la media global.
+-   $\tau_k$ representa el **desvío del efecto verdadero del estudio** $k$ con respecto a la media global.
 
 -   $\epsilon_k$ es el error muestral.
 
@@ -71,15 +71,17 @@ El valor de tau-cuadrado no se conoce de antemano y debe estimarse a partir de l
 
 ### Indicadores de heterogeneidad
 
-En un meta-análisis, la variabilidad en los resultados puede deberse a múltiples fuentes:
+En un meta-análisis, la variabilidad observada en los resultados puede deberse a diversas fuentes:
 
 -   **Variabilidad intraestudio**: refleja las diferencias entre los participantes dentro de cada estudio.
 
--   **Heterogeneidad entre estudios**: variabilidad en los efectos estimados más allá de lo esperable por azar.
+-   **Heterogeneidad entre estudios**: representa la variación en los efectos estimados que no puede atribuirse únicamente al azar.
 
--   **Error de muestreo** y otras fuentes de incertidumbre, que pueden influir en las diferencias observadas.
+-   **Error de muestreo** y otras fuentes de incertidumbre, que también pueden influir en las diferencias observadas.
 
-La heterogeneidad entre estudios es particularmente importante, ya que indica si los efectos varían más de lo que se esperaría solo por error aleatorio. En la siguiente tabla, adaptada de @Schwarzer2015, se resumen los indicadores más utilizados para cuantificar la heterogeneidad:
+La **heterogeneidad entre estudios** es particularmente importante, ya que permite evaluar si los efectos estimados varían más de lo esperado por error aleatorio. Identificar y cuantificar esta heterogeneidad es esencial para decidir si corresponde utilizar un modelo de efectos aleatorios en lugar de uno de efectos fijos.
+
+La siguiente tabla, adaptada de @Schwarzer2015, presenta los principales indicadores utilizados para cuantificar la heterogeneidad:
 
 ```{r}
 #| echo: false
@@ -87,37 +89,58 @@ La heterogeneidad entre estudios es particularmente importante, ya que indica si
 tibble(
   Medida = c("Q de Cochran", 
              "I²", 
-             "τ²", 
-             "H²"),
-    Interpretación = c(
-      "Evalúa si la heterogeneidad observada es estadísticamente significativa.",
-      "Cuantifica qué proporción de la variabilidad total se debe a heterogeneidad real.",
-      "Mide la variabilidad real entre los efectos verdaderos de los estudios.",
-      "Razón entre la varianza total observada y la varianza esperada bajo el supuesto de homogeneidad."
-    ),
-    Escala = c("Absoluta", 
-               "Porcentaje", 
-               "Varianza", 
-               "Absoluta"),
-    Rango = c("[0, ∞)", 
-              "[0, 100]", 
-              "[0, ∞)", 
-              "[1, ∞)"),
-    `Número de estudios` = c("Dependiente", 
-                             "Independiente", 
-                             "Independiente", 
-                             "Independiente"),
-    `Afectada por precisión` = c("Sí", 
-                                 "Sí", 
-                                 "No", 
-                                 "Sí")
-  ) |> 
+             "H²",
+             "τ²"),
+  
+  Interpretación = c(
+    "Evalúa si la variabilidad observada es mayor a la esperada por azar.",
+    "Porcentaje de la variación total atribuible a la heterogeneidad entre estudios.",
+    "Razón entre la varianza observada y la varianza esperada bajo homogeneidad.",
+    "Varianza entre los efectos verdaderos de los estudios incluidos."
+  ),
+  
+  Escala = c("Absoluta", 
+             "Porcentaje", 
+             "Absoluta",
+             "Varianza"),
+  
+  Rango = c("[0, ∞)", 
+            "[0, 100]", 
+            "[1, ∞)",
+            "[0, ∞)"),
+  
+  `Número de estudios` = c("Dependiente", 
+                           "Independiente", 
+                           "Independiente", 
+                           "Independiente"),
+  
+  `Precisión` = c("Dependiente", 
+                  "Dependiente", 
+                  "Dependiente",
+                  "Independiente")
+) |> 
   
   # Tabla 
   kbl_format()
 ```
 
-Estos indicadores permiten evaluar si las diferencias observadas entre los estudios justifican el uso de un modelo de efectos aleatorios en lugar de uno de efectos fijos.
+Estos indicadores permiten evaluar si las diferencias observadas entre los estudios justifican el uso de un modelo de efectos aleatorios. A modo de síntesis:
+
+-   El estadístico $Q$ de Cochran aumenta con el número de estudios ($k$) y su precisión (tamaño muestral).
+
+-   Tanto $I^2$ como $H^2$ se derivan de $Q$ y son independientes del número de estudios, pero no de su precisión.
+
+-   La varianza entre estudios, $\tau^2$, y su desvío estándar ($\tau$), son independientes tanto de $k$ como de la precisión, pero su interpretación es menos intuitiva.
+
+Entre estos indicadores, $I^2$ y su intervalo de confianza del 95 % son los más comúnmente reportados. Su interpretación usual es:
+
+-   Hasta 25 %: heterogeneidad baja.
+
+-   Entre 25 % y 50 %: heterogeneidad moderada.
+
+-   Más del 75 %: heterogeneidad alta.
+
+Para complementar la información proporcionada por $I^2$, se recomienda reportar un **intervalo de predicción**, que indica el rango en el que podrían encontrarse los efectos verdaderos de estudios futuros, considerando la heterogeneidad estimada a partir de la evidencia actual.
 
 ## Implementación en R
 
@@ -161,15 +184,18 @@ El paquete `meta` ofrece una serie de funciones para ajustar modelos de meta-an�
 ```{r}
 #| eval: false
 metagen(
-  TE, # <1>
-  seTE, # <2>
-  studlab, # <3>
-  data, # <4>
-  subset, # <5>
-  common, # <6>
-  random, # <7>
-  subgroup, # <8>
-  cluster # <9>
+  TE,          # <1>
+  seTE,        # <2>
+  studlab,     # <3>
+  data,        # <4>
+  subset,      # <5>
+  common,      # <6>
+  random,      # <7>
+  subgroup,    # <8>
+  cluster,     # <9>
+  prediction,  # <10>
+  backtransf,  # <11>
+  ...
 )
 ```
 
@@ -190,6 +216,10 @@ metagen(
 8.  Definir variable para análisis de subgrupos (opcional).
 
 9.  Definir variable para ajuste de modelo multinivel (opcional).
+
+10. Calcular intervalo de predicción (`TRUE`/`FALSE`, opcional).
+
+11. Mostrar resultados en la escala original de los datos (`TRUE`/`FALSE`, opcional).
 
 ### Ejemplo práctico
 
@@ -264,9 +294,25 @@ Una vez que decidimos con cual modelo quedarnos, procedemos a interpretar la sal
 
     -   `Calculation of I^2 based on Q:` metodología aplicada para calcular $I^2$.
 
+El paquete `meta` no calcula el intervalo de predicción por defecto, si nos interesa obtenerlo podemos actualizar el modelo de la siguiente forma:
+
+```{r}
+# Calcular el intervalo de predicción
+mod <- update(mod, prediction = TRUE)
+
+# Salida del modelo
+mod
+
+# Límite inferior intervalo de predicción
+mod$lower.predict
+
+# Límite superior intervalo de predicción
+mod$upper.predict
+```
+
 ### Interpretación de resultados
 
-En base a la salida anterior, podemos concluir que el meta-análisis realizado sobre 56 estudios individuales muestra que el rendimiento académico aumenta significativamente con la modificación del calendario escolar ($p < 0.005$). La alta heterogeneidad estadística ($I^2 = 99,9\%$) sugiere que la variabilidad observada se debe a diferencias reales entre estudios.
+En base a la salida anterior, podemos concluir que el meta-análisis realizado sobre 56 estudios individuales muestra que el rendimiento académico aumenta significativamente con la modificación del calendario escolar ($p < 0.005$). La alta heterogeneidad estadística ($I^2 = 99,9\%$) sugiere que la variabilidad observada se debe a diferencias reales entre estudios y el intervalo de predicción incluye la posibilidad de obtener asociaciones negativas en futuros estudios.
 
 ### Representación gráfica
 
@@ -316,36 +362,38 @@ A continuación, generaremos un *forest plot* para representar gráficamente el 
 #| fig-width: 9
 forest(mod,
        smlab = "Diferencia de medias estandarizada",
-       col.diamond = "#8C0172",
-       col.square = "#6BD48C"
+       col.diamond = "#8C0172",   # Color estimador global
+       col.square = "#6BD48C",    # Color estimadores individuales
+       common = FALSE,            # Omitir modelo de efectos fijos
+       prediction = TRUE          # Mostrar intervalo de predicción
        )
 ```
 
 El gráfico consta de tres paneles principales:
 
--   Panel izquierdo:
+#### Panel izquierdo
 
-    -   Identificador de estudio (`"studlab"`).
+-   Muestra el **identificador único de cada estudio** (generalmente el apellido del primer autor y el año de publicación).
 
-    -   Columnas adicionales dependientes del estimador de efecto utilizado.
+-   Puede incluir **columnas adicionales** según el tipo de estimador de efecto utilizado (por ejemplo, tamaño muestral, número de eventos, medias y desvíos estándar, etc.).
 
--   Panel central:
+#### Panel central
 
-    -   Línea vertical de referencia que indica el valor de no efecto (0 en datos continuos, 1 en escalas logarítmicas).
+-   **Línea vertical de referencia**: indica el valor de no efecto (`0` para diferencias de medias o coeficientes de correlación; `1` para datos en escala logarítmica).
 
-    -   Línea punteada que representa el estimador global del meta-análisis.
+-   **Estimador global**: representado por una línea punteada vertical que finaliza en un **rombo**. La posición del mismo indica el valor puntual estimado y su ancho el intervalo de confianza ($95\%~IC$).
 
-    -   Un rombo que representa el estimador de efecto global, cuyo ancho indica el intervalo de confianza al 95%.
+-   **Estimadores individuales**: representados por **cuadrados**, cuyo tamaño está dado por el peso estadístico del estudio, con bigotes horizontales que indican su $95\%~IC$.
 
-    -   Cuadrados que representan los estimadores de los estudios individuales, con un tamaño proporcional al peso del estudio en el análisis.
+-   Opcionalmente, se puede incluir una **línea horizontal roja** que representa el **intervalo de predicción**.
 
-    -   Bigotes horizontales que indican los $95\%~IC$ de cada estudio.
+-   En la parte inferior del gráfico se reportan los valores de $I^2$, $\tau^2$ y la significancia del test Q de Cochran.
 
--   Panel derecho:
+#### Panel derecho
 
-    -   Estimador de efecto e intervalo de confianza al 95% de cada estudio.
+-   Muestra el valor del **estimador de efecto** para cada estudio y su $95\%~IC$.
 
-    -   Peso estadístico asignado a cada estudio en el modelo de efectos aleatorios.
+-   Indica el **peso estadístico** asignado a cada estudio en el modelo.
 
 Se puede controlar la información que aparece en los lados del *forest plot* mediante los argumentos `leftcols`, `rightcols`, `leftlabs` y `rightlabs`. También es posible aplicar formatos predefinidos con `layout = "RevMan5"` o `layout = "JAMA"`, que ajustan el diseño según estilos ampliamente utilizados en la literatura científica.
 
