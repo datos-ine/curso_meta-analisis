@@ -14,7 +14,7 @@ datos <- dat.konstantopoulos2011
 
 datos_cor <- dat.molloy2014
 # 
-# datos_prev <- dat.crisafulli2020
+datos_prev <- dat.crisafulli2020
 # 
 # datos_inc <- dat.nielweise2008
 # 

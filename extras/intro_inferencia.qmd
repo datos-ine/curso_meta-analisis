@@ -11,17 +11,19 @@ bibliography: references.bib
 ```{r}
 #| echo: false
 #| message: false
-source("../setup.R")
+#| id: config
+source("setup.R")
 
 ## Define región crítica
-crit_n <- 
-  limitRange <- 
-  function(fun, min, max) {
-    function(x) {
-      y <- fun(x)
-      y[x < min  |  x > max] <- NA
-      return(y)
-      }}
+crit_n <-
+  limitRange <-
+    function(fun, min, max) {
+      function(x) {
+        y <- fun(x)
+        y[x < min | x > max] <- NA
+        return(y)
+      }
+    }
 ```
 
 [![Artwork por \@allison_horst](/images/inferencia.png){fig-align="center" width="80%"}](https://allisonhorst.com/)
@@ -38,9 +40,9 @@ La **población** se define como el conjunto completo de individuos u observacio
 
 La estimación consiste en utilizar información muestral para inferir el valor de un parámetro poblacional. Existen dos tipos principales:
 
--   **Estimación puntual**: proporciona un único valor estimado. Por ejemplo, la media muestral ($\bar{x}$) como estimador de la media poblacional ($\mu$).
+- **Estimación puntual**: proporciona un único valor estimado. Por ejemplo, la media muestral ($\bar{x}$) como estimador de la media poblacional ($\mu$).
 
--   **Estimación por intervalo de confianza**: proporciona un rango de valores plausibles para el parámetro, con un nivel de confianza determinado.
+- **Estimación por intervalo de confianza**: proporciona un rango de valores plausibles para el parámetro, con un nivel de confianza determinado.
 
 ### Intervalos de confianza
 
@@ -52,9 +54,9 @@ $$ IC = estimador~puntual \pm (coeficiente~de~confiabilidad) * (error~ estandar)
 
 #### Estimador puntual
 
--   Para la media poblacional ($\mu$): se utiliza la media muestral $\bar{x}$.
+- Para la media poblacional ($\mu$): se utiliza la media muestral $\bar{x}$.
 
--   Para una proporción poblacional ($p$): se utiliza la proporción muestral $\hat{p}$.
+- Para una proporción poblacional ($p$): se utiliza la proporción muestral $\hat{p}$.
 
 #### Coeficiente de confiabilidad
 
@@ -67,37 +69,35 @@ Representa la variabilidad de la distribución muestral y depende del parámetro
 Por ejemplo, para la media se calcula:
 
 $$ 
-SE = \frac{\sigma}{\sqrt{n}} 
-$$
+SE = \frac{\sigma}{\sqrt{n}} $$
 
 Donde $\sigma$ es la desviación estándar poblacional y $n$ el tamaño de la muestra.
 
 Mientras que para una proporción se calcula como:
 
 $$ 
-SE = \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}} 
-$$
+SE = \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}} $$
 
 #### Teorema del límite central
 
 El Teorema del Límite Central (TLC) establece que, para muestras suficientemente grandes, la distribución muestral de la media ($\bar{x}$) es aproximadamente normal, con media $\mu$ y varianza $\sigma^2/n$. Esto permite utilizar la distribución normal estándar para calcular probabilidades e intervalos:
 
 $$ 
-Z = \frac{\bar{x}-\mu}{\sigma} 
-$$
+Z = \frac{\bar{x}-\mu}{\sigma} $$
 
 Dado esto, se sabe que en una distribución normal:
 
--   Aproximadamente el 68% de los valores se encuentran entre $\mu \pm \sigma$.
+- Aproximadamente el 68% de los valores se encuentran entre $\mu \pm \sigma$.
 
--   Aproximadamente el 95% entre $\mu \pm 2\sigma$.
+- Aproximadamente el 95% entre $\mu \pm 2\sigma$.
 
--   Aproximadamente el 99% entre $\mu \pm 3\sigma$.
+- Aproximadamente el 99% entre $\mu \pm 3\sigma$.
 
 El siguiente gráfico ilustra lo explicado anteriormente:
 
 ```{r}
 #| echo: false 
+#| id: fig-1
 # Gráfico base 
 g1 <- tibble(x = c(-4, 4)) |>    
   
@@ -176,13 +176,13 @@ $$ IC = estimador~puntual \pm (coeficiente~de~confiabilidad) * (error~ estandar)
 
 En el caso de la media:
 
--   **Aumento del nivel de confianza:** Si se incrementa el nivel de confianza (por ejemplo, del 95% al 99%), el coeficiente de confiabilidad aumenta (por ejemplo, de 1.96 a 2.58), lo que produce un intervalo más amplio.
+- **Aumento del nivel de confianza:** Si se incrementa el nivel de confianza (por ejemplo, del 95% al 99%), el coeficiente de confiabilidad aumenta (por ejemplo, de 1.96 a 2.58), lo que produce un intervalo más amplio.
 
--   **Reducción del error estándar:** Si se mantiene fijo el nivel de confianza, reducir la amplitud del IC requiere disminuir el error estándar. Para la media, este se calcula como:
+- **Reducción del error estándar:** Si se mantiene fijo el nivel de confianza, reducir la amplitud del IC requiere disminuir el error estándar. Para la media, este se calcula como:
 
-    $$ SE = \frac{\sigma}{\sqrt{n}} $$
+  $$ SE = \frac{\sigma}{\sqrt{n}} $$
 
-    y considerando que $\sigma$ es constante, la única forma de disminuir el error estándar es aumentando el tamaño muestral ($n$).
+  y considerando que $\sigma$ es constante, la única forma de disminuir el error estándar es aumentando el tamaño muestral ($n$).
 
 El cálculo de los intervalos de confianza se basa en las **distribuciones muestrales** de los estimadores y en el **error estándar** correspondiente. Aunque las fórmulas pueden parecer complejas, los paquetes estadísticos (como R) permiten calcularlos de forma automática. Lo esencial es comprender de qué depende la **amplitud del IC** (nivel de confianza, error estándar y tamaño de la muestra) y cómo cada uno de estos factores influye en la **precisión de la estimación**.
 
@@ -192,21 +192,21 @@ Las pruebas de hipótesis (también conocidas como *tests* o *contrastes* de hip
 
 Antes de profundizar en los aspectos estadísticos, es importante distinguir entre dos tipos de hipótesis:
 
--   **Hipótesis de investigación**: representan la pregunta o problema que motiva el estudio.
+- **Hipótesis de investigación**: representan la pregunta o problema que motiva el estudio.
 
--   **Hipótesis estadística**: es la formulación que puede ser evaluada mediante técnicas de estadística inferencial.
+- **Hipótesis estadística**: es la formulación que puede ser evaluada mediante técnicas de estadística inferencial.
 
 El contraste de hipótesis se basa en la comparación de dos hipótesis estadísticas:
 
--   **Hipótesis nula** ($H_0$): sostiene que no existen diferencias entre los grupos comparados (por ejemplo, $\mu = \mu_0$​); por lo tanto, cualquier diferencia observada se debe únicamente al azar.
+- **Hipótesis nula** ($H_0$): sostiene que no existen diferencias entre los grupos comparados (por ejemplo, $\mu = \mu_0$​); por lo tanto, cualquier diferencia observada se debe únicamente al azar.
 
--   **Hipótesis alternativa** ($H_1$): plantea que existen diferencias entre grupos (por ejemplo, $\mu \neq \mu_0,~ \mu > \mu_0~ ó~ \mu < \mu_0$). Generalmente es la formulación matemática de nuestra hipótesis de investigación y es complementaria de $H_0$. No se acepta ni se refuta de manera directa.
+- **Hipótesis alternativa** ($H_1$): plantea que existen diferencias entre grupos (por ejemplo, $\mu \neq \mu_0,~ \mu > \mu_0~ ó~ \mu < \mu_0$). Generalmente es la formulación matemática de nuestra hipótesis de investigación y es complementaria de $H_0$. No se acepta ni se refuta de manera directa.
 
 El método estadístico nos permite cuantificar la diferencia entre grupos bajo el supuesto de que, si repitiésemos el experimento infinitas veces y obtuviésemos todas las muestras posibles del mismo tamaño, las diferencias entre grupos "iguales" seguirían una distribución muestral teórica. A partir de esta distribución, se define un valor límite (por ejemplo, que abarca el 95% o el 99% de las diferencias esperadas).
 
--   Si la diferencia observada excede ese límite, se considera demasiado grande para ser atribuida al azar y se **rechaza** la hipótesis nula ($H_0$).
+- Si la diferencia observada excede ese límite, se considera demasiado grande para ser atribuida al azar y se **rechaza** la hipótesis nula ($H_0$).
 
--   Si la diferencia cae dentro del rango esperado, **no se rechaza** $H_0$, ya que podría deberse al azar. En estos casos, se concluye que los grupos "no son diferentes", lo que no implica que "sean iguales", ya que la variabilidad muestral impide demostrar una igualdad exacta.
+- Si la diferencia cae dentro del rango esperado, **no se rechaza** $H_0$, ya que podría deberse al azar. En estos casos, se concluye que los grupos "no son diferentes", lo que no implica que "sean iguales", ya que la variabilidad muestral impide demostrar una igualdad exacta.
 
 Los contrastes de hipótesis suelen realizarse suponiendo que se conoce *a priori* la distribución de la población y que se extrae una muestra aleatoria de la misma.
 
@@ -214,17 +214,17 @@ Los contrastes de hipótesis suelen realizarse suponiendo que se conoce *a prior
 
 Es el valor calculado a partir de los datos muestrales que se utiliza para tomar la decisión respecto de $H_0$. Cada situación tiene un estadístico adecuado cuya magnitud, al compararse con su distribución teórica permite determinar si las diferencias observadas son atribuibles al azar. Por ejemplo:
 
--   Para **variables categóricas** se utiliza el estadístico chi-cuadrado ($\chi^2$).
+- Para **variables categóricas** se utiliza el estadístico chi-cuadrado ($\chi^2$).
 
--   Para **variables numéricas**, se emplean distribuciones como la normal ($Z$) o t de Student ($t$).
+- Para **variables numéricas**, se emplean distribuciones como la normal ($Z$) o t de Student ($t$).
 
 ### Errores
 
 En el razonamiento de los contrastes de hipótesis existen dos posibles errores:
 
--   **Error tipo I (**$\alpha$**)**: ocurre cuando se **rechaza la hipótesis nula** siendo esta verdadera. Es decir, se concluye erróneamente que existe una diferencia cuando en realidad no la hay. Para minimizar este riesgo, se elige un $\alpha$ pequeño (por ejemplo, 0,01; 0,05 o 0,10).
+- **Error tipo I (**$\alpha$**)**: ocurre cuando se **rechaza la hipótesis nula** siendo esta verdadera. Es decir, se concluye erróneamente que existe una diferencia cuando en realidad no la hay. Para minimizar este riesgo, se elige un $\alpha$ pequeño (por ejemplo, 0,01; 0,05 o 0,10).
 
--   **Error tipo II (**$\beta$**)**: ocurre cuando **no se rechaza la hipótesis nula siendo esta falsa**, es decir, se falla en detectar una diferencia real. El valor de $\beta$ depende del valor real del parámetro, y suele ser mayor que $\alpha$; sin embargo, **no se conoce con certeza** una vez realizada la prueba.
+- **Error tipo II (**$\beta$**)**: ocurre cuando **no se rechaza la hipótesis nula siendo esta falsa**, es decir, se falla en detectar una diferencia real. El valor de $\beta$ depende del valor real del parámetro, y suele ser mayor que $\alpha$; sin embargo, **no se conoce con certeza** una vez realizada la prueba.
 
 Una vez finalizado el análisis, **no es posible saber si se ha cometido alguno de estos errores**, ya que el verdadero estado de la población es desconocido. Sin embargo, si se ha utilizado un $\alpha$ bajo, podemos tener mayor confianza en que, si se rechazó $H_0$, el error tipo I es poco probable.
 
@@ -238,6 +238,7 @@ Se denomina **región crítica** (o región de rechazo) al conjunto de valores d
 
 ```{r}
 #| echo: false
+#| id: fig-2
 ## Gráfico base
 g1 <- tibble(x = c(-4, 4)) |> 
   
@@ -277,9 +278,9 @@ g1 +
 
 La regla de decisión es la siguiente:
 
--   Si el valor calculado del estadístico cae dentro de la región crítica, se **rechaza** $H_0$ y se concluye que las diferencias observadas son **estadísticamente significativas**.
+- Si el valor calculado del estadístico cae dentro de la región crítica, se **rechaza** $H_0$ y se concluye que las diferencias observadas son **estadísticamente significativas**.
 
--   Si el valor no cae en la región crítica, **no se rechaza** $H_0$. En ese caso, las diferencias observadas pueden explicarse por el azar, y no se consideran estadísticamente significativas.
+- Si el valor no cae en la región crítica, **no se rechaza** $H_0$. En ese caso, las diferencias observadas pueden explicarse por el azar, y no se consideran estadísticamente significativas.
 
 ### Valor crítico
 
@@ -289,9 +290,9 @@ Si el valor *p* es muy pequeño, indica que el resultado observado sería poco p
 
 La regla práctica es:
 
--   Si $p \leq \alpha$, se **rechaza** $H_0$.
+- Si $p \leq \alpha$, se **rechaza** $H_0$.
 
--   Si $p > \alpha$, **no se rechaza** $H_0$.
+- Si $p > \alpha$, **no se rechaza** $H_0$.
 
 ### Tipos de contraste
 
@@ -301,14 +302,13 @@ Los contrastes de hipótesis se clasifican según la forma de la hipótesis alte
 
 La hipótesis alternativa plantea que la media del primer grupo es significativamente **menor** que la del segundo:
 
-$$
-H_1: \mu_1 < \mu_2
-$$
+$$H_1: \mu_1 < \mu_2$$
 
 La región crítica se encuentra en el extremo izquierdo de la distribución. Todo el área crítica tiene un tamaño $\alpha$ con un valor crítico de $-1,645$.
 
 ```{r}
 #| echo: false
+#| id: fig-3
 # Test cola izquierda
 tibble(x = c(-4, 4)) |> 
   
@@ -359,6 +359,7 @@ La región crítica se concentra en el extremo derecho de la distribución y tod
 
 ```{r}
 #| echo: false
+#| id: fig-4
 # Test cola derecha
 tibble(x = c(-4, 4)) |> 
   
@@ -404,14 +405,13 @@ tibble(x = c(-4, 4)) |>
 
 La hipótesis alternativa afirma que existen diferencias entre los grupos, **sin especificar la dirección**:
 
-$$
-H_1: \mu_1 \neq \mu_2
-$$
+$$H_1: \mu_1 \neq \mu_2$$
 
 La región crítica se divide entre ambos extremos de la distribución, con valores críticos de $\pm 1,96$. El nivel de significación total ($\alpha$) se reparte en partes iguales entre las dos colas ($\alpha/2$ en cada una), lo que implica un 2,5% de probabilidad en cada cola si $H_0$ es verdadera.
 
 ```{r}
 #| echo: false
+#| id: fig-5
 # Test 2 colas
 tibble(x = c(-4, 4)) |> 
   
@@ -478,6 +478,7 @@ La siguiente tabla resume las posibles situaciones en un contraste de hipótesis
 
 ```{r}
 #| echo: false
+#| id: tab-1
 # Datos
 tibble(
   " " = c("H0 es cierta",
@@ -497,20 +498,20 @@ tibble(
 
 La inferencia estadística permite responder preguntas de investigación tales como:
 
--   ¿Es significativa la diferencia entre dos medias?
+- ¿Es significativa la diferencia entre dos medias?
 
--   ¿Existe una relación entre dos variables?
+- ¿Existe una relación entre dos variables?
 
--   ¿Cómo se distribuyen los datos respecto a un parámetro de interés?
+- ¿Cómo se distribuyen los datos respecto a un parámetro de interés?
 
 Al aplicar estos métodos, es crucial tener en cuenta la calidad y representatividad de la muestra, así como la validez de las asunciones subyacentes (normalidad, homogeneidad de varianzas, etc.).
 
 ::: {.callout-warning appearance="simple"}
 Este apunte sintetiza los conceptos esenciales y las herramientas básicas para llevar a cabo un análisis inferencial, que sirve de base para la interpretación de modelos y resultados en análisis cuantitativos. Quienes necesiten profundizar más en los temas, les recomendamos consultar las siguientes fuentes:
 
--   [Manual de Epidemiología: Fundamentos, Métodos y Aplicaciones](https://ine.gov.ar/descarga/Manual%20EpiIntermedia.pdf) [@institutonacionaldeepidemiología2015]: Capítulo 3.
+- [Manual de Epidemiología: Fundamentos, Métodos y Aplicaciones](https://ine.gov.ar/descarga/Manual%20EpiIntermedia.pdf) [@institutonacionaldeepidemiología2015]: Capítulo 3.
 
--   [Estadística 12A Edición](https://www.academia.edu/44058808/Estadistica_Mario_F_Triola_12ED?auto=download) [@triola2018]: Capítulos 8 y 9.
+- [Estadística 12A Edición](https://www.academia.edu/44058808/Estadistica_Mario_F_Triola_12ED?auto=download) [@triola2018]: Capítulos 8 y 9.
 :::
 
 ::: hidden
@@ -522,3 +523,5 @@ Este apunte sintetiza los conceptos esenciales y las herramientas básicas para 
 
 @agresti2015
 :::
+
+## Referencias

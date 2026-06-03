@@ -8,7 +8,7 @@ bibliography: "../references.bib"
 
 ```{r}
 #| echo: false
-source("../setup.R")
+source("setup.R")
 ```
 
 ## ¿Qué es un meta-análisis?
@@ -21,20 +21,25 @@ A continuación, se resumen algunas de las principales ventajas y limitaciones d
 
 ```{r}
 #| echo: false
+#| id: tab-1
 # Generar datos
 tibble(
-  Ventajas = c("Permite una síntesis cuantitativa de la evidencia disponible.",
-               "Aumenta la potencia estadística al combinar los datos de múltiples estudios.",
-               "Mejora la precisión de los estimadores al reducir la variabilidad aleatoria.",
-               "Permite identificar patrones no evidentes en estudios individuales.",
-               "Evalúa la consistencia de los resultados en diferentes poblaciones y contextos."),
-  Desventajas = c("La validez de los resultados depende de la calidad metodológica de los estudios incluidos.",
-                  "Puede estar afectado por sesgos de publicación.",
-                  "La heterogeneidad entre estudios puede dificultar la interpretación de los resultados.",
-                  "Requiere una metodología rigurosa y criterios estrictos de selección de estudios.",
-                  "No corrige errores metodológicos de los estudios primarios.")
-) |> 
-  
+  Ventajas = c(
+    "Permite una síntesis cuantitativa de la evidencia disponible.",
+    "Aumenta la potencia estadística al combinar los datos de múltiples estudios.",
+    "Mejora la precisión de los estimadores al reducir la variabilidad aleatoria.",
+    "Permite identificar patrones no evidentes en estudios individuales.",
+    "Evalúa la consistencia de los resultados en diferentes poblaciones y contextos."
+  ),
+  Desventajas = c(
+    "La validez de los resultados depende de la calidad metodológica de los estudios incluidos.",
+    "Puede estar afectado por sesgos de publicación.",
+    "La heterogeneidad entre estudios puede dificultar la interpretación de los resultados.",
+    "Requiere una metodología rigurosa y criterios estrictos de selección de estudios.",
+    "No corrige errores metodológicos de los estudios primarios."
+  )
+) |>
+
   # Generar tabla
   kbl_format()
 ```
@@ -51,13 +56,13 @@ Para integrar los resultados de diferentes estudios, los meta-análisis utilizan
 
 Un buen estimador de efecto debe cumplir con las siguientes condiciones:
 
--   **Comparable:** debe ser consistente entre los estudios incluidos.
+- **Comparable:** debe ser consistente entre los estudios incluidos.
 
--   **Computable:** debe poder calcularse a partir de la información disponible.
+- **Computable:** debe poder calcularse a partir de la información disponible.
 
--   **Confiable:** debe permitir la estimación de su error estándar.
+- **Confiable:** debe permitir la estimación de su error estándar.
 
--   **Interpretable:** debe responder de manera clara a la pregunta de investigación.
+- **Interpretable:** debe responder de manera clara a la pregunta de investigación.
 
 Desde una perspectiva estadística, los estimadores de efecto son análogos a los coeficientes en modelos de regresión o a las medidas de asociación en estudios epidemiológicos, ya que cuantifican la fuerza y dirección de la relación entre dos variables.
 

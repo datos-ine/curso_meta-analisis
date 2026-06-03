@@ -1,0 +1,16 @@
+---
+title: "Introducción a Positron"
+author:   
+  - name: Tamara Ricardo
+    orcid: 0000-0002-0921-2611
+bibliography: references.bib
+---
+
+```{r}
+#| echo: false
+#| id: setup
+source("setup.R")
+```
+
+## ¿Qué es Positron?
+Positron
