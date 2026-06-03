@@ -1,12 +1,13 @@
 project:
   type: book  
   execute-dir: project
+  
 
 book:
   ## Metadatos
   title: "Introducción a la Revisión sistemática con meta-análisis"
   author: "Instituto Nacional de Epidemiología Dr. Juan H. Jara"
-  favicon: logos/logos_ine.png
+  
 
   ## Configuración
   page-footer: 
@@ -100,16 +101,16 @@ format:
       sidebar-width: 300px
 
   # epub:
-  #   cover-image: logos/logo_curso.png
+  # #   cover-image: logos/logo_curso.png
 
-  typst: 
-    toc: false
-    include-in-header: typst-header.typ
-    lang: es
-    papersize: a4
-    margin: 
-      left: 2cm
-      top: 2cm
+  # typst: 
+  #   toc: false
+  #   include-in-header: typst-header.typ
+  #   lang: es
+  #   papersize: a4
+  #   margin: 
+  #     left: 2cm
+  #     top: 2cm
 
 # Tipografía
 mainfont: "Calibri"

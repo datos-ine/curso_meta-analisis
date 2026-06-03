@@ -10,9 +10,12 @@ knitr::opts_chunk$set(
 pacman::p_load(
   patchwork,
   scico,
-  janitor,
-  easystats,
+  performance,
+  knitr,
   kableExtra,
+  webshot,
+  webshot2,
+  janitor,
   tidyverse
 )
 
@@ -21,9 +24,15 @@ pal <- scico::scico(n = 9, palette = "tokyo")
 
 # Formato tabla
 kbl_format <- function(x) {
- kbl(x) |> 
-  kable_styling(bootstrap_options = c("stripped", "condensed", "hover"),
-                fixed_thead = TRUE,
-                html_font = "Calibri") |>
-  row_spec(0, background = "#2f2e4e", color = "white")
+  if (knitr::is_html_output()) {
+    kable(x) |>
+      kable_styling(
+        bootstrap_options = c("stripped", "condensed", "hover"),
+        fixed_thead = TRUE,
+        html_font = "Calibri"
+      ) |>
+      row_spec(0, background = "#2f2e4e", color = "white")
+  } else {
+    kable(x, format = "pipe")
+  }
 }

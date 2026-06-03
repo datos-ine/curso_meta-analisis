@@ -270,7 +270,7 @@ Además de los tipos atómicos, los datos pueden organizarse en **estructuras co
   #| eval: false
   #| id: ex-10
   # Vector
-  v  <- c(1, 2, 3, 4)
+    <- c(1, 2, 3, 4)
 
   # Lista
   lista <- list(vector, "elemento_2") # lista
