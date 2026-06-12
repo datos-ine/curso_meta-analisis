@@ -431,6 +431,33 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true"><i class="bi bi-file-earmark-bar-graph" role="img">
+</i> 
+ <span class="menu-text">Meta-análisis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/01_intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Introducción</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/02_fixed_random.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modelos de meta-análisis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/03_MA_descriptivos.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta-análisis en estudios descriptivos</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -559,7 +586,7 @@ Z = \frac{\bar{x}-\mu}{\sigma} \]</span></p>
 <p>El siguiente gráfico ilustra lo explicado anteriormente:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="85%">
+<div id="fig-1" class="quarto-float quarto-figure quarto-figure-center anchored" width="85%" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="intro_inferencia_files/figure-html/fig-1-1.png" id="fig-1" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:85.0%">
@@ -634,7 +661,7 @@ Figura&nbsp;1.1
 <p>Se denomina <strong>región crítica</strong> (o región de rechazo) al conjunto de valores del estadístico de prueba que llevan al rechazo de <span class="math inline">\(H_0\)</span>. Esta región se define según el nivel de significación (<span class="math inline">\(\alpha\)</span>), e incluye los valores extremos del estadístico que serían poco probables si <span class="math inline">\(H_0\)</span> fuera cierta. En una representación gráfica, la región crítica se ubica en una o ambas colas de la distribución, dependiendo del tipo de prueba</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="85%">
+<div id="fig-2" class="quarto-float quarto-figure quarto-figure-center anchored" width="85%" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="intro_inferencia_files/figure-html/fig-2-1.png" id="fig-2" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:85.0%">
@@ -672,7 +699,7 @@ Figura&nbsp;1.2
 <p>La región crítica se encuentra en el extremo izquierdo de la distribución. Todo el área crítica tiene un tamaño <span class="math inline">\(\alpha\)</span> con un valor crítico de <span class="math inline">\(-1,645\)</span>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-3" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="85%">
+<div id="fig-3" class="quarto-float quarto-figure quarto-figure-center anchored" width="85%" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="intro_inferencia_files/figure-html/fig-3-1.png" id="fig-3" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:85.0%">
@@ -692,7 +719,7 @@ Figura&nbsp;1.3
 <p>La región crítica se concentra en el extremo derecho de la distribución y toda el área crítica tiene un tamaño <span class="math inline">\(\alpha\)</span> con un valor crítico de <span class="math inline">\(1,645\)</span>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-4" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="85%">
+<div id="fig-4" class="quarto-float quarto-figure quarto-figure-center anchored" width="85%" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="intro_inferencia_files/figure-html/fig-4-1.png" id="fig-4" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:85.0%">
@@ -712,7 +739,7 @@ Figura&nbsp;1.4
 <p>La región crítica se divide entre ambos extremos de la distribución, con valores críticos de <span class="math inline">\(\pm 1,96\)</span>. El nivel de significación total (<span class="math inline">\(\alpha\)</span>) se reparte en partes iguales entre las dos colas (<span class="math inline">\(\alpha/2\)</span> en cada una), lo que implica un 2,5% de probabilidad en cada cola si <span class="math inline">\(H_0\)</span> es verdadera.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-5" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="85%">
+<div id="fig-5" class="quarto-float quarto-figure quarto-figure-center anchored" width="85%" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="intro_inferencia_files/figure-html/fig-5-1.png" id="fig-5" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:85.0%">
