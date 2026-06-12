@@ -69,10 +69,12 @@ book:
       - "extras/intro_inferencia.qmd"
       - "extras/intro_R.qmd"
 
-  # - part: "Meta-análisis"
-  #   icon: file-earmark-bar-graph
-  #   chapters: 
-  #       - "unidad_2/01_intro.qmd"
+  - part: "Meta-análisis"
+    icon: file-earmark-bar-graph
+    chapters: 
+        - "unidad_2/01_intro.qmd"
+        - "unidad_2/02_fixed_random.qmd"
+        - "unidad_2/03_MA_descriptivos.qmd"
 
 ## Botón de anterior/siguiente
 page-navigation: true

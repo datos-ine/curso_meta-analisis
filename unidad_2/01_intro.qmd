@@ -1,9 +1,5 @@
 ---
 title: "Introducción"
-author:
-  - name: Tamara Ricardo
-    orcid: 0000-0002-0921-2611
-bibliography: "../references.bib"
 ---
 
 ```{r}
@@ -69,3 +65,5 @@ Desde una perspectiva estadística, los estimadores de efecto son análogos a lo
 Entre los estimadores de efecto más utilizados en investigación epidemiológica y aplicables a modelos de meta-análisis se encuentran: proporciones, tasas de incidencia, coeficientes de correlación, diferencias de medias, *odds ratio* (OR), riesgos relativos (RR) y *hazard ratio*.
 
 En la próxima sección describiremos la estructura de los modelos de meta-análisis de efectos fijos y de efectos aleatorios. Luego, exploraremos cómo se ajustan estos modelos según cada tipo de estimador epidemiológico y con su implementación práctica en R.
+
+## Referencias

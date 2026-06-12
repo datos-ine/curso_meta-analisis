@@ -1,14 +1,11 @@
 ---
 title: "Modelos de meta-análisis"
-author:
-  - name: Tamara Ricardo
-    orcid: 0000-0002-0921-2611
-bibliography: "../references.bib"
 ---
 
 ```{r}
 #| echo: false
-source("../setup.R")
+#| id: setup
+source("setup.R")
 ```
 
 ## Introducción
@@ -169,7 +166,9 @@ tibble(
   kbl_format()
 ```
 
-Dado que este curso se enfoca en la aplicación práctica del meta-análisis, utilizaremos principalmente el paquete `meta`, que ajusta por defecto modelos de efectos fijos y aleatorios, e incluye distintos estimadores de heterogeneidad estadística.
+Dado que las y los participantes del curso tienen distintas formaciones y niveles de experiencia en R, durante las clases utilizaremos el paquete `meta`, que proporciona una interfaz sencilla para ajustar modelos de meta-análisis y se basa internamente en las funciones del paquete `metafor`.
+
+Quienes tengan mayor experiencia en programación y deseen contar con más flexibilidad para especificar modelos, realizar análisis avanzados o personalizar gráficos y resultados, podrán trabajar directamente con el paquete `metafor`.
 
 ### Estructura básica
 
@@ -218,17 +217,15 @@ metagen(
 
 ### Ejemplo práctico
 
-Usaremos el conjunto de datos `Curtin2002`, incluido en la dependencia `metabook` @metabook. El mismo presenta los resultados de 21 estudios que evalúan el efecto de la suplementación con potasio sobre la presión diastólica.
+Usaremos el conjunto de datos `Curtin2002`, incluido en la dependencia `metabook` [@metabook]. El mismo presenta los resultados de 21 estudios que evalúan el efecto de la suplementación con potasio sobre la presión diastólica.
 
 Comenzaremos por cargar los paquetes necesarios:
 
 ```{r}
+#| message: true
 #| id: cargar paquetes
-pacman::p_load(
-    meta,
-    metabook,
-    metadat
-)
+library(meta)
+library(janitor)
 ```
 
 Cargamos los datos y exploramos su estructura:
@@ -240,16 +237,23 @@ datos <- Curtin2002
 
 # Explorar estructura del dataset
 names(datos)
+
+# Comprobar si cada estudio tiene un identificador
+tabyl(datos$author)
 ```
 
-Las variables de entrada para `metagen()` serán `mean` (diferencia de medias estandarizada), `SE` (variabilidad de la estimación) y `author` (identificador único del estudio):
+Las variables de entrada para `metagen()` serán `mean` (diferencia de medias estandarizada) y `SE` (variabilidad de la estimación). Como `author` se repite, debemos crear un identificador único del estudio combinando `author` y `year`:
 
 ```{r}
 #| id: mod-1
+# Crear id de estudio
+datos <- datos |> 
+  mutate(au_anio = paste0(author, " (", year, ")"))
+
 # Ajustar el modelo
 mod <- metagen(TE = mean,
                seTE = SE,
-               studlab = author,
+               studlab = au_anio,
                common = TRUE,    
                random = TRUE,    
                backtransf = TRUE, 
@@ -363,10 +367,9 @@ A continuación, generaremos un *forest plot* para representar gráficamente el 
 
 ```{r}
 #| id: forest-1.1
-#| fig-height: 13
 #| fig-width: 9
 forest(mod,
-       smlab = "Diferencia de medias estandarizada",
+       smlab = "Dif. de medias estandarizada",
        col.diamond = "#8C0172",   # Color estimador global
        col.square = "#6BD48C",    # Color estimadores individuales
        common = FALSE,            # Omitir modelo de efectos fijos
@@ -378,7 +381,7 @@ El gráfico consta de tres paneles principales:
 
 #### Panel izquierdo
 
-- Muestra el **identificador único de cada estudio** (generalmente el apellido del primer autor y el año de publicación).
+- Muestra el **identificador único de cada estudio** (generalmente el apellido del primer autor y/o el año de publicación).
 
 - Puede incluir **columnas adicionales** según el tipo de estimador de efecto utilizado (por ejemplo, tamaño muestral, número de eventos, medias y desvíos estándar, etc.).
 
@@ -404,6 +407,8 @@ Se puede controlar la información que aparece en los lados del *forest plot* me
 
 Los gráficos generados con `forest()` no son compatibles con `ggplot2` ni se autoescalan, lo que puede ser problemático si el número de estudios es grande, ya que el gráfico podría quedar ilegible en la vista predeterminada.
 
-Para evitar este problema, se recomienda exportar el gráfico a un archivo de imagen (por ejemplo, PDF o PNG) usando las funciones `pdf()` o `png(),` especificando un tamaño adecuado antes de ejecutarlo con `forest()`. En la última clase además veremos opciones de visualización avanzada para generar gráficos listos para su publicación.
+Para evitar este problema, se recomienda exportar el gráfico a un archivo de imagen (por ejemplo, PDF o PNG) usando los argumentos `filename`, `path`, `device`, `height`, `width`, `units` y `dpi` . En la última clase además veremos opciones de visualización avanzada para generar gráficos listos para su publicación.
 
 En la siguiente sección, exploraremos las funciones de meta que permiten ajustar modelos de meta-análisis para distintos estimadores de efecto en epidemiología. Luego, abordaremos métodos para controlar la heterogeneidad, tales como el análisis de moderadores y la meta-regresión y aprenderemos qué es y como se mide el sesgo de publicación.
+
+## Referencias

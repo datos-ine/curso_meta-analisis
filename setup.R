@@ -15,6 +15,8 @@ pacman::p_load(
   kableExtra,
   webshot,
   webshot2,
+  meta,
+  metafor,
   janitor,
   tidyverse
 )
