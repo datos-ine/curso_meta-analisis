@@ -22,7 +22,7 @@ pacman::p_load(
 )
 
 # paleta colorblind-friendly
-pal <- scico::scico(n = 9, palette = "tokyo")
+pal <- scico::scico(n = 9, palette = "managua")
 
 # Formato tabla
 kbl_format <- function(x) {

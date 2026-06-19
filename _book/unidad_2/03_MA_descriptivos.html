@@ -87,6 +87,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../unidad_2/04_MA_analiticos.html" rel="next">
 <link href="../unidad_2/02_fixed_random.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -485,6 +486,11 @@ window.Quarto = {
   <a href="../unidad_2/03_MA_descriptivos.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Meta-análisis en estudios descriptivos</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/04_MA_analiticos.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Meta-análisis en estudios analíticos</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -540,7 +546,7 @@ window.Quarto = {
 <section id="introducción" class="level2">
 <h2 class="anchored" data-anchor-id="introducción">Introducción</h2>
 <p>En esta sección repasaremos los principales estimadores de efecto utilizados en estudios epidemiológicos descriptivos, junto con ejemplos prácticos para su ajuste e interpretación en R.</p>
-<p>Comenzaremos por cargar el paquete <code>meta</code> y las dependencias <code>metabook</code>y <code>metadat</code>que contienen datasets de ejemplo. Además, Para facilitar la exploración y manipulación de datos, utilizaremos funciones del paquete <code>tidyverse</code><span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham et&nbsp;al. 2019</a>)</span>.</p>
+<p>Comenzaremos por cargar el paquete <code>meta</code> y la dependencia <code>metadat</code>que contiene datasets de ejemplo. Además, Para facilitar la exploración y manipulación de datos, utilizaremos funciones del paquete <code>tidyverse</code><span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham et&nbsp;al. 2019</a>)</span>.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -593,7 +599,7 @@ r_{xy} = \frac{Cov_{xy}}{S_xS_y}
 </ul>
 <p>Dado que los coeficientes de correlación se encuentran en un rango entre -1 y 1, su distribución no es simétrica, lo cual puede afectar la estimación del error estándar en muestras pequeñas. Para corregir este sesgo y estabilizar la varianza, se utiliza la <strong>transformación <em>z</em> de Fisher</strong>.</p>
 <p>La función <code>metacor()</code> permite ajustar modelos de meta-análisis para correlaciones y aplica automáticamente esta transformación cuando se especifica el argumento <code>sm = "ZCOR"</code>.</p>
-<p>Como ejemplo, utilizaremos la base de datos <code>dat.molloy2014</code> del paquete <code>metadat</code>, que recopila resultados de 16 estudios sobre la relación entre concienciación y adherencia a la medicación.</p>
+<p>Como ejemplo, utilizaremos la base de datos <code>dat.molloy2014</code>, que recopila resultados de 16 estudios sobre la relación entre concienciación y adherencia a la medicación.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>datos_cor <span class="ot">&lt;-</span> metadat<span class="sc">::</span>dat.molloy2014</span>
@@ -820,10 +826,10 @@ p = \frac{k}{n}
 </ul>
 <p>Dado que las proporciones pueden estar cercanas a los valores extremos (0 o 1), su distribución es asimétrica, lo que afecta el cálculo del error estándar. Para corregir este problema, se aplica una transformación <strong>logit</strong> a los datos.</p>
 <p>La función <code>metaprop()</code> permite ajustar modelos para prevalencias e incorpora automáticamente esta transformación con el argumento <code>sm = "PLOGIT"</code>.</p>
-<p>Para ejemplificar, usaremos la base de datos <code>Feng2019</code>, que contiene resultados de 19 estudios sobre la prevalencia de depresión luego de un infarto de miocardio:</p>
+<p>Para ejemplificar, usaremos la base de datos <code>dat.feng2019</code>, que contiene resultados de 19 estudios sobre la prevalencia de depresión luego de un infarto de miocardio:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>datos_prev <span class="ot">&lt;-</span> Feng2019</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>datos_prev <span class="ot">&lt;-</span> dat.feng2019</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar estructura de los datos</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(datos_prev)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1578,6 +1584,9 @@ Wickham, Hadley, Mara Averick, Jennifer Bryan, et&nbsp;al. 2019. <em>Welcome to 
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../unidad_2/04_MA_analiticos.html" class="pagination-link" aria-label="Meta-análisis en estudios analíticos">
+        <span class="nav-page-text"><span class="chapter-title">Meta-análisis en estudios analíticos</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

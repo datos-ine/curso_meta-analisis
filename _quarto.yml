@@ -12,7 +12,7 @@ book:
   ## Configuración
   page-footer: 
     center: Este material fue creado en <a href="https://quarto.org/">Quarto</a> y forma parte del curso de Introducción a la Revisión sistemática con meta-análisis © 2026 Instituto Nacional de Epidemiología "Dr. Juan H. Jara" (ANLIS)
-    right: <img src="logos/logos_ine.svg" height="30">
+    right: <img src="../logos/logos_ine.svg" height="30">
   
   output-file: "rev_sis_ma"
   cover-image: images/meta-analysis_fusion.jpeg
@@ -75,6 +75,7 @@ book:
         - "unidad_2/01_intro.qmd"
         - "unidad_2/02_fixed_random.qmd"
         - "unidad_2/03_MA_descriptivos.qmd"
+        - "unidad_2/04_MA_analiticos.qmd"
 
 ## Botón de anterior/siguiente
 page-navigation: true

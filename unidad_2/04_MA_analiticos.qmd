@@ -22,6 +22,7 @@ pacman::p_load(
   tidyverse
 )
 ```
+
 ## Meta-análisis en estudios analíticos
 
 Dentro de los estudios analíticos (observacionales y/o experimentales), los estimadores de efecto más comunes son la **diferencia de medias**, el ***odds-ratio*** (OR), el **riesgo relativo** (RR) y la **razón de tasas de incidencia** (IRR). A continuación, mostraremos su implementación en R.
@@ -46,6 +47,7 @@ La función `metacont()` ajusta modelos de meta-análisis para diferencias de me
 Como ejemplo, utilizaremos la base de datos `dat.furukawa2003`, que contiene resultados de 17 estudios sobre la efectividad de la dosis de antidepresivos tricíclicos en casos de depresión severa.
 
 ```{r}
+#| id: metacont-1
 # Cargar datos
 datos_md <- dat.furukawa2003
 
@@ -72,6 +74,7 @@ Las principales variables de interés son:
 Ajustamos el modelo de meta-análisis para diferencia de medias estandarizada:
 
 ```{r}
+#| id: metacont-2
 mod_md <- metacont(
   n.e = Ne, # <1>
   mean.e = Me, # <2>
@@ -109,6 +112,7 @@ mod_md <- metacont(
 Analicemos ahora la salida del modelo:
 
 ```{r}
+#| id: metacont-3
 mod_md
 ```
 
@@ -121,6 +125,7 @@ Generamos el *forest plot* para visualizar los resultados:
 ```{r}
 #| fig-height: 6
 #| fig-width: 11
+#| id: metacont-4
 forest(
   mod_md,
   col.diamond.random = pal[1],
@@ -151,6 +156,7 @@ Para mejorar la visualización, podemos modificar el argumento `leftcols` para m
 ```{r}
 #| fig-height: 6
 #| fig-width: 8
+#| id: metacont-5
 forest(
   mod_md,
   common = FALSE,
@@ -199,6 +205,7 @@ El siguiente ejemplo utiliza la base de datos `dat.collins1985b`, que contiene i
 Comenzamos cargando los datos y explorando su estructura:
 
 ```{r}
+#| id: metabin-1
 # Carga datos
 datos_or <- dat.collins1985b
 
@@ -221,6 +228,7 @@ Las variables de interés son:
 Ajustamos el modelo de meta-análisis para OR:
 
 ```{r}
+#| id: metabin-2
 mod_or <- metabin(
   event.e = pre.xti, # <1>
   n.e = pre.nti, # <2>
@@ -252,6 +260,7 @@ mod_or <- metabin(
 Analicemos ahora la salida del modelo:
 
 ```{r}
+#| id: metabin-3
 mod_or
 ```
 
@@ -266,6 +275,7 @@ Generamos el *forest plot* para visualizar los resultados:
 ```{r}
 #| fig-height: 4
 #| fig-width: 8
+#| id: metabin-4
 forest(
   mod_md,
   col.diamond.random = pal[1],
@@ -316,7 +326,7 @@ Al igual que para la tasa de incidencia, se recomienda realizar la **transformac
 
 En `meta`, la función `metainc()` ajusta modelos de IRR con `sm = "IRR"`, aplicando automáticamente la transformación logarítmica.
 
-A modo de ejemplo, volveremos a usar la base `datos_inc`, esta vez comparando entre grupo de exposición y control.
+A modo de ejemplo, usaremos nuevamente el dataset `dat.hart1999`, esta vez comparando entre grupo de exposición y control.
 
 Las principales variables de interés para este caso son:
 
@@ -333,13 +343,19 @@ Las principales variables de interés para este caso son:
 Ajustamos el modelo de meta-análisis para IRR aplicando la transformación logarítmica:
 
 ```{r}
+#| id: metainc-1
+# Cargar datos
+datos_inc <- dat.hart1999 |>
+  # Crear identificador de estudio
+  mutate(au_anio = paste0(study, " (", year, ")"))
+
 # Ajusta modelo
 mod_irr <- metainc(
   event.e = x1i, # <1>
   time.e = t1i, # <2>
   event.c = x2i, # <3>
   time.c = t2i, # <4>
-  studlab = authors, # <5>
+  studlab = au_anio, # <5>
   data = datos_inc, # <6>
   sm = "IRR", # <7>
   prediction = TRUE # <8>
@@ -365,6 +381,7 @@ mod_irr <- metainc(
 Analicemos ahora la salida del modelo:
 
 ```{r}
+#| id: metainc-2
 mod_irr
 ```
 
@@ -377,6 +394,7 @@ Generamos el *forest plot* para visualizar los resultados, usando los argumentos
 ```{r}
 #| fig-height: 4
 #| fig-width: 9
+#| id: metainc-3
 forest(
   mod_irr,
   col.diamond.random = pal[1], # <1>

@@ -220,7 +220,7 @@ Para ejemplificar, usaremos la base de datos `dat.feng2019`, que contiene result
 ```{r}
 #| id: dat-prev
 # Cargar datos
-datos_prev <- Feng2019
+datos_prev <- dat.feng2019
 
 # Explorar estructura de los datos
 glimpse(datos_prev)
