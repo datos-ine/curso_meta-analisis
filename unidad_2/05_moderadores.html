@@ -8,7 +8,7 @@
 
 <meta name="author" content="Tamara Ricardo">
 
-<title>Introducción – Introducción a la Revisión sistemática con meta-análisis</title>
+<title>Análisis de moderadores – Introducción a la Revisión sistemática con meta-análisis</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -24,26 +24,42 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
 }
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -52,8 +68,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../unidad_2/02_fixed_random.html" rel="next">
-<link href="../extras/intro_R.html" rel="prev">
+<link href="../unidad_2/04_MA_analiticos.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -95,11 +110,36 @@ div.csl-indent {
     "search-label": "Buscar"
   }
 }</script>
-<script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
 
-<link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -275,7 +315,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html">Meta-análisis</a></li><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html"><span class="chapter-title">Introducción</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html">Meta-análisis</a></li><li class="breadcrumb-item"><a href="../unidad_2/05_moderadores.html"><span class="chapter-title">Análisis de moderadores</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -413,7 +453,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../unidad_2/01_intro.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Introducción</span></a>
+  <a href="../unidad_2/01_intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Introducción</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -433,7 +473,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../unidad_2/05_moderadores.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Análisis de moderadores</span></a>
+  <a href="../unidad_2/05_moderadores.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Análisis de moderadores</span></a>
   </div>
 </li>
       </ul>
@@ -448,9 +488,12 @@ div.csl-indent {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#qué-es-un-meta-análisis" id="toc-qué-es-un-meta-análisis" class="nav-link active" data-scroll-target="#qué-es-un-meta-análisis">¿Qué es un meta-análisis?</a></li>
-  <li><a href="#estimadores-de-efecto" id="toc-estimadores-de-efecto" class="nav-link" data-scroll-target="#estimadores-de-efecto">Estimadores de efecto</a></li>
-  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">Introducción</a>
+  <ul class="collapse">
+  <li><a href="#análisis-de-sugbgrupos" id="toc-análisis-de-sugbgrupos" class="nav-link" data-scroll-target="#análisis-de-sugbgrupos">Análisis de sugbgrupos</a></li>
+  <li><a href="#metarregresión" id="toc-metarregresión" class="nav-link" data-scroll-target="#metarregresión">Metarregresión</a></li>
+  <li><a href="#metarregresión-múltiple" id="toc-metarregresión-múltiple" class="nav-link" data-scroll-target="#metarregresión-múltiple">Metarregresión múltiple</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -458,9 +501,9 @@ div.csl-indent {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html">Meta-análisis</a></li><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html"><span class="chapter-title">Introducción</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unidad_2/01_intro.html">Meta-análisis</a></li><li class="breadcrumb-item"><a href="../unidad_2/05_moderadores.html"><span class="chapter-title">Análisis de moderadores</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Introducción</span></h1>
+<h1 class="title"><span class="chapter-title">Análisis de moderadores</span></h1>
 </div>
 
 
@@ -483,83 +526,309 @@ div.csl-indent {
 </header>
 
 
-<section id="qué-es-un-meta-análisis" class="level2">
-<h2 class="anchored" data-anchor-id="qué-es-un-meta-análisis">¿Qué es un meta-análisis?</h2>
-<p>El meta-análisis es una herramienta estadística que permite <strong>sintetizar cuantitativamente</strong> la evidencia proveniente de investigaciones independientes que abordan un mismo problema de investigación. Se lo ha definido como un “análisis de análisis” <span class="citation" data-cites="glass1976">(<a href="#ref-glass1976" role="doc-biblioref">Glass 1976</a>)</span>, ya que su <strong>unidad de análisis</strong> no son individuos ni poblaciones, sino estudios científicos.</p>
-<p>Su objetivo principal es proporcionar un estimador numérico que resuma los resultados de los estudios incluidos, lo que permite evaluar la <strong>magnitud del efecto</strong> de una intervención o la relación entre variables en distintos contextos <span class="citation" data-cites="Harrer2021">(<a href="#ref-Harrer2021" role="doc-biblioref">Harrer et&nbsp;al. 2021</a>)</span>. Es importante destacar que los meta-análisis son adecuados exclusivamente para <strong>investigaciones cuantitativas</strong> y, en general, requieren que los estudios analizados compartan un diseño similar y estimen medidas de asociación comparables.</p>
-<p>A continuación, se resumen algunas de las principales ventajas y limitaciones del meta-análisis:</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<table class="table table-condensed table-hover caption-top table-sm table-striped small">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Ventajas</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF; color: white !important; background-color: rgba(47, 46, 78, 255) !important;">Desventajas</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Permite una síntesis cuantitativa de la evidencia disponible.</td>
-<td style="text-align: left;">La validez de los resultados depende de la calidad metodológica de los estudios incluidos.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Aumenta la potencia estadística al combinar los datos de múltiples estudios.</td>
-<td style="text-align: left;">Puede estar afectado por sesgos de publicación.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Mejora la precisión de los estimadores al reducir la variabilidad aleatoria.</td>
-<td style="text-align: left;">La heterogeneidad entre estudios puede dificultar la interpretación de los resultados.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Permite identificar patrones no evidentes en estudios individuales.</td>
-<td style="text-align: left;">Requiere una metodología rigurosa y criterios estrictos de selección de estudios.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Evalúa la consistencia de los resultados en diferentes poblaciones y contextos.</td>
-<td style="text-align: left;">No corrige errores metodológicos de los estudios primarios.</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</section>
-<section id="estimadores-de-efecto" class="level2">
-<h2 class="anchored" data-anchor-id="estimadores-de-efecto">Estimadores de efecto</h2>
-<p>En estudios individuales, suele asumirse que las variables de interés fueron medidas de manera uniforme en todos los participantes. Esto permite aplicar técnicas de estadística descriptiva, como el <a href="https://datos-ine.github.io/unidad_1/EDA.html">análisis exploratorio de datos (EDA)</a>, para caracterizar la muestra, explorar relaciones entre variables y ajustar modelos de regresión acordes a la estructura de los datos.</p>
-<p>Sin embargo, en los meta-análisis esta suposición rara vez se cumple. Aún cuando los criterios de inclusión sean estrictos, los estudios pueden diferir en su diseño, población, medición de variables o definición de resultados. Por esta razón, no es posible sintetizar la evidencia con herramientas de la estadística tradicional.</p>
-<p>Para integrar los resultados de diferentes estudios, los meta-análisis utilizan <strong>estimadores de efecto</strong> <span class="citation" data-cites="Page2021a">(<a href="#ref-Page2021a" role="doc-biblioref">Page et&nbsp;al. 2021</a>)</span>, también conocidos como <em>effect size</em> o tamaño del efecto <span class="citation" data-cites="Harrer2021">(<a href="#ref-Harrer2021" role="doc-biblioref">Harrer et&nbsp;al. 2021</a>)</span><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. En algunos casos, estos valores pueden extraerse directamente de los artículos; sin embargo, a menudo es necesario calcularlos a partir de los datos reportados.</p>
-<p>Un buen estimador de efecto debe cumplir con las siguientes condiciones:</p>
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">Introducción</h2>
+<p>Anteriormente abordamos el ajuste de modelos de efectos fijos y aleatorios, la representación gráfica de los resultados mediante <em>forest plots</em> y la estimación de la heterogeneidad estadística. Ahora, nos enfocaremos en distintas estrategias para controlar la heterogeneidad observada y evaluar la robustez de los modelos ajustados.</p>
+<p>El <strong>análisis de moderadores</strong> permite explorar fuentes de heterogeneidad entre los estudios incluidos en un meta-análisis. Se asume que los estudios no provienen de una misma población base sino de distintas subpoblaciones o subgrupos, cada una con su propio efecto verdadero. Puede realizarse incorporando como moderador una variable categórica (<strong>análisis de subgrupos</strong>) o una variable numérica (<strong>metarregresión</strong>).</p>
+<p>Este enfoque contribuye a:</p>
 <ul>
-<li><p><strong>Comparable:</strong> debe ser consistente entre los estudios incluidos.</p></li>
-<li><p><strong>Computable:</strong> debe poder calcularse a partir de la información disponible.</p></li>
-<li><p><strong>Confiable:</strong> debe permitir la estimación de su error estándar.</p></li>
-<li><p><strong>Interpretable:</strong> debe responder de manera clara a la pregunta de investigación.</p></li>
+<li><p>Evaluar hipótesis sobre variaciones en la magnitud del estimador de efecto entre estudios.</p></li>
+<li><p>Interpretar diferencias observadas en los resultados.</p></li>
 </ul>
-<p>Desde una perspectiva estadística, los estimadores de efecto son análogos a los coeficientes en modelos de regresión o a las medidas de asociación en estudios epidemiológicos, ya que cuantifican la fuerza y dirección de la relación entre dos variables.</p>
-<p>Entre los estimadores de efecto más utilizados en investigación epidemiológica y aplicables a modelos de meta-análisis se encuentran: proporciones, tasas de incidencia, coeficientes de correlación, diferencias de medias, <em>odds ratio</em> (OR), riesgos relativos (RR) y <em>hazard ratio</em>.</p>
-<p>En la próxima sección describiremos la estructura de los modelos de meta-análisis de efectos fijos y de efectos aleatorios. Luego, exploraremos cómo se ajustan estos modelos según cada tipo de estimador epidemiológico y con su implementación práctica en R.</p>
+<p>Para evitar sesgos de selección, es fundamental definir las variables moderadoras <strong>durante la extracción de datos</strong> en la revisión sistemática.</p>
+<section id="análisis-de-sugbgrupos" class="level3">
+<h3 class="anchored" data-anchor-id="análisis-de-sugbgrupos">Análisis de sugbgrupos</h3>
+<p>En el análisis de subgrupos se asume que los estudios no provienen de una población única, sino de distintos subgrupos poblacionales, cada uno con su propio efecto verdadero.</p>
+<p>El análisis consta de dos etapas:</p>
+<ul>
+<li><p>Estimación del efecto <strong>dentro de cada subgrupo.</strong></p></li>
+<li><p>Prueba estadística para evaluar diferencias <strong>entre subgrupos</strong>.</p></li>
+</ul>
+<p>Para evaluar el efecto de una variable categórica con <code>meta</code>, ajustamos el modelo de meta-análisis incluyendo el argumento <code>subgroup = var</code>, donde <code>var</code> es el nombre de una variable del dataset.</p>
+<p>Retomemos el ejemplo del capítulo anterior para diferencia de medias estandarizadas:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar paquetes</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  meta,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  metadat,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  janitor,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  tidyverse</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar/preparar datos</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>datos_md <span class="ot">&lt;-</span> dat.poole2003 <span class="sc">|&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">au_anio =</span> <span class="fu">paste</span>(author, year, <span class="at">sep =</span> <span class="st">"_"</span>))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>mod_md <span class="ot">&lt;-</span> <span class="fu">metacont</span>(</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.e =</span> ne,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean.e =</span> me,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd.e =</span> se,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.c =</span> nc,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean.c =</span> mc,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd.c =</span> sc,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> au_anio,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_md,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Incorporamos la <code>duration</code>como posible fuente de heterogeneidad:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mod_sg <span class="ot">&lt;-</span> <span class="fu">update</span>(mod_md, <span class="at">subgroup =</span> duration)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Veamos la salida del modelo:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mod_sg</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 17
+Number of observations: o = 4034 (o.e = 2043, o.c = 1991)
+
+                          MD             95% CI     z  p-value
+Random effects model -0.1076 [-0.1504; -0.0647] -4.92 &lt; 0.0001
+Prediction interval          [-0.2783;  0.0631]               
+
+Quantifying heterogeneity (with 95% CIs):
+ tau^2 = 0.0060 [0.0028; 0.0245]; tau = 0.0775 [0.0533; 0.1565]
+ I^2 = 84.9% [77.2%; 90.0%]; H = 2.57 [2.09; 3.16]
+
+Test of heterogeneity:
+      Q d.f.  p-value
+ 105.78   16 &lt; 0.0001
+
+Results for subgroups (random effects model):
+                        k      MD             95% CI  tau^2    tau     Q   I^2
+duration = ≤ 3 months   4 -0.2742 [-0.4819; -0.0665] 0.0297 0.1724 22.43 86.6%
+duration = &gt; 3 months  13 -0.0821 [-0.1163; -0.0478] 0.0028 0.0527 70.79 83.0%
+
+Test for subgroup differences (random effects model):
+                  Q d.f. p-value
+Between groups 3.20    1  0.0736
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Prediction interval based on t-distribution (df = 16)</code></pre>
+</div>
+</div>
+<p>El análisis de subgrupos ajusta un modelo de meta-análisis para cada nivel de la variable categórica, con sus estimadores de efecto (<span class="math inline">\(95\%~IC\)</span>) e indicadores de heterogeneidad, además del estimador global (<span class="math inline">\(95\%~IC\)</span>) y sus indicadores de heterogeneidad. En base a esto, la salida del modelo muestra dos nuevos paneles:</p>
+<ul>
+<li><p><code>Results for subgroups (random effects model)</code>: muestra los resultados para cada categoría del moderador, incluyendo:</p>
+<ul>
+<li><p>Identificador de las categorías del moderador.</p></li>
+<li><p><code>k</code>: número de estudios en la categoría/subgrupo.</p></li>
+<li><p><code>events</code>: prevalencia en la categoría/subgrupo.</p></li>
+<li><p><code>95%-CI</code>: intervalo de confianza al 95% para la prevalencia en la categoría/subgrupo.</p></li>
+<li><p><code>tau^2</code>: varianza dentro de la categoría/subgrupo.</p></li>
+<li><p><code>tau</code>: desvío estándar en la categoría/subgrupo.</p></li>
+<li><p><code>Q</code>: estadístico Q de Cochran para la categoría/subgrupo.</p></li>
+<li><p><code>I^2</code>: porcentaje de heterogeneidad observado en la categoría/subgrupo.</p></li>
+</ul></li>
+<li><p><code>Test for subgroup differences (random effects model)</code>: prueba de hipótesis para detectar diferencias significativas entre subgrupos.</p></li>
+</ul>
+<p>En este ejemplo, observamos que no existen diferencias estadísticamente significativas entre escalas de medición (p = 0,074). Podemos acceder al p-valor de la prueba de moderadores con el siguiente código:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mod_sg<span class="sc">$</span>pval.Q.b.random</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.07355117</code></pre>
+</div>
+</div>
+<p>Podemos visualizar los resultados del análisis de moderadores incorporando el argumento <code>layout = "subgroup"</code> a la función <code>forest()</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>  mod_sg,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-3" class="code-annotation-target"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">layout =</span> <span class="st">"subgroup"</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-5-4" class="code-annotation-target"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort.subgroup =</span> <span class="cn">TRUE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-5-5" class="code-annotation-target"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">calcwidth.subgroup =</span> <span class="cn">TRUE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-5-6" class="code-annotation-target"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">calcwidth.tests =</span> <span class="cn">TRUE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-5-7" class="code-annotation-target"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.subgroup.name =</span> <span class="cn">FALSE</span>,</span>
+<span id="annotated-cell-5-8"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="3" data-code-annotation="1"><code>layout = "subgroup"</code>: muestra los estimadores de efecto para cada subgrupo y el estimador global, omitiendo los resultados de los estudios individuales.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="4" data-code-annotation="2"><code>sort.subgroup</code>: ordena alfabéticamente las categorías de la variable moderadora.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="5" data-code-annotation="3"><code>calcwidth.subgroup</code>: ajusta el ancho del forest plot para que se muestren correctamente las etiquetas de las categorías/subgrupos.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="6" data-code-annotation="4"><code>calcwidth.tests</code>: ajusta el ancho del forest plot para que se muestren correctamente las etiquetas del test de hipótesis de diferencias en las categorías/subgrupos.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="7" data-code-annotation="5"><code>print.subgroup.name</code>: muestra la etiqueta de la variable moderadora delante de cada categoría (<code>TRUE</code>, por defecto) o lo oculta (<code>FALSE</code>).</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="05_moderadores_files/figure-html/mod5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Cuando graficamos un análisis de subgrupos, el argumento <code>col.diamond</code> modifica el color del estimador global y de los estimadores por subgrupo. El argumento <code>col.square</code> <strong>no</strong> tiene efecto en este caso.</p>
+<p>El análisis de subgrupos puede interpretarse como un enfoque intermedio entre el modelo de efectos fijos y el de efectos aleatorios. Se asume que existe <strong>heterogeneidad entre los subgrupos</strong>, y que cada nivel de la variable moderadora posee su propio efecto verdadero. Sin embargo, los subgrupos analizados (por ejemplo, sexo biológico, grupo etario, país de origen, tipo de prueba diagnóstica) se consideran <strong>categorías fijas</strong>, definidas <em>a priori</em>.</p>
+<p>Entre sus principales <strong>limitaciones</strong> se encuentran:</p>
+<ul>
+<li><p>Si la heterogeneidad es elevada, los <strong>intervalos de confianza pueden ser amplios y superponerse</strong>, incluso cuando existen diferencias estadísticamente significativas entre subgrupos.</p></li>
+<li><p>El tamaño muestral por subgrupo es menor que para el estimador global, lo que reduce la <strong>potencia estadística</strong>.</p></li>
+<li><p>La ausencia de significación estadística no implica equivalencia entre los grupos, ya que el análisis <strong>no permite evaluar relaciones causales</strong>.</p></li>
+</ul>
 </section>
-<section id="referencias" class="level2">
-<h2 class="anchored" data-anchor-id="referencias">Referencias</h2>
+<section id="metarregresión" class="level3">
+<h3 class="anchored" data-anchor-id="metarregresión">Metarregresión</h3>
+<p>La metarregresión intenta predecir el estimador de efecto global en base a una o más variables independientes. Por lo general, se usa para evaluar el efecto de una variable continua (por ejemplo, el año de publicación) sobre la magnitud del efecto global. Sin embargo, también pueden incluirse moderadores categóricos, obteniendo resultados idénticos a los del análisis de subgrupos.</p>
+<p>Ajustaremos la metarregresión con la función <code>metareg()</code>, incluyendo el año de publicación (<code>year</code>) como moderador en el argumento <code>formula</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mod_year <span class="ot">&lt;-</span> <span class="fu">metareg</span>(mod_md, <span class="at">formula =</span> <span class="sc">~</span>year, <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>La salida del modelo muestra lo siguiente:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_year)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Mixed-Effects Model (k = 17; tau^2 estimator: REML)
+
+  logLik  deviance       AIC       BIC      AICc   
+ 11.1752  -22.3504  -16.3504  -14.2262  -14.1686   
+
+tau^2 (estimated amount of residual heterogeneity):     0.0052 (SE = 0.0026)
+tau (square root of estimated tau^2 value):             0.0724
+I^2 (residual heterogeneity / unaccounted variability): 87.38%
+H^2 (unaccounted variability / sampling variability):   7.93
+R^2 (amount of heterogeneity accounted for):            12.84%
+
+Test for Residual Heterogeneity:
+QE(df = 15) = 63.3405, p-val &lt; .0001
+
+Test of Moderators (coefficient 2):
+QM(df = 1) = 1.5199, p-val = 0.2176
+
+Model Results:
+
+         estimate      se     zval    pval     ci.lb   ci.ub    
+intrcpt   -7.6948  6.1553  -1.2501  0.2113  -19.7590  4.3693    
+year       0.0038  0.0031   1.2329  0.2176   -0.0023  0.0099    
+
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>Mixed-Effects Model</code>:&nbsp;reporta los cambios en heterogeneidad al añadir el moderador continuo y (según el estimador) la bondad de ajuste (<span class="math inline">\(R^2\)</span>) del modelo.</p></li>
+<li><p><code>Model results</code> presenta los coeficientes del modelo para el intercepto y el moderador, con su significancia estadística y <span class="math inline">\(95\%~IC\)</span>.</p></li>
+</ul>
+<p>En nuestro ejemplo, los resultados muestran que el efecto del año de publicación no es estadísticamente significativo (p = 0,218).</p>
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>Importante
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cuando se trabaja con <strong>moderadores continuos</strong>, estamos ajustando una <strong>recta de regresión</strong> que busca minimizar la diferencia entre el estimador observado y el predicho.</p>
+<ul>
+<li><p>El <strong>intercepto</strong> corresponde al valor del efecto cuando el moderador es cero (lo cual no tiene interpretación biológica).</p></li>
+<li><p>La <strong>pendiente</strong> representa el efecto del moderador sobre el estimador de efecto.</p></li>
+</ul>
+<p>Si se utilizan <strong>moderadores categóricos</strong>, cada nivel de la variable representa un subgrupo con su propio estimador de efecto:</p>
+<ul>
+<li><p>Se debe <strong>omitir el intercepto</strong> para obtener directamente el estimador de efecto de cada categoría.</p></li>
+<li><p>Este enfoque es equivalente a un ANOVA, donde se comparan medias entre grupos sin necesidad de definir una categoría de referencia.</p></li>
+<li><p>Los resultados se presentan en escala transformada (por ejemplo log-OR), por lo que se debe aplicar la transformación inversa para interpretarlos.</p></li>
+</ul>
+</div>
+</div>
+<section id="bubble-plots" class="level4">
+<h4 class="anchored" data-anchor-id="bubble-plots"><em>Bubble plots</em></h4>
+<p>Los resultados de la metarregresión con predictores numéricos se visualizan usando <em>bubble plots.</em> Estos gráficos representan en el eje <span class="math inline">\(X\)</span> el valor del moderador continuo y en el eje <span class="math inline">\(Y\)</span> el efecto estimado para cada estudio. Cada burbuja representa un estudio individual, y su tamaño es proporcional al peso del estudio (generalmente inversamente proporcional a la varianza). Además, el gráfico incluye una línea de regresión con su intervalo de confianza del 95%, permitiendo visualizar la tendencia general.</p>
+<p>La función <code>bubble()</code> genera este gráfico de forma rápida:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bubble</span>(</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a>  mod_year,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-8-3" class="code-annotation-target"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="st">"common"</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-8-4" class="code-annotation-target"><a href="#annotated-cell-8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.line =</span> <span class="st">"magenta"</span></span>
+<span id="annotated-cell-8-5"><a href="#annotated-cell-8-5" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="1">Modelo de meta-análisis.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="3" data-code-annotation="2">Tamaño de las burbujas.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="4" data-code-annotation="3">Color para la línea de regresión.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="05_moderadores_files/figure-html/mod8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="metarregresión-múltiple" class="level3">
+<h3 class="anchored" data-anchor-id="metarregresión-múltiple">Metarregresión múltiple</h3>
+<p>Los modelos de metarregresión permiten evaluar el efecto de dos o más variables independientes, que pueden ser continuas, categóricas o una combinación de ambas. Al igual que en los modelos de regresión convencional, se pueden especificar efectos <strong>aditivos</strong> (independientes) o <strong>multiplicativos</strong> (interacción).</p>
+<p>A menos que exista una hipótesis específica de interacción, se recomienda utilizar un modelo aditivo. Los modelos con interacción aumentan la <strong>complejidad</strong>, el riesgo de <strong>sobreajuste</strong>, la posibilidad de <strong>colinealidad</strong> entre variables moderadoras y los <strong>problemas de convergencia</strong>, especialmente cuando el número de estudios es reducido o hay muchos niveles en las variables categóricas.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mod_multi <span class="ot">&lt;-</span> <span class="fu">metareg</span>(mod_md, <span class="at">formula =</span> <span class="sc">~</span> year <span class="sc">+</span> duration, <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mod_multi</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Mixed-Effects Model (k = 17; tau^2 estimator: REML)
+
+tau^2 (estimated amount of residual heterogeneity):     0.0045 (SE = 0.0024)
+tau (square root of estimated tau^2 value):             0.0674
+I^2 (residual heterogeneity / unaccounted variability): 85.21%
+H^2 (unaccounted variability / sampling variability):   6.76
+R^2 (amount of heterogeneity accounted for):            24.41%
+
+Test for Residual Heterogeneity:
+QE(df = 14) = 59.8211, p-val &lt; .0001
+
+Test of Moderators (coefficients 2:3):
+QM(df = 2) = 8.6043, p-val = 0.0135
+
+Model Results:
+
+                    estimate      se     zval    pval     ci.lb    ci.ub     
+intrcpt              -7.4981  5.8083  -1.2909  0.1967  -18.8822   3.8860     
+year                  0.0037  0.0029   1.2765  0.2018   -0.0020   0.0095     
+duration≤ 3 months   -0.1447  0.0554  -2.6126  0.0090   -0.2533  -0.0362  ** 
+
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>En este caso, la significancia de <code>duration</code> cambia al añadir el efecto del año de publicación.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-glass1976" class="csl-entry" role="listitem">
-Glass, Gene V. 1976. <span>«Primary, Secondary, and Meta-Analysis of Research»</span>. <em>Educational Researcher</em> 5 (10): 3-8. <a href="https://doi.org/10.2307/1174772">https://doi.org/10.2307/1174772</a>.
-</div>
-<div id="ref-Harrer2021" class="csl-entry" role="listitem">
-Harrer, Mathias, Pim Cuijpers, Toshi A Furukawa, y David D Ebert. 2021. <em>Doing Meta-Analysis With R: A Hands-On Guide</em>. Chapman &amp; Hall/CRC Press. <a href="https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074">https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074</a>.
-</div>
-<div id="ref-Page2021a" class="csl-entry" role="listitem">
-Page, Matthew J., David Moher, Patrick M. Bossuyt, et&nbsp;al. 2021. <span>«PRISMA 2020 explanation and elaboration: Updated guidance and exemplars for reporting systematic reviews»</span>. <em>The BMJ</em> 372. <a href="https://doi.org/10.1136/bmj.n160">https://doi.org/10.1136/bmj.n160</a>.
-</div>
-</div>
 </section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>Si bien ambos términos son equivalentes, usaremos la denominación “estimador de efecto” presente en las normas PRISMA para evitar confusiones con los <em>effect size</em> calculados en los modelos de regresión tradicionales, que evalúan la magnitud del efecto de una variable independiente.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
 </section>
 
 </main> <!-- /main -->
@@ -978,14 +1247,11 @@ Page, Matthew J., David Moher, Patrick M. Bossuyt, et&nbsp;al. 2021. <span>«PRI
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../extras/intro_R.html" class="pagination-link" aria-label="Introducción a R y RStudio">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Introducción a R y RStudio</span></span>
+      <a href="../unidad_2/04_MA_analiticos.html" class="pagination-link" aria-label="Meta-análisis en estudios analíticos">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Meta-análisis en estudios analíticos</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../unidad_2/02_fixed_random.html" class="pagination-link" aria-label="Modelos de meta-análisis">
-        <span class="nav-page-text"><span class="chapter-title">Modelos de meta-análisis</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
