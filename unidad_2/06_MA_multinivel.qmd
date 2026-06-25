@@ -1,0 +1,385 @@
+---
+title: "Modelos multinivel"
+---
+```{r}
+#| echo: false 
+#| id: setup
+source("setup.R")
+```
+
+## Introducción
+Desde una perspectiva estadística, los modelos de meta-análisis pueden interpretarse como modelos multinivel, ya que contemplan múltiples fuentes de variación. Por ejemplo, los modelos de efectos aleatorios incluyen al menos dos niveles: la variabilidad dentro de los estudios (*error de muestreo*) y la variación sistemática entre estudios no explicada por los moderadores (*heterogeneidad*).
+
+Esta estructura supone que los estimadores de efecto están anidados dentro de los estudios, configurando una jerarquía de datos análoga a la de los modelos multinivel o de efectos mixtos (GLMM). En estos modelos, los efectos fijos representan parámetros comunes a todos los grupos, mientras que los efectos aleatorios capturan la dependencia entre observaciones pertenecientes a un mismo grupo o clúster.
+
+Aunque ambos enfoques son técnicamente modelos mixtos, en meta-análisis este término suele referirse a modelos que incorporan moderadores como efectos fijos y un componente aleatorio para representar la heterogeneidad entre estudios. Por esta razón, la metarregresión también se conoce como modelo de efectos mixtos (*mixed-effects model*).
+
+Ahora bien, esta representación puede resultar insuficiente cuando los estudios aportan múltiples estimaciones de efecto. Por ejemplo, un mismo estudio puede reportar resultados para distintos subgrupos, momentos de seguimiento, sitios de estudio, tratamientos o desenlaces. En estas situaciones, asumir independencia entre las estimaciones provenientes de un mismo estudio puede generar inferencias sesgadas y una estimación incorrecta de la incertidumbre.
+
+
+Los modelos de tres niveles abordan esta limitación incorporando una fuente adicional de variabilidad que representa la *heterogeneidad intraestudio*, es decir, la variación entre estimadores de efecto obtenidos dentro de un mismo estudio. Esto permite incluir todas las estimaciones disponibles sin necesidad de promediarlas ni seleccionar una única medida por estudio.
+
+
+## Implementación en R
+Si bien el paquete `meta` permite ajustar modelos multinivel mediante el argumento `cluster`, sus capacidades para este tipo de análisis son limitadas. Por ello, utilizaremos el paquete `metafor` [@metafor] para el ajuste de los modelos y `orchaRd` [@orchaRd] para la visualización de los resultados.
+
+```{r}
+#| eval: false
+#| id: paquetes
+remotes::install_github("daniel1noble/orchaRd")
+
+pacman::p_load(
+  metafor,
+  orcharRd, # Gráficos y tablas
+  gtsummary, # Tablas coeficientes
+  metadat, # Bases de datos de ejemplo
+  janitor,
+  tidyverse
+)
+```
+
+
+Usaremos como ejemplo el conjunto de datos `dat.bornmann2007`, que analiza el sesgo de género en la adjudicación de becas y subsidios para investigación. Comenzamos cargando y explorando los datos:
+
+```{r}
+#| id: datos
+datos <- dat.bornmann2007
+
+# Explorar datos
+glimpse(datos)
+
+tabyl(datos, study) |>
+  arrange(-n) |>
+  adorn_pct_formatting()
+
+tabyl(datos, type) |>
+  adorn_pct_formatting()
+
+tabyl(datos, discipline) |>
+  adorn_pct_formatting()
+```
+
+Nuestras variables de interés son:
+- `waward`: número de investigadoras que recibieron becas o subsidios.
+- `wtotal`: número de investigadoras que se postularon.
+- `maward`: número de investigadores que recibieron becas o subsidios.
+- `mtotal`: número de investigadores que se postularon.
+- `type`: tipo de postulación.
+- `discipline`: área disciplinar.
+
+
+Comenzaremos ajustando un modelo de efectos aleatorios con la función genérica `rma()`:
+
+```{r}
+#| id: rma-1
+mod1 <- rma(
+  ai = waward, # <1>
+  n1i = wtotal, # <2>
+  ci = maward, # <3>
+  n2i = mtotal, # <4>
+  measure = "OR", # <5>
+  data = datos, # <6>
+  slab = study # <7>
+)
+
+# Salida del modelo
+summary(mod1)
+```
+
+1. Número de eventos en el grupo expuesto.
+2. Número total de observaciones en el grupo expuesto.
+3. Número de eventos en el grupo de referencia.
+4. Número total de observaciones en el grupo de referencia.
+5. Medida de efecto a calcular (en este caso, odds ratio).
+6. Conjunto de datos.
+7. Identificador de estudio (opcional).
+
+El argumento `mods` permite agregar una o más variables independientes como moderador de efecto:
+
+```{r}
+#| id: rma-2
+# Tipo de postulación
+mod1.1 <- update(mod1, mods = ~type)
+
+## Salida del modelo
+summary(mod1.1)
+
+## Significancia de los moderadores
+anova(mod1.1)
+
+# Área de postulación
+mod1.2 <- update(mod1, mods = ~discipline)
+
+## Salida del modelo
+summary(mod1.2)
+
+## Significancia de los moderadores
+anova(mod1.2)
+```
+
+En nuestro ejemplo, ambas variables moderadoras presentan una asociación estadísticamente significativa con el estimador de efecto. Podemos visualizar los resultados mediante la función `mod_results()` del paquete `orchaRd`:
+
+```{r}
+#| id: mod_results-1
+# Tipo de postulación
+mod_results(
+  mod1.1,
+  mod = "type",
+  group = "study"
+)
+
+# Área de postulación
+mod_results(
+  mod1.2,
+  mod = "discipline",
+  group = "study"
+)
+```
+
+Alternativamente, podemos utilizar la función `tbl_regression()` de `gtsummary` [@gtsummary], que permite presentar los coeficientes exponenciados en la escala original del odds ratio:
+
+```{r}
+#| id: tbl-exp
+#| warning: false
+tbl_regression(mod1.1, exponentiate = TRUE)
+
+tbl_regression(mod1.2, exponentiate = TRUE)
+```
+
+Como `metafor` ajusta el modelo en la escala logarítmica, la opción `exponentiate = TRUE` facilita la interpretación de los coeficientes al expresarlos nuevamente como odds ratios.
+
+También podemos visualizar los resultados mediante la función `orchard_plot()`:
+
+```{r}
+#| id: orchard-1
+orchard_plot(
+  mod1.1, # <1>
+  mod = "type", # <2>
+  group = "study", # <3>
+  xlab = "OR", # <4>
+  est = TRUE, # <5>
+  transfm = "percent", # <6>
+  refline.pos = 100, # <7>
+  twig.size = 0 # <8>
+)
+```
+
+1. Modelo de meta-análisis ajustado con metafor.
+2. Nombre de la variable moderadora.
+3. Identificador del estudio.
+4. Etiqueta del estimador de efecto.
+5. Muestra el estimador de efecto y su intervalo de confianza del 95% (`FALSE` por defecto).
+6. Transformación aplicada a los resultados ("none" por defecto; "percent" expresa los cambios porcentuales para estimadores en escala logarítmica).
+7. Posición de la línea de referencia (0 por defecto).
+8. Longitud del intervalo de predicción (0 para ocultarlo).
+
+Los *orchard plot* son una variante del *forest plot* donde el estimador global se representa por un punto de color con "ramas" horizontales representando el intervalo de confianza (línea gruesa) y el intervalo de predicción (línea fina). Cada estimación individual se representa mediante puntos más claros, cuyo tamaño es proporcional a su precisión. Como la función `orchard_plot()` está basada en `ggplot2`, se pueden añadir capas adicionales para modificar la escala de colores, temas, ejes, etc. 
+
+Para área de postulación:
+
+```{r}
+#| id: orchard-2
+orchard_plot(
+  mod1.2,
+  mod = "discipline",
+  group = "study",
+  xlab = "OR",
+  est = TRUE,
+  transfm = "percent",
+  refline.pos = 100,
+  twig.size = 0,
+  angle = 30 # Cambia el ángulo de las etiquetas
+)
+```
+
+Si tuviéramos una meta-regresión con los dos moderadores categóricos, el *orchard plot* puede mostrarnos los resultados según niveles de uno de los moderadores usando el argumento `by`:
+
+```{r}
+#| id: orchard-3
+mod1.3 <- update(mod1, mods = ~ type + discipline)
+
+# Orchard plot
+orchard_plot(
+  mod1.3,
+  mod = "type",
+  group = "study",
+  xlab = "OR",
+  est = TRUE,
+  transfm = "percent",
+  refline.pos = 100,
+  twig.size = 0,
+  by = "discipline"
+) +
+  theme(legend.position = "bottom")
+```
+
+A partir de estos resultados observamos que las investigadoras presentan menores probabilidades de recibir becas (Fellowships) que los investigadores. En cambio, para los subsidios de investigación (Grants) no se observan diferencias estadísticamente significativas entre mujeres y hombres. Adicionalmente, puede apreciarse una considerable variabilidad entre disciplinas, lo que sugiere que la magnitud del sesgo de género no es uniforme entre áreas de conocimiento.
+
+Sin embargo, durante la exploración de los datos observamos que algunos estudios contribuyen con más de un estimador de efecto. Esto viola el supuesto de independencia entre observaciones asumido por los modelos anteriores y justifica el uso de un modelo multinivel que represente explícitamente esta estructura jerárquica.
+
+El paquete `metafor` permite ajustar modelos multinivel con la función `rma.mv()`. Esta función, a diferencia de `rma()`, no puede calcular internamente los estimadores de efecto a partir de los datos originales, sino que requiere calcularlos previamente usando la función `escalc()`:
+
+```{r}
+#| id: escalc
+datos <- escalc(
+  measure = "OR", # <1>
+  ai = waward, # <2>
+  n1i = wtotal, # <3>
+  ci = maward, # <4>
+  n2i = mtotal, # <5>
+  data = datos, # <6>
+  add.measure = TRUE # <7>
+)
+```
+
+1. Medida de efecto a calcular (en este caso, odds ratio).
+2. Número de eventos en el grupo expuesto.
+3. Número total de observaciones en el grupo expuesto.
+4. Número de eventos en el grupo de referencia.
+5. Número total de observaciones en el grupo de referencia.
+6. Conjunto de datos.
+7. Añadir una columna con el nombre de la medida de efecto (opcional).
+
+Si no dispusiéramos del tamaño muestral en cada grupo, podríamos reemplazar `n1i` por `bi` (expuestos sin el evento) y `n2i` por `di` (no expuestos sin el evento). Los argumentos requeridos dependerán de la medida de efecto especificada en `measure`.
+
+La función `escalc()` añadirá al conjunto de datos las columnas `yi`, que contiene el estimador de efecto transformado a la escala de análisis, y `vi`, que contiene su varianza muestral. Si se especifica `add.measure = TRUE`, también se añadirá la columna `measure` con el nombre de la medida de efecto utilizada.
+
+También necesitamos crear un identificador único para cada estimador de efecto, por ejemplo, a partir del número de fila:
+
+```{r}
+#| id: generar id
+datos <- datos |>
+  rownames_to_column(var = "id")
+```
+
+Este identificador permite distinguir las distintas estimaciones provenientes de un mismo estudio y constituye el nivel inferior de la estructura jerárquica especificada en el modelo.
+
+Una vez que nuestros datos están listos, ajustaremos el modelo:
+
+```{r}
+#| id: rma.mv-1
+mod2.1 <- rma.mv(
+  yi = yi, # <1>
+  V = vi, # <2>
+  mods = ~ type + discipline, # <3>
+  data = datos, # <4>
+  random = ~ 1 | study / id, # <5>
+)
+```
+
+1. Estimador de efecto.
+2. Varianza del estimador de efecto.
+3. Fórmula indicando la/s variable/s moderadora/s de efecto (opcional).
+4. Conjunto de datos.
+5. Fórmula especificando el/los efecto/s aleatorio/s.
+
+La expresión `random = ~ 1 | study / id` especifica una estructura jerárquica de tres niveles. El primer nivel corresponde al error de muestreo de cada estimación, el segundo a la variabilidad entre estimaciones dentro de un mismo estudio y el tercero a la variabilidad entre estudios.
+
+Veamos la salida del modelo:
+
+```{r}
+#| id: rma.mv-2
+#| warning: false
+# Salida modelo
+tbl_regression(mod2.1, exponentiate = TRUE)
+```
+
+Podemos observar que tanto los coeficientes para el estimador global como dentro de los subgrupos cambian ligeramente respecto al modelo de efectos aleatorios. Adicionamente, la heterogeneidad (tau-cuadrado) ahora aparece dividida en dos componentes:
+
+-   `sigma^2.1`: variabilidad entre estudios.
+
+-   `sigma^2.2`: variabilidad entre estimadores de efecto de un mismo estudio.
+
+Esta descomposición permite cuantificar qué proporción de la heterogeneidad total se debe a diferencias entre estudios y qué proporción corresponde a diferencias entre estimaciones obtenidas dentro de cada estudio. La función `i2_ml()` de `orchaRd`permite obtener estimaciones de $I^2$ intraestudio ($I^2_{nivel2}$) e interestudio ($I^2_{nivel3}$)
+
+```{r}
+#| id: rma.mv-3
+i2_ml(mod2.1) |> round(2)
+```
+
+También podemos generar el *orchard plot* para visualizar los resultados:
+
+```{r}
+#| id: rma.mv-4
+orchard_plot(
+  mod2.1,
+  mod = "type",
+  group = "study",
+  xlab = "OR",
+  est = TRUE,
+  transfm = "percent",
+  refline.pos = 100,
+  twig.size = 0,
+  by = "discipline"
+) +
+  theme(legend.position = "bottom")
+```
+
+
+Si tuviéramos un moderador continuo, usamos la función `bubble_plot()`:
+
+```{r}
+#| id: rma.mv-6
+# Modelo con moderadores continuos y categóricos
+mod2.2 <- update(mod2.1, mods = ~ type + year)
+
+# Bubble plot
+bubble_plot(
+  mod2.2,
+  mod = "year",
+  group = "study",
+  by = "type"
+) +
+
+  scale_fill_viridis_d()
+```
+
+## Sesgo de publicación
+
+El sesgo de publicación (*publication bias*) se refiere a la tendencia de publicar con mayor frecuencia estudios con resultados positivos, estadísticamente significativos o con grandes tamaños del efecto. Esto puede distorsionar la síntesis de la evidencia en un meta-análisis, produciendo una sobreestimación del efecto global. Por ello, es esencial evaluar y ajustar el sesgo de publicación para garantizar que los resultados sean lo más precisos y representativos posible.
+
+### ***Funnel plots***
+
+El *funnel plot* o gráfico de embudo representa en el eje $Y$ el tamaño muestral o la precisión de los estudios, y en el eje $X$ el estimador de efecto para cada estudio. En ausencia de sesgo de publicación, se espera una distribución simétrica que forme un patrón similar a un embudo; de lo contrario, se observa asimetría.
+
+Para generar un *funnel plot*, se utiliza la función `funnel()`:
+
+```{r}
+funnel(mod1)
+```
+
+
+### **Test de Egger**
+
+El test de Egger evalúa la simetría del funnel plot mediante una regresión lineal entre el estimador de efecto y su error estándar. Un *p*-valor menor a 0,05 sugiere la presencia de sesgo de publicación.
+
+Este test se implementa con la función `metabias()` para modelos ajustados en `meta` o `regtest()` para modelos ajustados en `metafor`:
+
+```{r}
+regtest(mod1)
+```
+
+### **Test de Begg**
+
+El test de Begg utiliza la correlación de rangos para evaluar la relación entre el tamaño del efecto y el error estándar. Un *p*-valor menor que 0,05 indica la presencia de sesgo de publicación.
+
+En `meta`, se implementa añadiendo el argumento `method.bias = "Begg"` a la función `metabias()`, mientras que `metafor` usa la función `ranktest()`:
+
+```{r}
+ranktest(mod1)
+```
+
+### ***Trim-and-fill***
+
+El método *trim-and-fill* estima el número de estudios faltantes debido al sesgo de publicación y ajusta la media global en consecuencia, incorporando estudios hipotéticos. Esto ayuda a corregir la estimación del efecto global.
+
+Se utiliza la función `trimfill()`:
+
+```{r}
+trimfill(mod1)
+```
+
+Generalmente, se recomienda utilizar dos o más métodos para evaluar el sesgo de publicación y obtener una visión más completa de su impacto en el meta-análisis. En el ejemplo anterior, no hubiera sido necesario realizar el *trim-and-fill* ya que el funnel plot tiene una forma bastante simétrica y el *p*-valor de los test de Egger y Begg fue menor a 0,05.
+
+
+## Referencias

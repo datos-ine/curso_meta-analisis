@@ -1,0 +1,87 @@
+---
+title: "Exploración de la heterogeneidad"
+---
+
+```{r}
+#| echo: false 
+#| id: setup
+source("setup.R")
+```
+
+## Sesgo de publicación
+
+El sesgo de publicación (*publication bias*) se refiere a la tendencia de publicar con mayor frecuencia estudios con resultados positivos, estadísticamente significativos o con grandes tamaños del efecto. Esto puede distorsionar la síntesis de la evidencia en un meta-análisis, produciendo una sobreestimación del efecto global. Por ello, es esencial evaluar y ajustar el sesgo de publicación para garantizar que los resultados sean lo más precisos y representativos posible.
+
+### ***Funnel plots***
+
+El *funnel plot* o gráfico de embudo representa en el eje $Y$ el tamaño muestral o la precisión de los estudios, y en el eje $X$ el estimador de efecto para cada estudio. En ausencia de sesgo de publicación, se espera una distribución simétrica que forme un patrón similar a un embudo; de lo contrario, se observa asimetría.
+
+Para generar un *funnel plot*, se utiliza la función `funnel()`:
+
+```{r}
+funnel(mod)
+```
+
+### **Test de Egger**
+
+El test de Egger evalúa la simetría del funnel plot mediante una regresión lineal entre el estimador de efecto y su error estándar. Un *p*-valor menor a 0,05 sugiere la presencia de sesgo de publicación.
+
+Este test se implementa con la función `metabias()`:
+
+```{r}
+metabias(
+  mod, # modelo de meta-análisis
+  method.bias = "Egger" # aplica test de Egger (opción por defecto)
+)
+```
+
+### **Test de Begg**
+
+El test de Begg utiliza la correlación de rangos para evaluar la relación entre el tamaño del efecto y el error estándar. Un *p*-valor menor que 0,05 indica la presencia de sesgo de publicación.
+
+Se implementa añadiendo el argumento `method.bias = "Begg"` a la función `metabias()`:
+
+```{r}
+metabias(
+  mod, # modelo de meta-análisis
+  method.bias = "Begg" # aplica test de Begg
+)
+```
+
+### ***Trim-and-fill***
+
+El método *trim-and-fill* estima el número de estudios faltantes debido al sesgo de publicación y ajusta la media global en consecuencia, incorporando estudios hipotéticos. Esto ayuda a corregir la estimación del efecto global.
+
+Se utiliza la función `trimfill()`:
+
+```{r}
+trimfill(mod)
+```
+
+Generalmente, se recomienda utilizar dos o más métodos para evaluar el sesgo de publicación y obtener una visión más completa de su impacto en el meta-análisis. En el ejemplo anterior, no hubiera sido necesario realizar el *trim-and-fill* ya que el funnel plot tiene una forma bastante simétrica y el *p*-valor de los test de Egger y Begg fue menor a 0,05.
+
+
+### Análisis de sensibilidad
+
+El análisis de sensibilidad permite evaluar la **robustez** de los resultados de un meta-análisis. Una estrategia común consiste en **reajustar el modelo** excluyendo estudios con menor tamaño muestral o de menor calidad, y luego comparar el estimador de efecto y su intervalo de confianza del 95% con los del modelo original. Otra alternativa es el análisis ***leave-one-out***, que implica eliminar un estudio a la vez para observar cómo varía el estimador global, en `meta` se implementa usando la función `metainf()` y solo admite modelos de efectos fijos o de efectos aleatorios.
+
+La función `leave_one_out()` del paquete `orchaRd` permite realizar un análisis de sensibilidad del modelo de meta-análisis, especificando en el argumento `group` el nombre de la variable que queremos usar para remover estudios iterativamente:
+
+```{r}
+leave_one <- leave_one_out(mod, group = "study")
+```
+
+Este procedimiento ayuda a identificar si algún estudio influye de **manera desproporcionada** en los resultados del meta-análisis. Podemos graficar los resultados usando la función `orchard_leave1out()`:
+
+```{r}
+orchard_leave1out(leave1out = leave_one, xlab = "log(OR)")
+```
+
+En el gráfico, el eje $Y$ representa cada elemento del grupo (en este caso, cada estudio), mientras que el eje $X$ muestra el estimador de efecto. Para cada estudio, se presenta el resultado del modelo al excluirlo: estimador de efecto global, su intervalo de confianza, el intervalo de predicción, y los **"puntos fantasma"**, que marcan la ubicación del estudio excluido.
+
+> 🔗 Otras opciones de gráficos con `orchaRd`: [LINK](https://daniel1noble.github.io/orchaRd/#introduction)
+
+
+::: {.callout-note appearance="simple"}
+Hasta aquí hemos cubierto los aspectos básicos para evaluar fuentes de heterogeneidad en modelos de meta-análisis. Quienes tengan interés en profundizar en las medidas de heterogeneidad y su aplicación, recomendamos consultar el artículo de [@bown2010] y los capítulos [7](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/subgroup.html), [8](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/metareg.html) y [9](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pub-bias.html) de @Harrer2021.
+:::

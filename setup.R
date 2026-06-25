@@ -17,12 +17,14 @@ pacman::p_load(
   webshot2,
   meta,
   metafor,
+  orchaRd,
+  gtsummary,
   janitor,
   tidyverse
 )
 
 # paleta colorblind-friendly
-pal <- scico::scico(n = 9, palette = "managua")
+pal <- scico::scico(n = 9, palette = "buda")
 
 # Formato tabla
 kbl_format <- function(x) {

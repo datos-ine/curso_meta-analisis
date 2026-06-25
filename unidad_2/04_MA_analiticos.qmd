@@ -44,12 +44,13 @@ El cálculo de la diferencia de medias requiere que todas las mediciones se haya
 
 La función `metacont()` ajusta modelos de meta-análisis para diferencias de medias estandarizadas con el argumento `sm = "SMD"`.
 
-Como ejemplo, utilizaremos la base de datos `dat.furukawa2003`, que contiene resultados de 17 estudios sobre la efectividad de la dosis de antidepresivos tricíclicos en casos de depresión severa.
+Como ejemplo, utilizaremos la base de datos `dat.poole`, que contiene resultados de 67 estudios sobre la efectividad de agentes mucolíticos en pacientes con bronquitis crónica o EPOC:
 
 ```{r}
 #| id: metacont-1
 # Cargar datos
-datos_md <- dat.furukawa2003
+datos_md <- dat.poole2003 |>
+  clean_names()
 
 # Explorar estructura de los datos
 glimpse(datos_md)
@@ -57,32 +58,40 @@ glimpse(datos_md)
 
 Las principales variables de interés son:
 
-- `Me`: media muestral en grupo expuesto/tratamiento.
+- `author`: primer autor.
 
-- `Se`: desvío estándar de la media en grupo expuesto/tratamiento.
+- `year`: año de publicación
 
-- `Ne`: tamaño muestral en grupo expuesto/tratamiento.
+- `ne`: tamaño muestral en grupo tratamiento.
 
-- `Mc`: media muestral en grupo no expuesto/control.
+- `me`: media en grupo ratamiento.
 
-- `Sc`: desvío estándar de la media en grupo no expuesto/control.
+- `se`: desvío estándar de la media en grupo tratamiento.
 
-- `Nc`: tamaño muestral en grupo no expuesto/control.
+- `nc`: tamaño muestral en grupo control.
 
-- `author`: identificador de estudio.
+- `mc`: media muestral en grupo control.
+
+- `sc`: desvío estándar de la media en grupo control.
+
 
 Ajustamos el modelo de meta-análisis para diferencia de medias estandarizada:
 
 ```{r}
 #| id: metacont-2
+# Crear identificador único de estudio
+datos_md <- datos_md |>
+  mutate(au_anio = paste(author, year, sep = "_"))
+
+# Ajustar modelo
 mod_md <- metacont(
-  n.e = Ne, # <1>
-  mean.e = Me, # <2>
-  sd.e = Se, # <3>
-  n.c = Nc, # <4>
-  mean.c = Mc, # <5>
-  sd.c = Sc, # <6>
-  studlab = author, # <7>
+  n.e = ne, # <1>
+  mean.e = me, # <2>
+  sd.e = se, # <3>
+  n.c = nc, # <4>
+  mean.c = mc, # <5>
+  sd.c = sc, # <6>
+  studlab = au_anio, # <7>
   data = datos_md, # <8>
   sm = "SMD", # <9>
   prediction = TRUE # <10>
@@ -118,7 +127,7 @@ mod_md
 
 El valor de $I^2$ indica que los datos presentan una heterogeneidad alta y debe descartarse el modelo de efectos fijos.
 
-Los coeficientes del modelo de efectos aleatorios indican que el grupo tratado con antidepresivos tricíclicos presenta una reducción en los síntomas respecto del grupo control $(p<0,001)$. El intervalo de predicción muestra que es posible que estudios futuros encuentren el efecto inverso al estimado.
+Los coeficientes del modelo de efectos aleatorios indican que el grupo tratado con mucolíticos presenta una reducción en los síntomas respecto del grupo control $(p<0,001)$. El intervalo de predicción muestra que es posible que estudios futuros encuentren el efecto inverso al estimado.
 
 Generamos el *forest plot* para visualizar los resultados:
 
@@ -129,7 +138,7 @@ Generamos el *forest plot* para visualizar los resultados:
 forest(
   mod_md,
   col.diamond.random = pal[1],
-  col.square = pal[3],
+  col.square = pal[8],
   common = FALSE, # <1>
   smlab = "Diferencia de medias \n estandarizada", # <2>
   leftlabs = c("Estudio", rep(c("Total", "Media", "SD"), 2)), # <3>
@@ -161,7 +170,7 @@ forest(
   mod_md,
   common = FALSE,
   col.diamond = pal[1],
-  col.square = pal[3],
+  col.square = pal[8],
   smlab = "Diferencia de medias \n estandarizada",
   leftlabs = "Estudio",
   rightlabs = c("SMD", "95% IC", "Peso"),
@@ -279,7 +288,7 @@ Generamos el *forest plot* para visualizar los resultados:
 forest(
   mod_md,
   col.diamond.random = pal[1],
-  col.square = pal[3],
+  col.square = pal[8],
   common = FALSE, # <1>
   smlab = "Odds-ratio", # <2>
   leftcols = "studlab", # <3>
@@ -305,6 +314,7 @@ forest(
 7.  Personalizar etiqueta del estimador global.
 
 ::: {.callout-warning appearance="simple"}
+
 ## Importante
 
 La función `metabin()` también permite estimar el riesgo relativo mediante el argumento `sm = "RR"`, así como otros estimadores de efecto para variables binomiales, como la diferencia de riesgos (`"RD"`), la efectividad de vacunas (`"VE"`), entre otros. Dado que su implementación es análoga a la utilizada para la razón de odds (`"OR"`), no se desarrollarán ejemplos específicos para las mismas.
@@ -435,3 +445,5 @@ forest(
 
 - Actualmente, el paquete `meta` no incluye funciones específicas para modelar el tiempo hasta el evento (*hazard ratio*, HR). Sin embargo, si los estudios reportan el log-HR y su error estándar, es posible utilizar la función `metagen()` con el argumento `sm = "HR"` para obtener una estimación combinada del efecto. Para una explicación detallada del proceso, pueden consultar el capítulo 2.6.1 de @Schwarzer2015.
 :::
+
+## Referencias
