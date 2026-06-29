@@ -362,17 +362,6 @@
     ]
   },
   {
-    "objectID": "unidad_2/06_MA_multinivel.html#introducción",
-    "href": "unidad_2/06_MA_multinivel.html#introducción",
-    "title": "Modelos multinivel",
-    "section": "",
-    "text": "Importante\nEn estadística convencional, los modelos lineales generalizados con efectos mixtos —o modelos multinivel— incorporan efectos fijos (coeficientes comunes a todos los grupos) y efectos aleatorios (específicos por grupo o clúster). Los efectos aleatorios modelan la dependencia estructural entre observaciones, pero no afectan directamente la inferencia sobre los efectos fijos.",
-    "crumbs": [
-      "Meta-análisis",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Modelos multinivel</span>"
-    ]
-  },
-  {
     "objectID": "unidad_2/06_MA_multinivel.html#implementación-en-r",
     "href": "unidad_2/06_MA_multinivel.html#implementación-en-r",
     "title": "Modelos multinivel",
