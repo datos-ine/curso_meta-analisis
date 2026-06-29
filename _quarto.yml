@@ -78,7 +78,7 @@ book:
         - "unidad_2/04_MA_analiticos.qmd"
         - "unidad_2/05_moderadores.qmd"
         - "unidad_2/06_MA_multinivel.qmd"
-        # - "unidad_2/07_pub_bias.qmd"
+        - "unidad_2/07_sesgo_pub.qmd"
 
 ## Botón de anterior/siguiente
 page-navigation: true
